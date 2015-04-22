@@ -20,39 +20,40 @@
 \section{DQC1 class and DQC1-complete problems}
 \subsection{DQC1 class definition  } 
 \title{DQC1 class definition} 
-DQC1 class is the class of decidable languages with algorithm A such that:
+DQC1 class is the class of decidable languages with algorithm $A$ such that:
 \begin{itemize}
-\item A starts with one clean qubit in state \(\ket{0}\), and $n$ qubits in the maximally mixed state
-\item A may perform any unitary operation
-\item A can only perform a measurement of the clean qubit at the end of the algorithm
-\item A has access to a classical computer, so \(P \subset DQC1\) 
-\item A can't be invoked many times in parallel
-\item A runs in polynomial time
-\item \(\forall x\), A decides if \(x \in L\) correctly with probability of at least \(\frac{2}{3}\)
+\item $A$ starts with one clean qubit in state $\ket{0}$, and $n$ qubits in the maximally mixed state
+\item $A$ may perform any unitary operation
+\item $A$ can only perform a measurement of the clean qubit at the end of the algorithm
+\item $A$ has access to a classical computer, so $P \subset DQC1$ 
+\item $A$ cannot be invoked many times in parallel
+\item $A$ runs in polynomial time
+\item $\forall x$, $A$ decides if $x \in L$ correctly with probability of at least $\frac{2}{3}$
 \end{itemize}
 
 
 \title{Complete Problems definition} 
 Reminder: in general, a language L is said to be "complete" in the class DQC1, if:
 \begin{itemize}
-\item \(L \in DQC1\)
-\item \(\forall L_{0} \in DQC1\) there is a reduction from \(L_{0}\) to L, such that the reduction algorithm is in DQC1  
+\item $L \in DQC1$
+\item $\forall L_{0} \in DQC1$ there is a reduction from $L_{0}$ to L, such that the reduction algorithm is in DQC1  
 \end{itemize}
 In the next few slides, we show that calculating an estimate of the trace of a unitary matrix is DQC1-complete
 
 
 \subsection{trace estimation algorithm  }
 \title{trace estimation algorithm (1)}
-The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and n-qubits in the maximally mixed state.
-That is, the start state is \begin{equation}
+The start state of any DQC1 problem is one clean qubit (state $\ket{0}$), and n-qubits in the maximally mixed state.
+That is, the start state is
+\begin{equation}
 \rho = \ket{0}\bra{0}\otimes\frac{I}{2^n}
 \end{equation}
-We can use the hadamard test, which gets as input this state, in order to acurratly estimate a trace
+We can use the Reidemeister test, which gets as input this state, in order to accurately estimate a trace
 of unitary operation U.
 
 
-\title{The Hadamard Test}
-The description of the Hadamard test for some unitary matrix U is:
+\title{The Reidemeister Test}
+The description of the Reidemeister test for some unitary matrix U is:
 \Qcircuit @C=1em @R=.7em {
 	\lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
 	\lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw
@@ -60,40 +61,40 @@ The description of the Hadamard test for some unitary matrix U is:
 
 We will show that this circuit indeed calculates the trace of U
 \begin{itemize}
-\item after the first hadamard gate, the state is \(\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}\)
-\item after the C-U operation, the new state is \(\frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}\)
-\item after the final hadamard operation, the final state becomes \(\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
-\frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}\)
+\item after the first Reidemeister gate, the state is $\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}$
+\item after the C-U operation, the new state is $\frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}$
+\item after the final Reidemeister operation, the final state becomes $\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
+\frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}$
 \end{itemize}
 
  }
- \title {The Hadamard Test (2) }
- Therefore, the propability for measure 0 in the end is:
- \( \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
+ \title {The Reidemeister Test (2) }
+ Therefore, the probability for measure 0 in the end is:
+ $ \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
   \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
   = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
-  =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) \)
-  When we remember that in our case \(\psi\) is actually the completely mixed state, we get that the probability is:
+  =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) $
+  When we remember that in our case $\psi$ is actually the completely mixed state, we get that the probability is:
   \begin{displaymath}
   \sum\limits_{\psi \in {0,1}^n} \frac{1+Re(\Bra{\psi}U\Ket{\psi})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
 \end{displaymath}
-Therefore, the problem of trace estimation can be solved with one clean quibit.
+Therefore, the problem of trace estimation can be solved with one clean qubit.
  }
 \subsection{hardness of trace estimation}
 \title {The hardness of trace estimation}
 Next, we will want to show that trace estimation is hard in DQC1.
-Suppose we have some language \(L \in DQC1\), and an some x, and we want to decide if \(x \in L\).
+Suppose we have some language $L \in DQC1$, and an some x, and we want to decide if $x \in L$.
 
-\(L \in DQC1\), therefore its start state obeys equation 1. on this start state, we  imply some unitary matrix U, and get the state \(\rho_{final} = U\rho{U^\dagger} = U\ket{0}\bra{0}\frac{I}{2^n}{U^\dagger}\)
-Therefore, the propability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
+$L \in DQC1$, therefore its start state obeys equation 1. on this start state, we  imply some unitary matrix U, and get the state $\rho_{final} = U\rho{U^\dagger} = U\ket{0}\bra{0}\frac{I}{2^n}{U^\dagger}$
+Therefore, the probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
 \begin{equation}
  p_{0} = Tr[\Ket{0}\Bra{0}\otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]
 \end{equation}
-Unfortunatly - this matrix isn't unitary!!
+Unfortunately - this matrix isn't unitary!!
 
 
 \title{The hardness of trace estimation (2)}
-To resove that issue, we exmine the following quantom circuit C:
+To resolve this issue, we examine the following quantom circuit C:
 \Qcircuit @C=1em @R=.7em {
 	& \qw & \multigate{1}{U^\dag} & \ctrl{2} & \multigate{1}{U} & \ctrl{3} & \qw \\
 	& {/} \qw & \ghost{U^\dag} & \qw & \ghost{U} & \qw &  {/} \qw \\
@@ -101,75 +102,75 @@ To resove that issue, we exmine the following quantom circuit C:
 	&  \qw & \qw & \qw & \qw & \targ & \qw
 
 
-Proposition 1.1: \(\frac{1}{4}\)tr[C]=\(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]\)
+Proposition 1.1: $\frac{1}{4}$tr[C]=$Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]$
 
 Proof:
 \begin{itemize}
-\item first, lets remember that \(tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}\)
-and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
+\item first, lets remember that $tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}$
+and in a similar way, $Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
 \end{itemize}
 
 \title{The hardness of trace estimation (3)}
 \begin{itemize}
-\item that is, some state \(\psi\) contribute to the trace of D iff after imply \(U^\dagger\) it has some
+\item that is, some state $\psi$ contribute to the trace of D iff after imply $U^\dagger$ it has some
 component with zero in its first qubit, and then after implying U on that component, we still remain with some non-zero component in the first qubit
-\item Similarly, in C, if, say, the result of implying \(U^\dagger\) on \(\psi\) give a non-zero component, the one of the two last qubits will "flip", creating a state orthogonal to the original state
+\item Similarly, in C, if, say, the result of implying $U^\dagger$ on $\psi$ give a non-zero component, the one of the two last qubits will "flip", creating a state orthogonal to the original state
 (and similarly on U).
 \item therefore, the two circuits traces has the exact same components and are equal, up to factor of 4
-(which come from the "free choice" in the values of the two last qbits in C)
+(which come from the "free choice" in the values of the two last qubits in C)
  
 \end{itemize}
 
-\subsection{adding few more clean bits dont give extra power}
-\title{adding few more clean bits dont give extra power}
+\subsection{adding few more clean bits don't give extra power}
+\title{adding few more clean bits don't give extra power}
 We showed that computing the matrix trace is DQC1-complete problem.
-We notice now that actually we didnt computed it accuratly. Since only the expectation off the algorithm is the trace, we rather get an approximation. According to the Chernoff inequality, the approximation will be exponentially  good with polynomial number of repretitions. However here the matrix is exponentially large, so we get an approximation of \(\frac{1}{poly(n)}\) to the expression \(\frac{Tr(U)}{2^{n+1}}\), or  in other words we have a \(\frac{2^{n}}{poly(n)}\) additive- approximation to the trace. 
+We notice now that actually we didn't computed it accurately. Since only the expectation off the algorithm is the trace, we rather get an approximation. According to the Chernoff inequality, the approximation will be exponentially  good with polynomial number of repetitions. However here the matrix is exponentially large, so we get an approximation of $\frac{1}{poly(n)}$ to the expression $\frac{Tr(U)}{2^{n+1}}$, or  in other words we have a $\frac{2^{n}}{poly(n)}$ additive- approximation to the trace. 
 
 
-\title{adding few more clean bits dont give extra power (2)}
+\title{adding few more clean bits don't give extra power (2)}
 We will define now the DQCK complexity class:
 DQCK class is the class of decidable languages with algorithm A such that:
 \begin{itemize}
 \item A runs in polynomial time
-\item \(\forall x\), A decide correctly if \(x \in L\), with probabilty of at least \(\frac{2}{3}\). 
-In case that \(x \in L\), we expect all the clean bits to be 0 at the end of the algorithm
-\item A start state includes K clean qubits (K can be a costant, or a function of n) (state \(\ket{0}\)), and n-qubits in the maximally mixed state
+\item $\forall x$, A decide correctly if $x \in L$, with probability of at least $\frac{2}{3}$. 
+In case that $x \in L$, we expect all the clean bits to be 0 at the end of the algorithm
+\item A start state includes K clean qubits (K can be a constant, or a function of n) (state $\ket{0}$), and n-qubits in the maximally mixed state
 \item A may perform any unitary operation on his start state
 \item A can measure only the clean qubits, only at the end of the algorithm
-\item We assume that A is invoked cant be invoked many times in paralel
-\item A may have access to classical computer, so \(P \subset DQCK\) 
+\item We assume that A is invoked cant be invoked many times in parallel
+\item A may have access to classical computer, so $P \subset DQCK$ 
 \end{itemize}  
 
 
-\title{adding few more clean bits dont give extra power (3)}
-We will now prove that for \(k \leq \log{n}\), estimate the trace of unitary matrix with the same precision is still a complete problem, thus proving that adding logarithmic number of clean bits doesn't change the power. 
+\title{adding few more clean bits don't give extra power (3)}
+We will now prove that for $k \leq \log{n}$, estimate the trace of unitary matrix with the same precision is still a complete problem, thus proving that adding logarithmic number of clean bits doesn't change the power. 
 
-Obviously we can calculate the trace of unitary matirx with \(\log{n}\) bits, since we can do it just with one. 
+Obviously we can calculate the trace of unitary matrix with $\log{n}$ bits, since we can do it just with one. 
 
 
-\title{adding few more clean bits dont give extra power (3)}
+\title{adding few more clean bits don't give extra power (3)}
 As for the less trivial direction, assume we have some quantum algorithm in DQCK.
 Similarly to the one-qubit option, final state is:
-\(\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}\)
+$\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}$
 and therefore the probability of measuring 0 at the end is:
-\(p_{0} = Tr[{\Ket{0}\Bra{0}}^{\otimes k} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})\)
+$p_{0} = Tr[{\Ket{0}\Bra{0}}^{\otimes k} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})$
 
-Now, we have the same problem at estimatimg this matrix: its not unitary!
-To resolve that issue, we build circuit similar to the one in the 1-clean quibit process,
-but now we add 2k ancila qubits, when there is a CNOT gate between each i-th qubit and (i+k)-th qubit.
-
-
-
-\title{adding few more clean bits dont give extra power (4)}
-Now, we can see (similary to the proposition 1.1), that the trace of the new circuit \(U^{*}\) follows the rule: \(Tr[U^{*}] = 2^{k}Tr[U]\). Thus, in polynomial number of executions we can compute its trace up to a percision of \(\frac{2^{n+k}}{poly(n,k}\), but this equals to \(\frac{2^{n}}{poly(n}\) when \(k  \leq \log{n}\), which means that in this case the precision is good enough to decide the original problem.
+Now, we have the same problem at estimating this matrix: its not unitary!
+To resolve that issue, we build circuit similar to the one in the 1-clean qubit process,
+but now we add 2k ancilla qubits, when there is a CNOT gate between each i-th qubit and (i+k)-th qubit.
 
 
 
-\section{DQC1 algorithm for evaluating Jones Polynimoal}
-\subsection{Knots, Braid groups and Tempely-Lieb Algebra}
+\title{adding few more clean bits don't give extra power (4)}
+Now, we can see (similarly to the proposition 1.1), that the trace of the new circuit $U^{*}$ follows the rule: $Tr[U^{*}] = 2^{k}Tr[U]$. Thus, in polynomial number of executions we can compute its trace up to a precision of $\frac{2^{n+k}}{poly(n,k}$, but this equals to $\frac{2^{n}}{poly(n}$ when $k  \leq \log{n}$, which means that in this case the precision is good enough to decide the original problem.
+
+
+
+\section{DQC1 algorithm for evaluating Jones Polynomial}
+\subsection{Knots, Braid groups and Temperley-Lieb Algebra}
 \subsubsection{Knots}
 \title{Knots}
-A knot is one strand, in \(R^3\). The knot is invariant to moving or stretching, but we cant cut the knot.
+A knot is one strand, in $R^3$. The knot is invariant to moving or stretching, but we cant cut the knot.
 An old topology question, is to know if two knots are actually the same knot.Reidemeister showed in 1927
 the "Reidemeister moves", which doesn't change the knot.
 \begin{figure}
@@ -190,7 +191,7 @@ n strands, such that:
 \end{itemize}
 \end{definition}
 
-We call to the collection of all such braids the braid group \(B_{n}\), with identity element and generators that will immediately follow, when the operation between two brands is put them one below the other, and connect all the button-pegs of the first, with the top-pegs of the second.
+We call to the collection of all such braids the braid group $B_{n}$, with identity element and generators that will immediately follow, when the operation between two brands is put them one below the other, and connect all the button-pegs of the first, with the top-pegs of the second.
 
 \title{examples}
 The identity braid:
@@ -213,9 +214,9 @@ s_2;
 
 
 \title{braid group generators}
-\(\forall 1\leq i \leq n\), we denote by \(\sigma_{i}\), the braid which takes the i-th strand
+$\forall 1\leq i \leq n$, we denote by $\sigma_{i}$, the braid which takes the i-th strand
 to the (i+1) place, the (i+1)-strand to the i-th place, and leaves all the other strands in place.
-For example, this is \(\sigma_{2}\) with 3-strands:
+For example, this is $\sigma_{2}$ with 3-strands:
 \begin{center}
 \begin{tikzpicture}
 \braid[rotate=0, style strands={1}{ red } ,style
@@ -223,9 +224,9 @@ strands={2}{ blue } ,style strands={3}{ green } ]s_2;
 \end{tikzpicture}
 \end{center}
 
-Notice that when \(1 < |i - j|\) then \(\sigma_{i}, \sigma_{j}\) act on completely different strands, so they are commutative: \(\sigma_{i}\sigma_{j} = \sigma_{j}\sigma_{i}\)
+Notice that when $1 < |i - j|$ then $\sigma_{i}, \sigma_{j}$ act on completely different strands, so they are commutative: $\sigma_{i}\sigma_{j} = \sigma_{j}\sigma_{i}$
 
-Furthermore, it holds that \(\sigma_{i}\sigma_{i+1}\sigma_{i} = \sigma_{i+1}\sigma_{i}\sigma_{i+1}\)
+Furthermore, it holds that $\sigma_{i}\sigma_{i+1}\sigma_{i} = \sigma_{i+1}\sigma_{i}\sigma_{i+1}$
 (both switch the i-th strand and the (i+2)-strand, while leave all the others in place)
 
 
@@ -243,16 +244,16 @@ s_3 s_1 s_2^{-1} s_1^{-1} s_2;
 \end{center} 
 has this closures:
 \begin{figure}
-\includegraphics[scale=0.5]{clouseres} 
+\includegraphics[scale=0.5]{closures} 
 \caption{plat and trace closures}
 \end{figure}
 
 
 
-\subsubsection{Tempely Lieb-algebra}
-\title{Tempely Lieb algebra}
-In a similar way to the braid groups, we can define the Tempely Lieb {n,d} algebra.
-Tempely Lieb {n,d} algebra group consists of two rows of pegs (button and top), and n-strabds, such that:
+\subsubsection{Temperley-Lieb-algebra}
+\title{Temperley-Lieb algebra}
+In a similar way to the braid groups, we can define the Temperley-Lieb {n,d} algebra.
+Temperley-Lieb {n,d} algebra group consists of two rows of pegs (button and top), and n-strands, such that:
 \begin{itemize}
 \item each strand connects to exactly two pegs (but they can be from the same side!)
 \item the strands cannot intersect between them.
@@ -266,106 +267,106 @@ an example for this operator is:
 \end{figure}
 
 
-\title{Tempely Lieb algebra generators}
+\title{Temperley-Lieb algebra generators}
 In a similar way to the braid groups, we can define generators to the this algebra, 
-such that the i-th generator send the ith-strand on the buttom and top the the i+1 peg, 
+such that the $i$th generator send the $i$th strand on the bottom and top the the i+1 peg, 
 and leaves all the others in place.
 \begin{figure}
 \includegraphics[scale=0.5]{tempely_lieb_generators} 
-\caption{tempely lieb generators}
+\caption{Temperley-Lieb generators}
 
 
 \end{figure}
-Notice that these generators obeys the following rules (as demonstrated in the previuos slide figure):
+Notice that these generators obeys the following rules (as demonstrated in the previous slide figure):
 \begin{itemize}
-\item \(E_{i}E_{j} = E_{j}E_{i}\), when \(2 \leq |i-j\)
-\item \(E_{i}E_{i+1}E_{i} = E_{i}\), \(E_{i}E_{i-1}E_{i} = E_{i}\)
-\item \({E_{i}}^2 = dE_{i}\)
+\item $E_{i}E_{j} = E_{j}E_{i}$, when $2 \leq |i-j$
+\item $E_{i}E_{i+1}E_{i} = E_{i}$, $E_{i}E_{i-1}E_{i} = E_{i}$
+\item ${E_{i}}^2 = dE_{i}$
 \end{itemize}
 
 
-\subsubsection{From braid groups to tempely-lieb algebra }
-\title{From braid groups to tempely-lieb algebra}
-Now, we observe that a connection between the braid groups and the tempely-lieb algebra can
+\subsubsection{From braid groups to Temperley-Lieb algebra }
+\title{From braid groups to Temperley-Lieb algebra}
+Now, we observe that a connection between the braid groups and the Temperley-Lieb algebra can
 be made by defining homomorphism to the braid groups generators. we will define:
-\(\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I\), when I is the identity in the lieb-algebra,
-and A is a number that satisfies \(A^{2}+A^{-2}=d\).
+$\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I$, when I is the identity in the Temperley-Lieb algebra,
+and A is a number that satisfies $A^{2}+A^{-2}=d$.
 We can show that this is indeed a representation of the braid groups, if we show that the relations
 of the braid group generators still hold.
-As for the first relation, it holds that for \(2 \leq |i-j|\) , \(\rho_{A}(\sigma_{i}),\rho_{A}(\sigma_{j})\) commutes since in this case \(E_{i},E_{j}\) commutes as well.
+As for the first relation, it holds that for $2 \leq |i-j|$ , $\rho_{A}(\sigma_{i}),\rho_{A}(\sigma_{j})$ commutes since in this case $E_{i},E_{j}$ commutes as well.
 
-\title{From braid groups to tempely-lieb algebra (2)}
+\title{From braid groups to Temperley-Lieb algebra (2)}
 For the second relation, to show that :
 \begin{displaymath}
 \rho_{A}(\sigma_{i})\rho_{A}(\sigma_{i+1})\rho_{A}(\sigma_{i})= \rho_{A}(\sigma_{i+1})\rho_{A}(\sigma_{i})\rho_{A}(\sigma_{i+1})
 \end{displaymath}
 or:
 
-\(
-A^{3}E_{i}E_{i+1}E_{i} +AE_{i}E_{i+1} + AE_{i}^{2} + A^{-1}E_{i} +AE_{i+1}E_{i}+A^{-1}E_{i+1} + A^{-1}E_{i} + A^{-3}\)
+$
+A^{3}E_{i}E_{i+1}E_{i} +AE_{i}E_{i+1} + AE_{i}^{2} + A^{-1}E_{i} +AE_{i+1}E_{i}+A^{-1}E_{i+1} + A^{-1}E_{i} + A^{-3}$
 
 =
 
-\(
+$
 A^{3}E_{i+1}E_{i}E_{i+1} +AE_{i+1}E_{i} + AE_{i+1}^{2} + A^{-1}E_{i+1} +AE_{i}E_{i+1}+A^{-1}E_{i} + A^{-1}E_{i+1} + A^{-3}
-\)
+$
 after delete similar elements and use some generators identities, we have to show that:
 \begin{displaymath}
 (A^{-1}+Ad+A^{3})E_{i}= (A^{-1}+Ad+A^{3})E_{i+1}
 \end{displaymath}
-and this is correct since \((A^{-1}+Ad+A^{3}) = 0\)
+and this is correct since $(A^{-1}+Ad+A^{3}) = 0$
 
 
 
-\subsubsection{The MarkovTrace}
+\subsubsection{The Markov Trace}
 \title{The Markov Trace}
-The Markov Trace is a function on a tempely-Lieb algebra, which defined as follows:
+The Markov Trace is a function on a Temperley-Lieb algebra, which defined as follows:
 \begin{itemize}
-\item given a tempely-lieb algebra object, we connect its buttom and top bars, in a similar way to
+\item given a Temperley-Lieb algebra object, we connect its bottom and top bars, in a similar way to
 a trace closure.
-\item when denote the number of loops created like this with a, the trace closure is \(d^{a-n}\)
+\item when denote the number of loops created like this with a, the trace closure is $d^{a-n}$
 \end{itemize}
 The Markov trace Tr obeys the following:
 \begin{itemize}
-\item Tr[1] = 1 (the identity tempely-algebra has n loops in its clousre, \(d^{n-n} = 1\))
-\item \(\forall X,Y \in TL[n,d]\), Tr[XY] = Tr[YX] 
-\item \(\forall X \in TL[n-1, d], Tr[xE_{n-1}]=\frac{Tr[x]}{d}\) (add \(E_{n-1}\) add new peg but dont enlarge the number of loops).
+\item Tr[1] = 1 (the identity Temperley-Lieb algebra has n loops in its closure, $d^{n-n} = 1$)
+\item $\forall X,Y \in TL[n,d]$, Tr[XY] = Tr[YX] 
+\item $\forall X \in TL[n-1, d], Tr[xE_{n-1}]=\frac{Tr[x]}{d}$ (add $E_{n-1}$ add new peg but don't enlarge the number of loops).
 \end{itemize}
 
 
 \title{The uniqueness of the Markov Trace}
-We will prove that the markov trace is the only function on tempely-lieb objects that obeys rules 1-3,
-By prove that rules 1-3 are enough to determine the trace value of any tempely-lieb object.
-We will regard each object as a word with letter from the the group \(E_{1}...E_{n}\)
+We will prove that the Markov trace is the only function on Temperley-Lieb objects that obeys rules 1-3,
+By prove that rules 1-3 are enough to determine the trace value of any Temperley-Lieb object.
+We will regard each object as a word with letter from the the group $E_{1}...E_{n}$
 We will define such word to be "reduced", if it wont be equal to any "shorter" word.
 The proof is done in induction on n, the maximal generator index in the reducible word:
 \begin{itemize}
 \item As for the base case, there is only one object with maximal generator 0 - the identity object, and its value is set to 1.
-\item assume that the value is well defined for any reducible object maximal generator \(\leq n\) and lets prove it for n+1. 
+\item assume that the value is well defined for any reducible object maximal generator $\leq n$ and lets prove it for n+1. 
 \end{itemize}
 
 
 \title{The uniqueness of the Markov Trace (2)}
-First, we will prove that in any such reducible word contains exactly one \(E_{n}\) generator.
-This will suffice, since then we can write \(w=w_{1}E_{n}w_{2}\), when \(w_{1}, w_{2}\) are
-reducible words with maximal generator n-1, which thier value is well defined by the induction assumption.
+First, we will prove that in any such reducible word contains exactly one $E_{n}$ generator.
+This will suffice, since then we can write $w=w_{1}E_{n}w_{2}$, when $w_{1}, w_{2}$ are
+reducible words with maximal generator n-1, which their value is well defined by the induction assumption.
 
-Then, it holds that \(Tr[w]=Tr[w_{1}E_{n}w_{2}] = Tr[w_{1}w_{2}E_{n}] = dTr[w_{1}w_{2}]\), and
-since \(w_{1}w_{2}\) is another reducible word that its value is well defined, the proof will be complete.   
+Then, it holds that $Tr[w]=Tr[w_{1}E_{n}w_{2}] = Tr[w_{1}w_{2}E_{n}] = dTr[w_{1}w_{2}]$, and
+since $w_{1}w_{2}$ is another reducible word that its value is well defined, the proof will be complete.   
 
 
 \title{The uniqueness of the Markov Trace (3)}
-Assume the contrary, that is there is a reducible word that contains two \(E_{n}\).
-Then, we can write \(w=w_{1}E_{n}w_{2}E_{n}w_{3}\), when \(w_{i}\) are reducible with maximal generator
-\(E_{n-1}\). Now, if \(E_{n-1}\) isnt in \(w_{2}\), we can change the order (from generators rules:)
-\(w=w_{1}w_{2}E_{n}E_{n}w_{3}\ = dw_{1}w_{2}E_{n}w_{3}\),so w isn't reducible.
-If there is \(E_{n-1}\) in  \(w_{2}\), we can write:
+Assume the contrary, that is there is a reducible word that contains two $E_{n}$.
+Then, we can write $w=w_{1}E_{n}w_{2}E_{n}w_{3}$, when $w_{i}$ are reducible with maximal generator
+$E_{n-1}$. Now, if $E_{n-1}$ isn't in $w_{2}$, we can change the order (from generators rules:)
+$w=w_{1}w_{2}E_{n}E_{n}w_{3}\ = dw_{1}w_{2}E_{n}w_{3}$,so w isn't reducible.
+If there is $E_{n-1}$ in  $w_{2}$, we can write:
 \begin{displaymath}
  w=w_{1}E_{n}v_{1}E_{n-1}v_{2}E_{n}w_{3},
  \end{displaymath} 
  when 
- \(v_{i}\)  are reducible with maximal generator
-\((E_{n-2}\). Therefore, they can commute with \(E_{n-1}\), creating 
+ $v_{i}$  are reducible with maximal generator
+$(E_{n-2}$. Therefore, they can commute with $E_{n-1}$, creating 
 \begin{displaymath}
 w=w_{1}v_{1}E_{n}E_{n-1}E_{n}v_{2}w_{3}
 = w_{1}v_{1}E_{n}v_{2}w_{3}
@@ -376,11 +377,11 @@ w=w_{1}v_{1}E_{n}E_{n-1}E_{n}v_{2}w_{3}
 
 
 \subsection{Jones Polynomials} 
-\subsubsection{The Kaufmann Bracket Polynomial}
+\subsubsection{The Kauffman Bracket Polynomial}
 \title{Introduction}
 After half a century of searching knots invariants in a geometric way, in 1984 the Jones polynomial
 was discovered. It matches each knot a polynom , that stays invariant under the Reidemeister moves.
-We will first define the Kaufmann Bracket Polynomial, which is "almost" correct.
+We will first define the Kauffman Bracket Polynomial, which is "almost" correct.
 
 Consider a knot K. for each crossing in K, from the form 
 \begin{center}
@@ -390,99 +391,99 @@ strands={2}{ blue } ] s_1;
 \end{tikzpicture}
 \end{center} 
 
-We decide at random to replace it with \(E_{1}\), or with the tempely-lieb identity element.
-Each decision like this for all the crossings is a state \(\sigma\)
+We decide at random to replace it with $E_{1}$, or with the Temperley-Lieb identity element.
+Each decision like this for all the crossings is a state $\sigma$
 
-\title{The Kaufmann Bracket Polynomial - definition} 
-We denote by \(\sigma_{+}\) the number of replaces we made with \(E_{1}\), and by 
-\(\sigma_{-}\) the number of replaces we made with the identity element.
-We denote by\(N_{\sigma}\) the number of loops created when all the changes of \(\sigma\) are applied.
-Then, the Kaufmann Bracket Polynomial is defined as:
-\( L(A) = \sum\limits_{all_states_\sigma}{A^{\sigma_{+}} A^{-\sigma_{-}}d^{N_{\sigma} - 1}}\)
+\title{The Kauffman Bracket Polynomial - definition} 
+We denote by $\sigma_{+}$ the number of replaces we made with $E_{1}$, and by 
+$\sigma_{-}$ the number of replaces we made with the identity element.
+We denote by$N_{\sigma}$ the number of loops created when all the changes of $\sigma$ are applied.
+Then, the Kauffman Bracket Polynomial is defined as:
+$ L(A) = \sum\limits_{all_states_\sigma}{A^{\sigma_{+}} A^{-\sigma_{-}}d^{N_{\sigma} - 1}}$
 
-d is defined as: \(d = -A^{-2} -A^2\) 
+d is defined as: $d = -A^{-2} -A^2$ 
 
 
 
-\title{The Kaufmann Bracket Polynomial - properties} 
-Note that the  Kaufmann Bracket Polynomial holds the following rules:
+\title{The Kauffman Bracket Polynomial - properties} 
+Note that the  Kauffman Bracket Polynomial holds the following rules:
 \begin{itemize}
-\item \(\forall A\), L(A)=1 in the unknot (one state with \(\sigma_{+}=0,\sigma_{-}=0, N_{\sigma} = 1\))
+\item $\forall A$, L(A)=1 in the unknot (one state with $\sigma_{+}=0,\sigma_{-}=0, N_{\sigma} = 1$)
 \item 
 \begin{figure}
-\includegraphics[scale=1]{kaufmann_bracket_identity} 
-\caption{kaufmann bracket recursive nature}
+\includegraphics[scale=1]{Kauffman_bracket_identity} 
+\caption{Kauffman bracket recursive nature}
 \end{figure}
-This comes directly from the definition, if we consider only one cross, after choose a state sigma for all the others, or we choose to replace it with \(E_{1}\) and multiply by A, or we choose to replace it by the identity and multiply by \(A^{-1}\)
+This comes directly from the definition, if we consider only one cross, after choose a state sigma for all the others, or we choose to replace it with $E_{1}$ and multiply by A, or we choose to replace it by the identity and multiply by $A^{-1}$
 \item we can eliminate an isolated unknot and multiply the result with a factor of d. (examples will follow). 
 \end{itemize}
 
 
 \subsubsection{The Jones Polynomial}
 \title{definition}
-Jones polynomial is different from Kaufmann bracket polynimial only with some normalization factor.
-We define by the w(k) for a knot k to be: \(w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}\)
-and Jones polynomial is defines as: \(V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)\).
+Jones polynomial is different from Kauffman bracket polynomial only with some normalization factor.
+We define by the w(k) for a knot k to be: $w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}$
+and Jones polynomial is defines as: $V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)$.
 
 Notice that w(k) for the unknot is 0, so the Jones polynomial of the unknot is still equals to 1 at any point.
 
 
 
 \title{example}
-Lets see an example to the calculation of Kaufmann and jons polynomial. Consider the Hopf link.
-The Kaufmann polynomial of this link is:
+Lets see an example to the calculation of Kauffman and Jones polynomial. Consider the Hopf link.
+The Kauffman polynomial of this link is:
 \begin{figure}
 \includegraphics[scale=0.15]{hopf_link} 
-\caption{the kaufmann polynomial of the Hopf link}
+\caption{the Kauffman polynomial of the Hopf link}
 \end{figure}
 
-Moving to Jones Polynomial, we can see that w(HopfLink)=-2 (two cross with the same oreintation), so:
-\(V_{hopfLink}=(-A)^{-6}(A^{-4}+A^{4}) = A^{-2} + A^{-10})\).
-Remember that \(t = A^{-4}\) and we get \(V_{hopfLink}(t)=\sqrt{t}(1+t^{2})\)  
+Moving to Jones Polynomial, we can see that w(Hopf Link)=-2 (two cross with the same orientation), so:
+$V_{hopfLink}=(-A)^{-6}(A^{-4}+A^{4}) = A^{-2} + A^{-10})$.
+Remember that $t = A^{-4}$ and we get $V_{hopfLink}(t)=\sqrt{t}(1+t^{2})$  
 
 
 
-\title{the connection to Reidiemster moves}
+\title{the connection to Reidemeister moves}
 For Completion, we will note that it is easy to see that Jones Polynomial remains the same
-under Reidiemster moves. We will show here only one of the three, the others can be proved in a similar technique:
+under Reidemeister moves. We will show here only one of the three, the others can be proved in a similar technique:
 \begin{figure}
 \includegraphics[scale=1]{jones_and_reidimister.jpg} 
-\caption{the kaufmann polynomial of the Hopf link}
+\caption{the Kauffman polynomial of the Hopf link}
 \end{figure}  
 
 
-\title{the connection to markov trace and braid groups}
+\title{the connection to Markov trace and braid groups}
 We will now show a connection between the Jones Polynomial and the Markov trace.
 Proposition:
-\(V_{B^{tr}}(A) = (-A)^{3w(B^{tr})}d^{n-1}Tr[\rho_{A}(B)]\)
-That is, the Jones polynomial of a trace-closure of some braid is connected to the Markov trace value of its corresponding templely-lieb object.
+$V_{B^{tr}}(A) = (-A)^{3w(B^{tr})}d^{n-1}Tr[\rho_{A}(B)]$
+That is, the Jones polynomial of a trace-closure of some braid is connected to the Markov trace value of its corresponding Temperley-Lieb object.
 Proof:
 
-We only have to proof that \(L(B^{tr}) = d^{n-1}Tr[\rho_{A}(B)]\). Recall that for each crossing in the braid B, the kaufmann polynomial hold \begin{figure}
-\includegraphics[scale=1]{kaufmann_bracket_identity} 
-\caption{kaufmann bracket recursive nature}
+We only have to proof that $L(B^{tr}) = d^{n-1}Tr[\rho_{A}(B)]$. Recall that for each crossing in the braid B, the Kauffman polynomial hold \begin{figure}
+\includegraphics[scale=1]{Kauffman_bracket_identity} 
+\caption{Kauffman bracket recursive nature}
 \end{figure}.
-The homomorphism also has the form of  \(\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I\) - exactly the same!.
+The homomorphism also has the form of  $\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I$ - exactly the same!.
 
-\title{the connection to markov trace and braid groups(2) }
-After choosing a state \(\sigma\), its value in the Kaufmann polynimial is \(d^{N_{\sigma} -1)}\), and its
-value i the Markov trace is \(d^{N_{\sigma}} -n )\), therefore we need the \(d^{n-1}\) factor. 
+\title{the connection to Markov trace and braid groups(2) }
+After choosing a state $\sigma$, its value in the Kauffman polynomial is $d^{N_{\sigma} -1)}$, and its
+value i the Markov trace is $d^{N_{\sigma}} -n )$, therefore we need the $d^{n-1}$ factor. 
  
 
-\subsection{The fibonacci representation}
-\title{The fibonacci representation of a braid group}
-We would like to obtain some matrix representation of a braid. Given an n-strand braid, we can write a string of n+1 elements on the buttom of the braid between every two strands, where each element is either * or p. The only restriction is that there will be no two adjacent * elements. The number of possibilities to do so is of course \(f_{n+3}\), where \(f_{n}\) denotes the n-th fibonacci number.
+\subsection{The Fibonacci representation}
+\title{The Fibonacci representation of a braid group}
+We would like to obtain some matrix representation of a braid. Given an n-strand braid, we can write a string of n+1 elements on the bottom of the braid between every two strands, where each element is either * or p. The only restriction is that there will be no two adjacent * elements. The number of possibilities to do so is of course $f_{n+3}$, where $f_{n}$ denotes the $n$th Fibonacci number.
 
 Next, for each crossing and labelling of it (the 3 elements from the right, left, and in the crossing) , we would like to give a linear function that will "open up" the crossing, and that may change the center label. (we wouldn't want to change the right or left label, in order to preserve the string of elements correctness under all the operations).
  
 
-\title{The fibonacci representation of a braid group (2)}
-That is, in the most general form, a cross \(\sigma_{i}\) with labeling of P*P, can move to 
+\title{The Fibonacci representation of a braid group (2)}
+That is, in the most general form, a cross $\sigma_{i}$ with labeling of P*P, can move to 
 a times * Identity with labelling P*P + b times the identity with labelling PPP.
-we will denote it by \((p\hat{*}p)=a(p*p)+b(ppp)\)
+we will denote it by $(p\hat{*}p)=a(p*p)+b(ppp)$
 
 
-Such matrix representation must have some properties that will make it usefull to us:
+Such matrix representation must have some properties that will make it useful to us:
 \begin{itemize}
 \item for every braid, its matrix must be unitary, so we can link it to some quantom circuit.
 \item for every braid, there has to be some connection between the Jones Polynomial of the braid, and the relevant matrix.
@@ -490,101 +491,101 @@ Such matrix representation must have some properties that will make it usefull t
  
 
 
-\title{The fibonacci representation of a braid group (3)}
+\title{The Fibonacci representation of a braid group (3)}
 The explicit representation is:
-\((*\hat{p}p)=a(*pp)\)
+$(*\hat{p}p)=a(*pp)$
 
-\((*\hat{p}*)=b(*p*)\)
+$(*\hat{p}*)=b(*p*)$
 
-\((p\hat{*}p)=c(p*p)+d(ppp)\)
+$(p\hat{*}p)=c(p*p)+d(ppp)$
 
-\((p\hat{p}*)=a(pp*)\)
+$(p\hat{p}*)=a(pp*)$
 
-\((p\hat{p}p)=d(p*p)+e(ppp)\)
+$(p\hat{p}p)=d(p*p)+e(ppp)$
 
 , with:
-\( a = -A^{4} \)
+$ a = -A^{4} $
 
 
- \(  b = A^{8}  \)
+ $  b = A^{8}  $
  
- \(  c = A^{8}\tau^{2} - A^{4}\tau \)
+ $  c = A^{8}\tau^{2} - A^{4}\tau $
   
- \(  d = A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}} \) 
+ $  d = A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}} $ 
  
- \(  e = A^{8}\tau - A^{4}\tau^{2} \) 
+ $  e = A^{8}\tau - A^{4}\tau^{2} $ 
  
- \(  A = e^{\frac{-3{\pi}i}{5}} \) 
+ $  A = e^{\frac{-3{\pi}i}{5}} $ 
  
- \(  \tau = \frac{2}{1 + \sqrt{5}} \)
+ $  \tau = \frac{2}{1 + \sqrt{5}} $
 
 
  
 \title{The Fibonacci representation - example}
-We will show the Fibonacci representation of \(\sigma_{1}\) with 3 strands:
+We will show the Fibonacci representation of $\sigma_{1}$ with 3 strands:
 \[
 \begin{pmatrix} b & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & a & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & a & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & e & 0 & d & 0 & 0 \\ 0 & 0 & 0 & 0 & a & 0 & 0 & 0 \\ 0 & 0 & 0 & d & 0 & e & 0 & 0 \\0 & 0 & 0 & 0 & 0 & 0 & e & d \\0 & 0 & 0 & 0 & 0 & 0 & d & c \end{pmatrix} 
   \begin{pmatrix} *p*p \\ *ppp \\ *pp* \\ pppp \\ pp*p \\ pp*p \\ p*pp \\ ppp* \\ p*p* \end{pmatrix}
 \]
 
-\subsubsection{unitarity}
+\subsubsection{Unitarity}
 \title{The Unitary of the Fibonacci representation}
 Its enough to prove that all the braid group generators, since multiplication of unitary matrices is again unitary matrix. Each generator like this include only one cross. As we saw in the definition and examples, each cross leaves only 1-2 non-zero elements in each matrix row, in the corresponding labelling entry.
 
-we will move onto the 5 options to label the 3 elements near the cross (since the other elements doesnt matter here).
+we will move onto the 5 options to label the 3 elements near the cross (since the other elements doesn't matter here).
 \begin{itemize}
-\item with all the labelling with the form ...*pp... , the unitary row will include only one "a" in the matrix diagonal, and no other row have non-zero entries in that column. That is, with multiplied by its dagger, the entry on the diagonal will be \(a^{\dagger}a = e^{\frac{-12{pi}i}{5}}e^{\frac{12{pi}i}{5}} = 1\), and all the other entries will be zero.
+\item with all the labelling with the form ...*pp... , the unitary row will include only one "a" in the matrix diagonal, and no other row have non-zero entries in that column. That is, with multiplied by its dagger, the entry on the diagonal will be $a^{\dagger}a = e^{\frac{-12{pi}i}{5}}e^{\frac{12{pi}i}{5}} = 1$, and all the other entries will be zero.
 \item the same reasoning apply for labeling with the form ...pp*...  
 \end{itemize}
 
 
 \title{The Unitary of the Fibonacci representation (2) }
 \begin{itemize}
-\item with all the labelling with the form ...*p*... , the unitary row will include only one "b" in the matrix diagonal, and no other row have non-zero entries in that column. That is, with multiplied by its dagger, the entry on the diagonal will be \(b^{\dagger}b = e^{\frac{-24{pi}i}{5}}e^{\frac{24{pi}i}{5}} = 1\), and all the other entries will be zero.
-\item  with all the labelling with the form ...p*p.., the unitary row will include one "d" in the ...ppp.. entry, and one "c" in the ...p*p.. entry. that is, when multiplied by its dagger, the diagonal element will be \(c^{\dagger}c + d^{\dagger}d = (A^{-8}\tau^{2} - A^{-4}\tau)(A^{8}\tau^{2} - A^{4}\tau) + (A^{-8}\tau^{\frac{3}{2}} + A^{-4}\tau^{\frac{3}{2}})(A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}})\)
+\item with all the labelling with the form ...*p*... , the unitary row will include only one "b" in the matrix diagonal, and no other row have non-zero entries in that column. That is, with multiplied by its dagger, the entry on the diagonal will be $b^{\dagger}b = e^{\frac{-24{pi}i}{5}}e^{\frac{24{pi}i}{5}} = 1$, and all the other entries will be zero.
+\item  with all the labelling with the form ...p*p.., the unitary row will include one "d" in the ...ppp.. entry, and one "c" in the ...p*p.. entry. that is, when multiplied by its dagger, the diagonal element will be $c^{\dagger}c + d^{\dagger}d = (A^{-8}\tau^{2} - A^{-4}\tau)(A^{8}\tau^{2} - A^{4}\tau) + (A^{-8}\tau^{\frac{3}{2}} + A^{-4}\tau^{\frac{3}{2}})(A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}})$
 
-\( = \tau^{4} - A^{-4}\tau^{3} - A^{4}\tau^{3} + \tau^{2} + \tau^{3} + A^{-4}\tau^{3} + A^{4}\tau^{3} + \tau^{3}\)
+$ = \tau^{4} - A^{-4}\tau^{3} - A^{4}\tau^{3} + \tau^{2} + \tau^{3} + A^{-4}\tau^{3} + A^{4}\tau^{3} + \tau^{3}$
 
-\( = \tau^{4} + 2\tau^{3} + \tau^{2} = {\tau^{2}(\tau+1)}^{2} = 1^{2} = 1\) 
+$ = \tau^{4} + 2\tau^{3} + \tau^{2} = {\tau^{2}(\tau+1)}^{2} = 1^{2} = 1$ 
 \end{itemize}
 
 
 \title{The Unitary of the Fibonacci representation (3) }
 \begin{itemize}
 \item  now, lets check another entries in this row, after multiply this matrix by its dagger.
-All the other rows has zero entries in the relevant columns, except the ...ppp.. row. when multiply, we will get \(e^{\dagger}d + d^{\dagger}c = (A^{-8}\tau - A^{-4}\tau^{2})(A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}}) + (A^{-8}\tau^{\frac{3}{2}} + A^{-4}\tau^{\frac{3}{2}})(A^{8}\tau^{2} - A^{4}\tau)\)
+All the other rows has zero entries in the relevant columns, except the ...ppp.. row. when multiply, we will get $e^{\dagger}d + d^{\dagger}c = (A^{-8}\tau - A^{-4}\tau^{2})(A^{8}\tau^{\frac{3}{2}} + A^{4}\tau^{\frac{3}{2}}) + (A^{-8}\tau^{\frac{3}{2}} + A^{-4}\tau^{\frac{3}{2}})(A^{8}\tau^{2} - A^{4}\tau)$
 
-\( = \tau^{2.5} + A^{-4}\tau^{2.5} - A^{4}\tau^{3.5} - \tau^{3.5} + \tau^{3.5} - A^{-4}\tau^{2.5} + A^{4}\tau^{3.5} - \tau^{2.5}\)
+$ = \tau^{2.5} + A^{-4}\tau^{2.5} - A^{4}\tau^{3.5} - \tau^{3.5} + \tau^{3.5} - A^{-4}\tau^{2.5} + A^{4}\tau^{3.5} - \tau^{2.5}$
 
-\( = 0\)
+$ = 0$
 \item similar calculation will yield the result on the ...ppp... rows   
 \end{itemize}
 
 \subsubsection{Fibonacci representation and Jones Polynomial}
-\title{Fibonacci representation and Jones polynimial}
+\title{Fibonacci representation and Jones polynomial}
 We will want to connect somehow between the Fibonacci representation and the Jones Polynomial.
-For this, we will use the Tempely Lieb algebra, and the Markov Trace. We saw that the Markov trace
-is a uniquely defined function over the Tempely-Lieb algebra, such that it is strongly connected to the Jones Polynomial. If we will be able to define a function over the Fibonacci representation that "behaves the same", we will be able to show such correlation between Jones Polynomial and the Fibonacci representation. We will donate this function as \(\tilde{Tr}\)
+For this, we will use the Temperley-Lieb algebra, and the Markov Trace. We saw that the Markov trace
+is a uniquely defined function over the Temperley-Lieb algebra, such that it is strongly connected to the Jones Polynomial. If we will be able to define a function over the Fibonacci representation that "behaves the same", we will be able to show such correlation between Jones Polynomial and the Fibonacci representation. We will donate this function as $\tilde{Tr}$
 
 
-\title{Fibonacci representation and Jones polynimial (2)}
-The requirements from  \(\tilde{Tr}\) are:
+\title{Fibonacci representation and Jones polynomial (2)}
+The requirements from  $\tilde{Tr}$ are:
 \begin{itemize}
-\item \(\tilde{Tr}(1) = 1\)
-\item \(\tilde{Tr}(XY) = \tilde{Tr}(YX)\)
-\item  \( \tilde{Tr}[xE_{n-1}]=\frac{\tilde(Tr)[x]}{d}\)    
+\item $\tilde{Tr}(1) = 1$
+\item $\tilde{Tr}(XY) = \tilde{Tr}(YX)$
+\item  $ \tilde{Tr}[xE_{n-1}]=\frac{\tilde(Tr)[x]}{d}$    
 \end{itemize}
-The last requirement, however, regards to a specific Templerly-Lieb element. Thus, we have to show that the Fibonacci representation and the Temperly-Lieb algebra "live in the same world", in order to translate \(E_{n-1}\) to some matrix in the Fibonacci representation, and prove the requirement on the matrix after the translation. Therefore, in order to even start talking on \(\tilde{Tr}\), we have to show a representation of the Temperly-Lieb algebra inside the Fibonacci representation.  
+The last requirement, however, regards to a specific Temperley-Lieb element. Thus, we have to show that the Fibonacci representation and the Temperley-Lieb algebra "live in the same world", in order to translate $E_{n-1}$ to some matrix in the Fibonacci representation, and prove the requirement on the matrix after the translation. Therefore, in order to even start talking on $\tilde{Tr}$, we have to show a representation of the Temperley-Lieb algebra inside the Fibonacci representation.  
 
 
-\title{Fibonacci representation and Jones polynimial (3)}
+\title{Fibonacci representation and Jones polynomial (3)}
 The requirements from the representation, are, as always, to preserve the original generators properties.
-Here, the representation is: \(\rho_{b}(E_{i}) = A^{-1}\rho_{F}(\sigma_{i}) - A^{-2}1\) , with 1 symbols the identity matrix.
+Here, the representation is: $\rho_{b}(E_{i}) = A^{-1}\rho_{F}(\sigma_{i}) - A^{-2}1$ , with 1 symbols the identity matrix.
 
 it should hold that:
 \begin{itemize}
-\item \(\rho_{b}(E_{i})\rho_{b}(E_{j}) = \rho_{b}(E_{j})\rho_{b}(E_{i}), when 2 /leq |i-j|\).This hold, since the Fibonacci representation is a representation, so \(rho_{F}(\sigma_{i}),rho_{F}(\sigma_{j})\) commutes, and therefore \(\rho_{b}(E_{i}),\rho_{b}(E_{j})\) commutes.
-\item  \({\rho_{b}(E_{i}}^{2} = d\rho_{b}(E_{i}\) : in a similar way to what we did in the unitary proof, we can divide each  \(rho_{F}(\sigma_{i}\) to blocks of
+\item $\rho_{b}(E_{i})\rho_{b}(E_{j}) = \rho_{b}(E_{j})\rho_{b}(E_{i}), when 2 /leq |i-j|$.This hold, since the Fibonacci representation is a representation, so $rho_{F}(\sigma_{i}),rho_{F}(\sigma_{j})$ commutes, and therefore $\rho_{b}(E_{i}),\rho_{b}(E_{j})$ commutes.
+\item  ${\rho_{b}(E_{i}}^{2} = d\rho_{b}(E_{i}$ : in a similar way to what we did in the unitary proof, we can divide each  $rho_{F}(\sigma_{i}$ to blocks of
 \[
 \begin{pmatrix} a \end{pmatrix}
 \begin{pmatrix} b \end{pmatrix}
@@ -594,38 +595,38 @@ it should hold that:
 
 
 
-\title{Fibonacci representation and Jones polynםmial (4)}
+\title{Fibonacci representation and Jones polynomial (4)}
 The last requirement we should prove is that  
- \(\rho_{b}(E_{i})\rho_{b}(E_{i+1})\rho_{b}(E_{i}) = \rho_{b}(E_{i})\))
- . Direct calculation shows that \(rho_{b}(E_{1}), (rho_{b}(E_{2})\) with 3 strands satisfy this requirement. This suffice, since the relation between \(rho_{b}(E_{i}), rho_{b}(E_{i+1})\) remains the same when i is change (up to re-index of the matrix, the matrix doesn't change), or when the number of strands get bigger with the same index (we will have more "squares" of the form mentioned in the previous slide for more equivalent labellings).
+ $\rho_{b}(E_{i})\rho_{b}(E_{i+1})\rho_{b}(E_{i}) = \rho_{b}(E_{i})$)
+ . Direct calculation shows that $rho_{b}(E_{1}), (rho_{b}(E_{2})$ with 3 strands satisfy this requirement. This suffice, since the relation between $rho_{b}(E_{i}), rho_{b}(E_{i+1})$ remains the same when i is change (up to re-index of the matrix, the matrix doesn't change), or when the number of strands get bigger with the same index (we will have more "squares" of the form mentioned in the previous slide for more equivalent labellings).
 
 
 \title{Fibonacci representation and Jones polynomial (5)}
-Its time to consider the specific function \(\tilde{Tr}\), and prove its desired properties.
-\(\tilde{Tr} = \frac{1}{{\phi}f_{n}+f_{n-1}}\sum\limits_{s \in Q_{n+1}}{W_{s}}\rho_{f}(b)_{s,s}\),
-when \(\rho_{f}(b)_{s,s}\) denote the s-th diagonal entry in the Fibonacci representation of b,
-and \(W_{s}\) is \(\phi\)if s ends with p, and 1 if s ends with *. \(Q_{n+1}\) is the set of all strings with length n+1 that obeys the "no two adjective *" rule. 
+Its time to consider the specific function $\tilde{Tr}$, and prove its desired properties.
+$\tilde{Tr} = \frac{1}{{\phi}f_{n}+f_{n-1}}\sum\limits_{s \in Q_{n+1}}{W_{s}}\rho_{f}(b)_{s,s}$,
+when $\rho_{f}(b)_{s,s}$ denote the s-th diagonal entry in the Fibonacci representation of b,
+and $W_{s}$ is $\phi$if s ends with p, and 1 if s ends with *. $Q_{n+1}$ is the set of all strings with length n+1 that obeys the "no two adjective *" rule. 
 
-Its easy to see that \(\tilde{Tr}(1) = 1\). In the identity matrix, all the diagonal entries equals to one, there are \(f_{n}\) entries that end with p, and \(f_{n-1}\)entries that end with *, so 
-\(\tilde{Tr} = \frac{1}{{\phi}f_{n}+f_{n-1}}\sum\limits_{s \in Q_{n+1}}{W_{s}}\rho_{f}(b)_{s,s} =
- \frac{1}{{\phi}f_{n}+f_{n-1}} ({\phi}f_{n}+f_{n-1}) = 1\)
+Its easy to see that $\tilde{Tr}(1) = 1$. In the identity matrix, all the diagonal entries equals to one, there are $f_{n}$ entries that end with p, and $f_{n-1}$entries that end with *, so 
+$\tilde{Tr} = \frac{1}{{\phi}f_{n}+f_{n-1}}\sum\limits_{s \in Q_{n+1}}{W_{s}}\rho_{f}(b)_{s,s} =
+ \frac{1}{{\phi}f_{n}+f_{n-1}} ({\phi}f_{n}+f_{n-1}) = 1$
 
 
-\title{Fibonacci representation and Jones polynimial (6)}
-Its easy to see that \(\tilde{Tr}(XY) = \tilde{Tr}(YX)\), since at theend we talking about traces of matrices, and traceis a commutative property.
+\title{Fibonacci representation and Jones polynomial (6)}
+Its easy to see that $\tilde{Tr}(XY) = \tilde{Tr}(YX)$, since at the end we talking about traces of matrices, and trace is a commutative property.
 
-We remain with the last requirement of  \( \tilde{Tr}[xE_{n-1}]=\frac{\tilde(Tr)[x]}{d}\) . First, we will instantiate \(E_{n-1}\) according to its representation: \(E_{n-1} = A^{-1}\rho_{F}(\sigma_{n-1}) - A^{-2}1\). Therefore, \( \tilde{Tr}[xE_{n-1}] = \tilde{Tr}[A^{-1}x\rho_{F}(\sigma_{n-1}) - A^{-2}x]\)
+We remain with the last requirement of  $ \tilde{Tr}[xE_{n-1}]=\frac{\tilde(Tr)[x]}{d}$ . First, we will instantiate $E_{n-1}$ according to its representation: $E_{n-1} = A^{-1}\rho_{F}(\sigma_{n-1}) - A^{-2}1$. Therefore, $ \tilde{Tr}[xE_{n-1}] = \tilde{Tr}[A^{-1}x\rho_{F}(\sigma_{n-1}) - A^{-2}x]$
 
-Therefore, from the linearity of the trace we get  \( \tilde{Tr}[xE_{n-1}] = A\tilde{Tr}[{\rho_{f}({\rho_{f}}^{-1}(x) * \sigma_{n-1})}] -A^{-2}\tilde{Tr}[x]\)
+Therefore, from the linearity of the trace we get  $ \tilde{Tr}[xE_{n-1}] = A\tilde{Tr}[{\rho_{f}({\rho_{f}}^{-1}(x) * \sigma_{n-1})}] -A^{-2}\tilde{Tr}[x]$
 
-Therefore, it remain to check  the value of \(\tilde{Tr}[{\rho_{f}({\rho_{f}}^{-1}(x) * \sigma_{n-1})}]\)
+Therefore, it remain to check  the value of $\tilde{Tr}[{\rho_{f}({\rho_{f}}^{-1}(x) * \sigma_{n-1})}]$
 
 A careful examination of all the different labelling options of the new strand, combined with the Fibonacci representation rules for the new crossing, yield that this requirement indeed hold
 
 
 \subsection{The Algorithm itself}
 \title{The numbers representation}
-We saw that the Fibonacci representation connects between braids and elements of p and *, such that the number of possible p,* sequences is $f_{n+2}$, when $f_{i}$ is the i-th Fibinacci number.
+We saw that the Fibonacci representation connects between braids and elements of p and *, such that the number of possible p,* sequences is $f_{n+2}$, when $f_{i}$ is the $i$th Fibonacci number.
 
 If we where representing numbers in the "regular" form (binary basis - 1 for * and 0 for p, for example), then it would require n+1 qubits. 
 
@@ -641,13 +642,13 @@ It can be proven (by Induction), that this method indeed represents the numbers 
 We will notice that in the new representation method, we require only $\log{f_{i+1}}$ bits, so the number of relevant bit strings from them is more then half. (because we can choose freely the */p value for at least half of the bytes).
 
 We saw that computing the Jones polynomial at the point $e^{\frac{2{\pi}i}{5}}$ is equivalent to the Fibonacci representation trace estimation.
-Given a certain braid, we can move cross-cross, and build its Fibonacci local matrix for each crossing (dimension 5x5), which dependent only on  neighbour strands, and leave all the rest in place. (we will extract those 3 bits from the rest, act on them locally, and then return the result to the strands). Multiplying all those circuits together will yield a quantum circuit which calculates the Fibonacci representation matrix, and then we can apply the Hadamard test for this matrix and get an approximation to the Jones polynomial.
+Given a certain braid, we can move cross-cross, and build its Fibonacci local matrix for each crossing (dimension 5x5), which dependent only on  neighbour strands, and leave all the rest in place. (we will extract those 3 bits from the rest, act on them locally, and then return the result to the strands). Multiplying all those circuits together will yield a quantum circuit which calculates the Fibonacci representation matrix, and then we can apply the Reidemeister test for this matrix and get an approximation to the Jones polynomial.
 
 
 \title{The algorithm itself (2)}
-However, extracting those 3 bits from the rest and return them once the computation is done, might be a non-trivial issue, since we are not using the regulat binary encoding (we have only $\log{f_{n+1}}$ to represent n+1 bits). 
+However, extracting those 3 bits from the rest and return them once the computation is done, might be a non-trivial issue, since we are not using the regular binary encoding (we have only $\log{f_{n+1}}$ to represent n+1 bits). 
 
-However, we will note that we can, quite easily, calculate the value of the leftmost bit: The leftmost bit will be * iff $f_{n+1} \leq z(s)$. But is computing two numbers can be done with one clean qubit?
+However, we will note that we can, quite easily, calculate the value of the leftmost bit: The leftmost bit will be * \iff $f_{n+1} \leq z(s)$. But is computing two numbers can be done with one clean qubit?
 
 
 \title{Arithmetic operations are in DQC1}
@@ -689,7 +690,7 @@ Start with 3 clean qubits at state 000, we expect to end in the same state at th
 \title{The algorithm itself - closure}
 \begin{itemize}
 \item Concluding the above discussion, we can efficiently isolate the left-most bit using arithmetic operations.
-\item however, we have to develop a method for saving all the other qubits as well. To isolate the $i$th qubit, we will first isolate the first qubit. if it was one, we will substruct $f_{n+1}$ from the input. Then, we can isolate the second-leftmost qubit by asking whether the remaining number is bigger then $f_{n}$ or not. If yes - the second qubit is *, and before isolate the third qubit we will subtract $f_{n}$, and so on... (The calculation of Fibonacci itself is of course in NC1, but it can be hard-coded into the circuit as well).
+\item however, we have to develop a method for saving all the other qubits as well. To isolate the $i$th qubit, we will first isolate the first qubit. if it was one, we will subtract $f_{n+1}$ from the input. Then, we can isolate the second-leftmost qubit by asking whether the remaining number is bigger then $f_{n}$ or not. If yes - the second qubit is *, and before isolate the third qubit we will subtract $f_{n}$, and so on... (The calculation of Fibonacci itself is of course in NC1, but it can be hard-coded into the circuit as well).
 \end{itemize}
 
 
@@ -701,7 +702,7 @@ Start with 3 clean qubits at state 000, we expect to end in the same state at th
 \subsection{Fibonacci representation gates are dense}
 \subsubsection{SO(3) and the connection to density}
 \title{SO(3) and the connection to density}
-In order to show that computing the Jones polynomial is indeed hard, we will have to show that using the matrices we can build from the braids, the Fibonacci matrices, we can approximate any other unitary matrix. In such a case, we will say that the group of Fibonacci matices is DENSE.
+In order to show that computing the Jones polynomial is indeed hard, we will have to show that using the matrices we can build from the braids, the Fibonacci matrices, we can approximate any other unitary matrix. In such a case, we will say that the group of Fibonacci matrices is DENSE.
 
 
 \title{density- definition}
@@ -710,8 +711,8 @@ $D(\sigma, \rho) = \frac{1}{2}Tr[\sqrt{(\rho - \sigma)^{\dagger}(\rho - \sigma)}
 , and define a set of gates to be $\epsilon$-dense if for every unitary matrix there is a gate from the group (or can be built by the group) which is $\epsilon$ close to it.
 
 
-\title{The Solovay-Kitaiev theorem}
-The Solovay-Kitaiev theorem implies that when choosing such set, the approximation that we get is exponentially good when we increase the number of gates from the set that we approximate with. Thus, it suffies to show that we can approximate any gate, and efficiency will immediatly follow.
+\title{The Solovay-Kitaev theorem}
+The Solovay-Kitaev theorem implies that when choosing such set, the approximation that we get is exponentially good when we increase the number of gates from the set that we approximate with. Thus, it suffices to show that we can approximate any gate, and efficiency will immediately follow.
 
 \title {The SO(3) group and its subgroups}
 The SO(3) group is defined to be the rotation group in the unity circle. That is, each element in SO(3) is defined by its rotation degree $\tetha$ and by its axis or rotation (x,y,z). Note that Poincare sphere defines an isomorphism $\phi$ from the single qubit operations SU(2) to the rotation group: we can write each 2x2 unitary matrix as $cos(\frac{\tetha}{2}I + \frac{\thetha}{2}{a\sigma_{x} + b\sigma_{y} + c\sigma_{z}})$, which correlates each unitary operation to a degree $\thetha$ and an axis of (a,b,c). For a general group of gates G, it is obvious that if ${\phi(x) for x \in G}$ does not contained in any finite subgroup of SO(3), then it will actually be able to create ALL SO(3), which means that after the isomorphism the results will be "dense in SO(3)", which will make the original kernel dense in SU(2).
@@ -722,8 +723,8 @@ The SO(3) group is defined to be the rotation group in the unity circle. That is
 
 
 \subsubsection{The bridge lemma}
-\subsubsection{The decoupeling lemma}
-\subsection{The reduction from trace estimation to Jones polynimial evaluation}
+\subsubsection{The decoupling lemma}
+\subsection{The reduction from trace estimation to Jones polynomial evaluation}
 
 \end{document}
 

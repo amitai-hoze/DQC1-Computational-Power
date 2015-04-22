@@ -48,12 +48,12 @@ That is, the start state is
 \begin{equation}
 \rho = \ket{0}\bra{0}\otimes\frac{I}{2^n}
 \end{equation}
-We can use the Reidemeister test, which gets as input this state, in order to accurately estimate a trace
+We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace
 of unitary operation U.
 
 
-\title{The Reidemeister Test}
-The description of the Reidemeister test for some unitary matrix U is:
+\title{The Hadamard Test}
+The description of the Hadamard test for some unitary matrix U is:
 \Qcircuit @C=1em @R=.7em {
 	\lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
 	\lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw
@@ -61,14 +61,14 @@ The description of the Reidemeister test for some unitary matrix U is:
 
 We will show that this circuit indeed calculates the trace of U
 \begin{itemize}
-\item after the first Reidemeister gate, the state is $\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}$
+\item after the first Hadamard gate, the state is $\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}$
 \item after the C-U operation, the new state is $\frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}$
-\item after the final Reidemeister operation, the final state becomes $\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
+\item after the final Hadamard operation, the final state becomes $\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
 \frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}$
 \end{itemize}
 
  }
- \title {The Reidemeister Test (2) }
+ \title {The Hadamard Test (2) }
  Therefore, the probability for measure 0 in the end is:
  $ \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
   \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
@@ -642,7 +642,7 @@ It can be proven (by Induction), that this method indeed represents the numbers 
 We will notice that in the new representation method, we require only $\log{f_{i+1}}$ bits, so the number of relevant bit strings from them is more then half. (because we can choose freely the */p value for at least half of the bytes).
 
 We saw that computing the Jones polynomial at the point $e^{\frac{2{\pi}i}{5}}$ is equivalent to the Fibonacci representation trace estimation.
-Given a certain braid, we can move cross-cross, and build its Fibonacci local matrix for each crossing (dimension 5x5), which dependent only on  neighbour strands, and leave all the rest in place. (we will extract those 3 bits from the rest, act on them locally, and then return the result to the strands). Multiplying all those circuits together will yield a quantum circuit which calculates the Fibonacci representation matrix, and then we can apply the Reidemeister test for this matrix and get an approximation to the Jones polynomial.
+Given a certain braid, we can move cross-cross, and build its Fibonacci local matrix for each crossing (dimension 5x5), which dependent only on  neighbour strands, and leave all the rest in place. (we will extract those 3 bits from the rest, act on them locally, and then return the result to the strands). Multiplying all those circuits together will yield a quantum circuit which calculates the Fibonacci representation matrix, and then we can apply the Hadamard test for this matrix and get an approximation to the Jones polynomial.
 
 
 \title{The algorithm itself (2)}

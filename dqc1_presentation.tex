@@ -25,7 +25,7 @@ DQC1 class is the class of decidable languages with algorithm $A$ such that:
 \item $A$ starts with one clean qubit in state $\ket{0}$, and $n$ qubits in the maximally mixed state
 \item $A$ may perform any unitary operation
 \item $A$ can only perform a measurement of the clean qubit at the end of the algorithm
-\item $A$ has access to a classical computer, so $P \subset DQC1$ 
+\item $A$ has no access to a classical computer, so its not promised that $P \subset DQC1$ 
 \item $A$ cannot be invoked many times in parallel
 \item $A$ runs in polynomial time
 \item $\forall x$, $A$ decides if $x \in L$ correctly with probability of at least $\frac{2}{3}$
@@ -135,12 +135,12 @@ DQCK class is the class of decidable languages with algorithm A such that:
 \begin{itemize}
 \item A runs in polynomial time
 \item $\forall x$, A decide correctly if $x \in L$, with probability of at least $\frac{2}{3}$. 
-In case that $x \in L$, we expect all the clean bits to be 0 at the end of the algorithm
+In case that $x \in L$, we expect the first clean qubit to be 0 at the end of the algorithm
 \item A start state includes K clean qubits (K can be a constant, or a function of n) (state $\ket{0}$), and n-qubits in the maximally mixed state
 \item A may perform any unitary operation on his start state
 \item A can measure only the clean qubits, only at the end of the algorithm
 \item We assume that A is invoked cant be invoked many times in parallel
-\item A may have access to classical computer, so $P \subset DQCK$ 
+\item A has no access to classical computer, so its not promised that $P \subset DQCK$ 
 \end{itemize}  
 
 
@@ -701,23 +701,108 @@ Start with 3 clean qubits at state 000, we expect to end in the same state at th
 
 
 \section{The Hardness of computing Jones polynomial}
+\subsection{The reduction from trace estimation to Jones polynomial evaluation - an overview}
+
+We are now moving from showing an algorithm for estimate Jones polynomial of a trace closure of a braid at the point $\frac{2{\pi}i}{5}$, into showing that this is indeed a DQC1-hard problem. Specifically, we will want to show a reduction from trace-estimation to this estimation problem.
+
+Say that we have some unitary matrix (with suitable quantom cicruit). How to reduce this problem to the Jones polynomials world?
+
+We will have to construct some braid, of our choice, and show a correlation between of Jones polynomial and that circuit trace.
+
+Since the only correlation we know so far between Jones Polynomial and quantom circuit is the Fibonacci representation, we will obviously have to approximate each quantom operation from the circuit C via Fibonnaci representation on some braid. For this, it is required to prove that Fibonacci representation matrices are dense, and we will prove that in subsection 3.2
+
+More explicitly, we will show that $\{rho^{n}}_{**}$ is dense subgroup of $SU(f_{n-1})$, and that $\{rho^{n}}_{*p}$ is a dense subgroup of $SU(f_{n})$.
+
+Next, we are tackeling the problem of the representation of qubit as braid with */p symbols. Since in our model there cannot be two adjacent $*$ symbols, a naive one-to-one mapping is not feasible.
+
+Taking into account the fact that any such representation will have to give an "equal whight" to the different strings matching 0 and 1, and that we want to be able to operate on all the qubits freely, yields an optional encoding: $1 \rightarrow ppp, 0 \rightarrow p*p$.
+
+However, there are many groups of three symbols, most of them aren't encode to anything, and we still want to know ahead what is the place that encode to each qubit abd qubit. We note that the probability that such group of three won't appear in $O(logn)$ bits is polynomially small. Therefore, we can assume that in every group of $O(\log{n})$ symbols we will find an encoding to one or to zero.
+
+Notice that the Fibonacci matrix representation to $O(\log{n})$ bits is polynomial, so we will be able to actually construct these matrixes.
+
+By the density theorem which will be proven in section 3.2, we now that there is some braid that suit to that matrix circuit. However, the number of crossing in the braid might be large. In section 3.3 we will prove that $poly(n)$ crossings in that braid is enough for any level of approximation that we want.
+
+However, two issues are still remain.
+
+First, we will show that Fibonacci matrices that act on string which start at $*$ are dense. But what we do in the case that there is no $*$ around?. Note that for the first 2 blocks, we can assume that there is a "*" in the middle of them (since it happens with a constant probability, we can make the other options to not contribute to the final trace, similar to what we did in section 1, with ancilla qubits and CNOTs). However, this method cannot be applied to all the blocks (since we will need polynomial number of ancila qubits, which we cannot have in DQC1 reduction).
+
+Therefore, a method one can try is to "move the $*$". Specifically, we can imply a unitary transformation that "switches" between two segments in the center of two neigthboring blocks, if they are both in the same size, and both starts and end with a "p". (Since its just a replace action - its obvious that this matrix is indeed unitary). Note that:
+\begin{itemize}
+\item Since this matrix act on two blocks, its size is still polynomial.
+\item Using this matrix we can bring a "*" to every block: At the start we have * in the middle of the first two blocks. Using this matrix once we can move the "*" to be in the first and the third blocks. Use it again, and we can move the "*" to be in the center of the second and the third blocks, and etc.
+\item The probability that we wont find such "p" segment to make the replace on is polynomially small. Furthermore, the probability that our encoding lies within these segments is also polynomially small. Thus, we can assume that these conditions always hold, and add polynomially small error to the calculations. 
+\end{itemize}
+
+The second issue that we have to take into account, is the fact that the weight that the trace gives to each encoding is the same, while the weight that the Jones polynomial calculation gives is not. This issue can be solved by adding  one more superblock at the end. This superblock encoding will match the encoding of a matrix that, conditioned on the last original bit (i.e. just if it was "p"), rotate the state, so the inner product of the new state with the old state is exactly $\frac{1}{\phi}$ (recall that in the Jones polynimial calculations, the weight we gave to the "ending with p states" was $\phi$). The orthogonal part of the state after the rotation will obviously wont contribute to the trace, and therefore we will get in the Jones polynomial calculation that its value is equal to the trace in the original circuit.
+
+This completes the proof that the Jones polynomial estimation is hard in DQC1 (except proving the theoremes in sections 3.2 and 3.3). 
 \subsection{Fibonacci representation gates are dense}
-\subsubsection{SO(3) and the connection to density}
-\title{SO(3) and the connection to density}
-In order to show that computing the Jones polynomial is indeed hard, we will have to show that using the matrices we can build from the braids, the Fibonacci matrices, we can approximate any other unitary matrix. In such a case, we will say that the group of Fibonacci matrices is DENSE.
+In this section we will prove that the Fibonacci representation gates are dense. Specifically, we will prove that:
+\begin{itemize}
+\item ${\rho^{n}}_{**}$ (which stand for all the Fibonacci matrices, taken over the subspace of strings with start and end with *), are dense in $SU(f_{n-1})$
+\item ${\rho^{n}}_{*p}$ (which stand for all the Fibonacci matrices, taken over the subspace of strings with start and end with *), are dense in $SU(f_{n})$
+\end{itemize}
 
+Together, this two statements implies the fact that as long that our encoding start with "*", we can find a suitable Fibonacci matrix that will approximate any unitary transformation on our n bits.
 
+First, lets remind what the term "dense" means. 
 \title{density- definition}
 A subset of gates $\in SU(f_{n+1})$ is said to be dense, if we can approximate any gate in $ SU(f_{n+1})$ by this subset. Formally, we can measure the distance between 2 unitary matrices by their trace distance: 
 $D(\sigma, \rho) = \frac{1}{2}Tr[\sqrt{(\rho - \sigma)^{\dagger}(\rho - \sigma)}]$
 , and define a set of gates to be $\epsilon$-dense if for every unitary matrix there is a gate from the group (or can be built by the group) which is $\epsilon$ close to it.
 
+We will prove that therorem by induction on n. The base case is to prove that ${\rho^{4}}_{**}$, ${\rho^{3}}_{*p}$ are dense in $SU(2)$. How to prove density in $SU(2)$?
 
-\title{The Solovay-Kitaev theorem}
-The Solovay-Kitaev theorem implies that when choosing such set, the approximation that we get is exponentially good when we increase the number of gates from the set that we approximate with. Thus, it suffices to show that we can approximate any gate, and efficiency will immediately follow.
+For that we will use an isomorphism from $SU(2)$ to $SO(3)$ - the group of rotations on the sphere with radius 1.
+
+
+\subsubsection{SO(3) and the connection to density}
 
 \title {The SO(3) group and its subgroups}
-The SO(3) group is defined to be the rotation group in the unity circle. That is, each element in SO(3) is defined by its rotation degree $\tetha$ and by its axis or rotation (x,y,z). Note that Poincare sphere defines an isomorphism $\phi$ from the single qubit operations SU(2) to the rotation group: we can write each 2x2 unitary matrix as $cos(\frac{\tetha}{2}I + \frac{\thetha}{2}{a\sigma_{x} + b\sigma_{y} + c\sigma_{z}})$, which correlates each unitary operation to a degree $\thetha$ and an axis of (a,b,c). For a general group of gates G, it is obvious that if ${\phi(x) for x \in G}$ does not contained in any finite subgroup of SO(3), then it will actually be able to create ALL SO(3), which means that after the isomorphism the results will be "dense in SO(3)", which will make the original kernel dense in SU(2).
+The SO(3) group is defined to be the rotation group in the unity circle. That is, each element in SO(3) is defined by its rotation degree $\tetha$ and by its axis or rotation (x,y,z). Note that we can easily find isomorphism $\phi$ from the single qubit operations SU(2) to the rotation group: we can write each 2x2 unitary matrix as $cos(\frac{\tetha}{2}I + \frac{\thetha}{2}{a\sigma_{x} + b\sigma_{y} + c\sigma_{z}})$, which correlates each unitary operation to a degree $\thetha$ and an axis of (a,b,c). For a general group of gates G, it is obvious that if ${\phi(x) for x \in G}$ does not contained in any finite subgroup of SO(3), then it will actually be able to create ALL SO(3), which means that after the isomorphism the results will be "dense in SO(3)", which will make the original kernel dense in SU(2).
+
+Therefore, we have to determine what the finite subgroups of $SO(3)$ looks like.
+
+\begin{itemize}
+\item Consider such subgroup $G \subset SO(3)$. Each element $g \in G$ is an action that rotates some point on a sphere, to some other point on that sphere. 
+\item Since its a rotation, each action should have 2 "poles" - points which stay invariant after the rotation is taking place.
+\item We will say that two poles $p, p^{'}$ are equivalent, if there exist some action $g \in G$ such that $g \circ p = p^{'}$, and noate this classes by $C_{1}...C_{M}$.
+\item Note that if $p, p^{'}$ are equivalent with some action $g$, then any action $h$ which leaves $p$ in place, can be used to obtained an action $g \circ h$ which send $p$ to $p^{'}$.
+\item In addition, note that neceessarily $p$ and $p^{'}$ stay invarant under the same number of operations, since ($g, h$ defined as before) $ghg^{-1}$ is an action which $p^{'}$ is its pole: $ghg^{-1}p^{'} = ghp =gp = p^{'}$.
+\item from all the above, we get the relation: $|C_{i}| = \frac{N}{n_{i}}$, when $n_{i}$ is the number of operations that leaves some pole $p$ in place, and N is the number of elements in G.
+
+\item In addation, note that $\sum\limits_{1..M}{C_{i}(n_{i} -1)} = 2(N-1)$, since the left side contains the number of poles, when each pole is multiplied by the non-trivial elements that leaves it fixed, and any element from the $N-1$ non trivial elements has 2 poles.
+
+\item the combination of the two formulas from abobe yields the following restriction on the SO(3) subgroups: $\sum\limits_{1..M}{1 - \frac{1}{n_{i}}} = 2(1-\frac{1}{N})$.
+
+\item This solution has only 5 options:
+\item $M=2, n_{1}=n_{2}=N$. this solution describes a subgroup of size N, contains cyclic rotation of $\frac{2{\pi}i}{N}$ around the same circle.
+\item $M=3, n_{1}=n_{2}=2, n_{3}=\frac{N}{2}$. This solution describes a dehideral group (imagine a regular cyclic group with size N, that we add to it all the reflections of each element as well).
+\item $M=3, n_{1}=2, n_{2}=n_{3}=3, N=12$, describes a tetrahedron.
+\item $M=3, n_{1}=2,n_{2}=3, n_{3}=4, N=12$, descrobes octahedron,
+\item $M=3, n_{1}=2, n_{2}=3, n_{3}=5, N=60$, decribes dedocahedron.
+\end{itemize}
+
+Notice that in the last 3 finite subgroups, the largest order possible for some element is 5. We will use this fact later. 
+
+Now, after we know that, lets return to the density therorem proof.
+
+As for the ${\rho^{4}}_{**}$ case, its defined 2 matrices:
+
+${\rho^{4}}_{**}(\sigma_{1}) = {\rho^{4}}_{**}(\sigma_{3}) = \begin{pmatrix} b & 0 \\ 0 & a \end{pmatrix}$
+
+${\rho^{4}}_{**}(\sigma_{2}) =  \begin{pmatrix} c & d \\ d & e \end{pmatrix}$
+
+Since global phase does not interent us, we can normalize these matrices to have determinant of one, thus being a subgroup of $SU(2)$. we get the matrices:
+
+$A = \frac{1}{\sqrt{ab}} \begin{pmatrix}  b & 0 \\ 0 & a \end{pmatrix}$
+and:
+$B = \frac{1}{\sqrt{ce - d^{2}}}  \begin{pmatrix} c & d \\ d & e \end{pmatrix}$
+
+after imply the isomorphism $\phi$ on these matrices, we get a rotation by angle of $\frac{7{\phi}}{5}$, by different axes. The angle between these axes is $\tetha_{12} = cos^{-1}(2 - \sqrt{5}) = 1.809$.
+
+All that remain is to show that this subgroup of $SU(3)$ is not contained in any final subgroup. First, note that this subgroup has two diferent rotation axes, therefore it cant be contained in one of the first two options, for every N. Second, note that ${\phi(A)}^{5}{\phi(B)}^{5}$ is a rotation by $2\thetha_{12}$. (This is because ofter 5 rotations of $\phi(A)$ we get rotation by $7\phi$ arount the first axe (which is equal to the "mirror" around to this axe, and after 5 rotations more of $\phi(B)$ we will get a mirror around the second axe - similar to whats going on in the groover algorithm). Direct checking shows that this rotation order in $SO(3)$ is more then 3, therefore  it cant be contained in any of the last 3 finite groups. This completes the proof that  ${\rho^{4}}_{**}$ is dense in $SU(2)$ (up to a phase). 
 
 
 
@@ -726,7 +811,7 @@ The SO(3) group is defined to be the rotation group in the unity circle. That is
 
 \subsubsection{The bridge lemma}
 \subsubsection{The decoupling lemma}
-\subsection{The reduction from trace estimation to Jones polynomial evaluation}
+
 
 \end{document}
 

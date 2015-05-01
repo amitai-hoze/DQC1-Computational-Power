@@ -54,12 +54,12 @@ of a unitary operation U.
 
 \title{The Hadamard Test}
 The description of the Hadamard test for some unitary matrix U is:
-\\
+\\\\
 \Qcircuit @C=1em @R=.7em {
 	\lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
 	\lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw
 }
-\\
+\\\\\\
 We will show that this circuit indeed calculates the trace of U
 \begin{itemize}
 \item after the first Hadamard gate, the state is $\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}$
@@ -69,7 +69,7 @@ We will show that this circuit indeed calculates the trace of U
 \end{itemize}
 
  \title {The Hadamard Test (2) }
- Therefore, the probability for measure 0 in the end is:
+ Therefore, the probability for measuring 0 at the end of the calculation is:
  $ \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
   \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
   = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
@@ -803,6 +803,16 @@ $B = \frac{1}{\sqrt{ce - d^{2}}}  \begin{pmatrix} c & d \\ d & e \end{pmatrix}$
 after imply the isomorphism $\phi$ on these matrices, we get a rotation by angle of $\frac{7{\phi}}{5}$, by different axes. The angle between these axes is $\tetha_{12} = cos^{-1}(2 - \sqrt{5}) = 1.809$.
 
 All that remain is to show that this subgroup of $SU(3)$ is not contained in any final subgroup. First, note that this subgroup has two diferent rotation axes, therefore it cant be contained in one of the first two options, for every N. Second, note that ${\phi(A)}^{5}{\phi(B)}^{5}$ is a rotation by $2\thetha_{12}$. (This is because ofter 5 rotations of $\phi(A)$ we get rotation by $7\phi$ arount the first axe (which is equal to the "mirror" around to this axe, and after 5 rotations more of $\phi(B)$ we will get a mirror around the second axe - similar to whats going on in the groover algorithm). Direct checking shows that this rotation order in $SO(3)$ is more then 3, therefore  it cant be contained in any of the last 3 finite groups. This completes the proof that  ${\rho^{4}}_{**}$ is dense in $SU(2)$ (up to a phase). 
+
+As a result, the fact that ${\rho^{3}}_{*p}$ is dense in  $SU(2)$ immediatly follows (the two matrices of ${\rho^{3}}_{*p}$  are identical to the two matrices of ${\rho^{4}}_{**}$ ).
+
+We are now moving to prove the induction step. First, we take a closer look at  ${\rho^{n}}_{**}$. We note that we can split each matrix in ${\rho^{n}}_{**}$ to two matrices - one that act on the subspace ending with *p* like the original matrix, and one that act on the subspace pp* like the original matrix. By definition $\rho^{n}_{**}(\sigma_{1}) ... \rho^{n}_{**}(\sigma_{n-3})$ will not "mix" these subspaces.
+
+Furthermore, since each $\sigma_{i}$ like this affects only the neigboring "bits", it holds that there is one to one correspondense between $\rho^{n-2}_{**}(\sigma_{1}) ... \rho^{n-2}_{**}(\sigma_{n-3})$ and $\rho^{n}_{*...*p*}(\sigma_{1}) ... \rho^{n-2}_{*...*p*}(\sigma_{n-3})$, 
+
+and one to one correspondence between $\rho^{n-1}_{**}(\sigma_{1}) ... \rho^{n-1}_{**}(\sigma_{n-3})$ and $\rho^{n}_{*...pp*}(\sigma_{1}) ... \rho^{n}_{*...pp*}(\sigma_{n-3})$ .
+
+However, $\rho^{n}_{**}(\sigma_{n-2})$ will mix these two subspaces, since it will affect the $n-1$ symbol.
 
 
 

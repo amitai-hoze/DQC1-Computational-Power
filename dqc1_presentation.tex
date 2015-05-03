@@ -7,6 +7,8 @@
 \usepackage{tikz}
 \usepackage{braids}
 \usepackage{qcircuit}
+\newtheorem{definition}{Definition}
+
 \begin{document}
 \title{DQC1 complexity class and Jones polynomials} 
 \author{Ohad Barta}
@@ -650,7 +652,7 @@ Given a certain braid, we can move cross-cross, and build its Fibonacci local ma
 \title{The algorithm itself (2)}
 However, extracting those 3 bits from the rest and return them once the computation is done, might be a non-trivial issue, since we are not using the regular binary encoding (we have only $\log{f_{n+1}}$ to represent n+1 bits). 
 
-However, we will note that we can, quite easily, calculate the value of the leftmost bit: The leftmost bit will be * \iff $f_{n+1} \leq z(s)$. But is computing two numbers can be done with one clean qubit?
+However, we will note that we can, quite easily, calculate the value of the leftmost bit: The leftmost bit will be * $\iff f_{n+1} \leq z(s)$. But is computing two numbers can be done with one clean qubit?
 
 
 \title{Arithmetic operations are in DQC1}
@@ -711,7 +713,7 @@ We will have to construct some braid, of our choice, and show a correlation betw
 
 Since the only correlation we know so far between Jones Polynomial and quantom circuit is the Fibonacci representation, we will obviously have to approximate each quantom operation from the circuit C via Fibonnaci representation on some braid. For this, it is required to prove that Fibonacci representation matrices are dense, and we will prove that in subsection 3.2
 
-More explicitly, we will show that $\{rho^{n}}_{**}$ is dense subgroup of $SU(f_{n-1})$, and that $\{rho^{n}}_{*p}$ is a dense subgroup of $SU(f_{n})$.
+More explicitly, we will show that $\{rho^{n}\}_{**}$ is dense subgroup of $SU(f_{n-1})$, and that $\{rho^{n}\}_{*p}$ is a dense subgroup of $SU(f_{n})$.
 
 Next, we are tackeling the problem of the representation of qubit as braid with */p symbols. Since in our model there cannot be two adjacent $*$ symbols, a naive one-to-one mapping is not feasible.
 
@@ -760,7 +762,7 @@ For that we will use an isomorphism from $SU(2)$ to $SO(3)$ - the group of rotat
 \subsubsection{SO(3) and the connection to density}
 
 \title {The SO(3) group and its subgroups}
-The SO(3) group is defined to be the rotation group in the unity circle. That is, each element in SO(3) is defined by its rotation degree $\tetha$ and by its axis or rotation (x,y,z). Note that we can easily find isomorphism $\phi$ from the single qubit operations SU(2) to the rotation group: we can write each 2x2 unitary matrix as $cos(\frac{\tetha}{2}I + \frac{\thetha}{2}{a\sigma_{x} + b\sigma_{y} + c\sigma_{z}})$, which correlates each unitary operation to a degree $\thetha$ and an axis of (a,b,c). For a general group of gates G, it is obvious that if ${\phi(x) for x \in G}$ does not contained in any finite subgroup of SO(3), then it will actually be able to create ALL SO(3), which means that after the isomorphism the results will be "dense in SO(3)", which will make the original kernel dense in SU(2).
+The SO(3) group is defined to be the rotation group in the unity circle. That is, each element in SO(3) is defined by its rotation degree $\theta$ and by its axis or rotation (x,y,z). Note that we can easily find isomorphism $\phi$ from the single qubit operations SU(2) to the rotation group: we can write each 2x2 unitary matrix as $cos(\frac{\theta}{2}I + \frac{\theta}{2}{a\sigma_{x} + b\sigma_{y} + c\sigma_{z}})$, which correlates each unitary operation to a degree $\theta$ and an axis of (a,b,c). For a general group of gates G, it is obvious that if ${\phi(x) for x \in G}$ does not contained in any finite subgroup of SO(3), then it will actually be able to create ALL SO(3), which means that after the isomorphism the results will be "dense in SO(3)", which will make the original kernel dense in SU(2).
 
 Therefore, we have to determine what the finite subgroups of $SO(3)$ looks like.
 
@@ -800,9 +802,9 @@ $A = \frac{1}{\sqrt{ab}} \begin{pmatrix}  b & 0 \\ 0 & a \end{pmatrix}$
 and:
 $B = \frac{1}{\sqrt{ce - d^{2}}}  \begin{pmatrix} c & d \\ d & e \end{pmatrix}$
 
-after imply the isomorphism $\phi$ on these matrices, we get a rotation by angle of $\frac{7{\phi}}{5}$, by different axes. The angle between these axes is $\tetha_{12} = cos^{-1}(2 - \sqrt{5}) = 1.809$.
+after imply the isomorphism $\phi$ on these matrices, we get a rotation by angle of $\frac{7{\phi}}{5}$, by different axes. The angle between these axes is $\theta_{12} = cos^{-1}(2 - \sqrt{5}) = 1.809$.
 
-All that remain is to show that this subgroup of $SU(3)$ is not contained in any final subgroup. First, note that this subgroup has two diferent rotation axes, therefore it cant be contained in one of the first two options, for every N. Second, note that ${\phi(A)}^{5}{\phi(B)}^{5}$ is a rotation by $2\thetha_{12}$. (This is because ofter 5 rotations of $\phi(A)$ we get rotation by $7\phi$ arount the first axe (which is equal to the "mirror" around to this axe, and after 5 rotations more of $\phi(B)$ we will get a mirror around the second axe - similar to whats going on in the groover algorithm). Direct checking shows that this rotation order in $SO(3)$ is more then 3, therefore  it cant be contained in any of the last 3 finite groups. This completes the proof that  ${\rho^{4}}_{**}$ is dense in $SU(2)$ (up to a phase). 
+All that remain is to show that this subgroup of $SU(3)$ is not contained in any final subgroup. First, note that this subgroup has two diferent rotation axes, therefore it cant be contained in one of the first two options, for every N. Second, note that ${\phi(A)}^{5}{\phi(B)}^{5}$ is a rotation by $2\theta_{12}$. (This is because ofter 5 rotations of $\phi(A)$ we get rotation by $7\phi$ arount the first axe (which is equal to the "mirror" around to this axe, and after 5 rotations more of $\phi(B)$ we will get a mirror around the second axe - similar to whats going on in the groover algorithm). Direct checking shows that this rotation order in $SO(3)$ is more then 3, therefore  it cant be contained in any of the last 3 finite groups. This completes the proof that  ${\rho^{4}}_{**}$ is dense in $SU(2)$ (up to a phase). 
 
 As a result, the fact that ${\rho^{3}}_{*p}$ is dense in  $SU(2)$ immediatly follows (the two matrices of ${\rho^{3}}_{*p}$  are identical to the two matrices of ${\rho^{4}}_{**}$ ).
 

@@ -9,7 +9,7 @@
 \usepackage{braids}
 \usepackage{qcircuit}
 \begin{document}
-\title{DQC1 complexity class the trace estimation problem} 
+\title{DQC1 complexity class and the trace estimation problem} 
 \author{Ohad Barta} 
 \date{\today} 
 
@@ -79,7 +79,10 @@ We will show that this circuit indeed calculates the trace of U
   \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
   = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
   =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) \)
-  When we remember that in our case \(\psi\) is actually the completely mixed state, we get that the probability is:
+  
+  }
+   \frame{\frametitle {The Hadamard Test (3) }
+  When we remember that in our case \(\psi\) is actually the completely mixed state (which is equivalent to choose from all the compiotational basis states with equal probability), we get that the probability is:
   \begin{displaymath}
   \frac{1}{2^{n}}\sum\limits_{\psi \in {0,1}^n} \frac{1+Re(\Bra{\psi}U\Ket{\psi})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
 \end{displaymath}
@@ -136,11 +139,22 @@ the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
 
 \section{adding few more clean bits dont give extra power}
 \frame{\frametitle{adding few more clean bits dont give extra power}
-We showed that computing the matrix trace is DQC1-complete problem.
-We notice now that actually we didn't computed it accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. According to the Chernoff inequality, the approximation will be exponentially  good with polynomial number of repetitions. However here the matrix is exponentially large, so we get an approximation of \(\frac{1}{poly(n)}\) to the expression \(\frac{Tr(U)}{2^{n+1}}\), or  in other words we have a \(\frac{2^{n}}{poly(n)}\) additive- approximation to the trace. 
+\begin{itemize}
+\item We notice now that actually we didn't computed the trace accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. 
+\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O($\frac{1}{poly(n)}$) , and therefore with high probability we get a  O( \(\frac{1}{poly(n)}\)) estimation.
+\end{itemize}
 }
 
-\frame{\frametitle{adding few more clean bits dont give extra power (2)}
+\frame{\frametitle{adding few more clean bits dont give extra power(2) }
+\begin{itemize}
+\item On the other hand, an approximation of \(\frac{1}{poly(n)}\) to the expression \(\frac{Tr(U)}{2^{n+1}}\) is enough to decide every problem in DQC1 using the analysis above
+\item Therefore, we showed that getting a  \(\frac{2^{n}}{poly(n)}\) additive- approximation to the trace is a DQC1-complete problem
+ 
+\end{itemize}
+. 
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power (3)}
 We will define now the DQCK complexity class:
 DQCK is the same as DQC1, except the following differences:
 \begin{itemize}
@@ -148,7 +162,7 @@ DQCK is the same as DQC1, except the following differences:
 \end{itemize}  
 }
 
-\frame{\frametitle{adding few more clean bits dont give extra power (3)}
+\frame{\frametitle{adding few more clean bits dont give extra power (4)}
 We will now prove that for \(k \leq \log{n}\), estimate the trace of unitary matrix with the same precision is still a complete problem \cite{SJ2008}, thus proving that adding logarithmic number of clean bits doesn't change the power. 
 
 Obviously we can calculate the trace of unitary matirx with \(\log{n}\) bits, since we can do it just with one. 
@@ -167,7 +181,7 @@ but now we add additional  $k-1$ ancila qubits, when there is a CNOT gate betwee
 (Thus, enforcing them to be zero in order to contribute to the circuit's trace)/
 }
 
-\frame{\frametitle{adding few more clean bits dont give extra power (4)}
+\frame{\frametitle{adding few more clean bits dont give extra power (5)}
 \Qcircuit @C=1em @R=.7em {
 	& {/}  \qw &  \qw & \multigate{1}{U^\dag} & \ctrl{2} & \multigate{1}{U} & \ctrl{3} & \qw & \qw\\
 	& {/}  \qw & \qw & \ghost{U^\dag} & \qw & \ghost{U} & \qw  & \qw   {/} & \qw \\

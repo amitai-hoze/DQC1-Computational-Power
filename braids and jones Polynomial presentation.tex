@@ -88,7 +88,7 @@ to the (i+1) place, the (i+1)-strand to the i-th place, and leaves all the other
 For example, this is \(\sigma_{2}\) with 3-strands:
 \begin{center}
 \begin{tikzpicture}
-\braid[rotate=0, style strands={1}{ red } ,style
+\braid[rotate=270, style strands={1}{ red } ,style
 strands={2}{ blue } ,style strands={3}{ green } ]s_2;
 \end{tikzpicture}
 \end{center}
@@ -102,14 +102,14 @@ Furthermore, it holds that \(\sigma_{i}\sigma_{i+1}\sigma_{i} = \sigma_{i+1}\sig
 \frame{\frametitle{Braid Groups generator rule example}
 \begin{center}
 \begin{tikzpicture}
-\braid[rotate=90, style strands={1}{ red } ,style
+\braid[rotate=270, style strands={1}{ red } ,style
 strands={2}{ blue } ,style strands={3}{ green } ]s_1 s_2 s_1;
 \end{tikzpicture}
 \end{center}
 
 \begin{center}
 \begin{tikzpicture}
-\braid[rotate=90, style strands={1}{ red } ,style
+\braid[rotate=270, style strands={1}{ red } ,style
 strands={2}{ blue } ,style strands={3}{ green } ]s_2 s_1 s_2;
 \end{tikzpicture}
 \end{center}
@@ -124,11 +124,14 @@ for example, for the following braid:
 
 \begin{center}
 \begin{tikzpicture}
-\braid[rotate=90, height=.3cm, style strands={1}{ red } ,style
+\braid[rotate=0, height=.3cm, style strands={1}{ red } ,style
 strands={2}{ blue } ,style strands={3}{ green } ,style strands={4}{ black } ] s_1 s_2^{-1} 
 s_3 s_1 s_2^{-1} s_1^{-1} s_2;
 \end{tikzpicture}
 \end{center} 
+
+}
+\frame{\frametitle{braid groups and knots (2)}
 has this closures:
 \begin{figure}
 \includegraphics{closures} 
@@ -136,138 +139,10 @@ has this closures:
 \end{figure}
 }
 
-
-\subsubsection{Tempely Lieb-algebra}
-\frame{\frametitle{Tempely Lieb algebra}
-In a similar way to the braid groups, we can define the Tempely Lieb {n,d} algebra.
-Tempely Lieb {n,d} algebra group consists of two rows of pegs (button and top), and n-strands, such that:
-\begin{itemize}
-\item each strand connects to exactly two pegs (but they can be from the same side!)
-\item the strands cannot intersect between them.
-\item the operator of two objects like this is simply put them one below the other, 
-while erasing circuits created, but multiply the final result by d, for each circuit removed
-\end{itemize}
-an example for this operator is:
-\begin{figure}
-\includegraphics[scale=0.5]{tempely_lieb_operator} 
-\caption{plat and trace closures}
-\end{figure}
-}
-
-\frame{\frametitle{Tempely Lieb algebra generators}
-In a similar way to the braid groups, we can define generators to the this algebra, 
-such that the i-th generator send the ith-strand on the buttom and top the the i+1 peg, 
-and leaves all the others in place.
-\begin{figure}
-\includegraphics[scale=0.5]{tempely_lieb_generators} 
-\caption{tempely lieb generators}
-
-
-\end{figure}
-Notice that these generators obeys the following rules (as demonstrated in the previuos slide figure):
-\begin{itemize}
-\item \(E_{i}E_{j} = E_{j}E_{i}\), when \(2 \leq |i-j|\)
-\item \(E_{i}E_{i+1}E_{i} = E_{i}\), \(E_{i}E_{i-1}E_{i} = E_{i}\)
-\item \({E_{i}}^2 = dE_{i}\)
-\end{itemize}
-}
-
-\subsubsection{From braid groups to tempely-lieb algebra }
-\frame{\frametitle{From braid groups to tempely-lieb algebra}
-Now, we observe that a connection between the braid groups and the tempely-lieb algebra can
-be made \cite{DVZ2006} by defining homomorphism to the braid groups generators. we will define:
-\(\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I\), when I is the identity in the lieb-algebra,
-and A is a number that satisfies \(A^{2}+A^{-2}=d\).
-We can show that this is indeed a representation of the braid groups, if we show that the relations
-of the braid group generators still hold.
-As for the first relation, it holds that for \(2 \leq |i-j|\) , \(\rho_{A}(\sigma_{i}),\rho_{A}(\sigma_{j})\) commutes since in this case \(E_{i},E_{j}\) commutes as well.
-}
-\frame{\frametitle{From braid groups to tempely-lieb algebra (2)}
-For the second relation, to show that :
-\begin{displaymath}
-\rho_{A}(\sigma_{i})\rho_{A}(\sigma_{i+1})\rho_{A}(\sigma_{i})= \rho_{A}(\sigma_{i+1})\rho_{A}(\sigma_{i})\rho_{A}(\sigma_{i+1})
-\end{displaymath}
-or:
-
-\(
-A^{3}E_{i}E_{i+1}E_{i} +AE_{i}E_{i+1} + AE_{i}^{2} + A^{-1}E_{i} +AE_{i+1}E_{i}+A^{-1}E_{i+1} + A^{-1}E_{i} + A^{-3}\)
-
-=
-
-\(
-A^{3}E_{i+1}E_{i}E_{i+1} +AE_{i+1}E_{i} + AE_{i+1}^{2} + A^{-1}E_{i+1} +AE_{i}E_{i+1}+A^{-1}E_{i} + A^{-1}E_{i+1} + A^{-3}
-\)
-after delete similar elements and use some generators identities, we have to show that:
-\begin{displaymath}
-(A^{-1}+Ad+A^{3})E_{i}= (A^{-1}+Ad+A^{3})E_{i+1}
-\end{displaymath}
-and this is correct since \((A^{-1}+Ad+A^{3}) = 0\)
-}
-
-
-\subsubsection{The MarkovTrace}
-\frame{\frametitle{The Markov Trace}
-The Markov Trace is a function on a tempely-Lieb algebra, which defined as follows:
-\begin{itemize}
-\item given a tempely-lieb algebra object, we connect its buttom and top bars, in a similar way to
-a trace closure.
-\item when denote the number of loops created like this with a, the trace closure is \(d^{a-n}\)
-\end{itemize}
-The Markov trace Tr obeys the following:
-\begin{itemize}
-\item Tr[1] = 1 (the identity tempely-algebra has n loops in its clousre, \(d^{n-n} = 1\))
-\item \(\forall X,Y \in TL[n,d]\), Tr[XY] = Tr[YX] 
-\item \(\forall X \in TL[n-1, d], Tr[xE_{n-1}]=\frac{Tr[x]}{d}\) (add \(E_{n-1}\) add new peg but dont enlarge the number of loops).
-\end{itemize}
-}
-
-\frame{\frametitle{The uniqueness of the Markov Trace}
-We will prove that the markov trace is the only function on tempely-lieb objects that obeys rules 1-3 \cite{DVZ2006},
-By prove that rules 1-3 are enough to determine the trace value of any tempely-lieb object.
-We will regard each object as a word with letter from the the group \(E_{1}...E_{n}\)
-We will define such word to be "reduced", if it wont be equal to any "shorter" word.
-The proof is done in induction on n, the maximal generator index in the reducible word:
-\begin{itemize}
-\item As for the base case, there is only one object with maximal generator 0 - the identity object, and its value is set to 1.
-\item assume that the value is well defined for any reducible object maximal generator \(\leq n\) and lets prove it for n+1. 
-\end{itemize}
-}
-
-\frame{\frametitle{The uniqueness of the Markov Trace (2)}
-First, we will prove that in any such reducible word contains exactly one \(E_{n}\) generator.
-This will suffice, since then we can write \(w=w_{1}E_{n}w_{2}\), when \(w_{1}, w_{2}\) are
-reducible words with maximal generator n-1, which thier value is well defined by the induction assumption.
-
-Then, it holds that \(Tr[w]=Tr[w_{1}E_{n}w_{2}] = Tr[w_{1}w_{2}E_{n}] = dTr[w_{1}w_{2}]\), and
-since \(w_{1}w_{2}\) is another reducible word that its value is well defined, the proof will be complete.   
-}
-
-\frame{\frametitle{The uniqueness of the Markov Trace (3)}
-Assume the contrary, that is there is a reducible word that contains two \(E_{n}\).
-Then, we can write \(w=w_{1}E_{n}w_{2}E_{n}w_{3}\), when \(w_{i}\) are reducible with maximal generator
-\(E_{n-1}\). Now, if \(E_{n-1}\) isnt in \(w_{2}\), we can change the order (from generators rules:)
-\(w=w_{1}w_{2}E_{n}E_{n}w_{3}\ = dw_{1}w_{2}E_{n}w_{3}\),so w isn't reducible.
-If there is \(E_{n-1}\) in  \(w_{2}\), we can write:
-\begin{displaymath}
- w=w_{1}E_{n}v_{1}E_{n-1}v_{2}E_{n}w_{3},
- \end{displaymath} 
- when 
- \(v_{i}\)  are reducible with maximal generator
-\((E_{n-2}\). Therefore, they can commute with \(E_{n-1}\), creating 
-\begin{displaymath}
-w=w_{1}v_{1}E_{n}E_{n-1}E_{n}v_{2}w_{3}
-= w_{1}v_{1}E_{n}v_{2}w_{3}
- \end{displaymath} 
- , so w again is not reducible
-   
-}
-
-
 \subsection{Jones Polynomials} 
 \subsubsection{The Kaufmann Bracket Polynomial}
 \frame{\frametitle{Jones Polynomials - Introduction}
-After half a century of searching knots invariants in a geometric way, in 1984 the Jones polynomial
-was discovered. It matches each knot a polynom , that stays invariant under the Reidemeister moves.
+The jones polynomial matches each knot a polynom , that stays invariant under the Reidemeister moves.
 We will first define the Kaufmann Bracket Polynomial, which is "almost" correct.
 
 Consider a knot K. for each crossing in K, from the form 
@@ -278,57 +153,67 @@ strands={2}{ blue } ] s_1;
 \end{tikzpicture}
 \end{center} 
 
-We decide at random to replace it with \(E_{1}\), or with the tempely-lieb identity element.
+We decide at random to replace it with one of two options:
+\begin{itemize}
+\item The blue strand remains on the right, the red strand remains on the left (choice 1)
+\item The blue strand remains on the top, the red strand remains at the bottom (choice 2)
+\end{itemize}
 Each decision like this for all the crossings is a state \(\sigma\)
 }
 \frame{\frametitle{The Kaufmann Bracket Polynomial - definition} 
-We denote by \(\sigma_{+}\) the number of replaces we made with \(E_{1}\), and by 
-\(\sigma_{-}\) the number of replaces we made with the identity element.
+We denote by \(\sigma_{+}\) the number of replaces we made choice 2, and by 
+\(\sigma_{-}\) the number of replaces we made choice 1.
 We denote by\(N_{\sigma}\) the number of loops created when all the changes of \(\sigma\) are applied.
-Then, the Kaufmann Bracket Polynomial is defined as:
+The Kaufmann Bracket Polynomial is defined as:
 \( L(A) = \sum\limits_{all_states_\sigma}{A^{\sigma_{+} -\sigma_{-}}d^{N_{\sigma} - 1}}\)
 
-d is defined as: \(d = -A^{-2} -A^2\) 
+d is: \(d = -A^{-2} -A^2\) 
 
 }
 
-\frame{\frametitle{The Kaufmann Bracket Polynomial - properties} 
-Note that the  Kaufmann Bracket Polynomial holds the following rules:
+\frame{\frametitle{The Kaufmann Bracket Polynomial - simple examples}
+
 \begin{itemize}
-\item \(\forall A\), L(A)=1 in the unknot (one state with \(\sigma_{+}=0,\sigma_{-}=0, N_{\sigma} = 1\))
-\item 
+\item \(\forall A\), L(A)=1 in the unknot:
+    \begin{itemize}
+    \item we have only one state $\sigma$, with \(\sigma_{+}=0,\sigma_{-}=0\)
+    \item this state have one loop, so \(N_{\sigma} = 1\)
+    \item Therefore, $L(A) = A^{0}d^{0}=1$
+    \end{itemize}
+\item For two unknots:
+    \begin{itemize}
+    \item we have only one state $\sigma$, with \(\sigma_{+}=0,\sigma_{-}=0\)
+    \item this state have two loops, so \(N_{\sigma} = 2\)
+    \item Therefore, $L(A) = A^{0}d^{1}=d=-A^{-2}-A^{2}$
+    \end{itemize}
+\end{itemize}
+}
+\frame{\frametitle{The Kaufmann Bracket Polynomial - simple examples (2)}
+
+\begin{figure}
+\includegraphics[scale=0.2]{kauffman_calc} 
+\caption{kaufmann bracket example}
+\end{figure}
+:
+\begin{itemize}
+    \item we have two states. In choice 1, $\sigma_{-}=1$, In choice 2,$\sigma_{+}=1$
+    \item If we chooce choice 1 we have \(N_{\sigma} = 1\), if we choose choice 2 we have \(N_{\sigma} = 2\)
+    \item Therefore, $L(A) = A^{-1}d^{0} + A^{1}d^{1} = A^{-1} +A^{1}(-A^{-2}-A^{2}) = -A^{3}$
+\end{itemize}
+}
+\frame{\frametitle{recursive formula}
 \begin{figure}
 \includegraphics[scale=1]{Kauffman_bracket_identity} 
 \caption{kaufmann bracket recursive nature}
 \end{figure}
-This comes directly from the definition, if we consider only one cross, after choose a state sigma for all the others, or we choose to replace it with \(E_{1}\) and multiply by A, or we choose to replace it by the identity and multiply by \(A^{-1}\)
-\item we can eliminate an isolated unknot and multiply the result with a factor of d. (examples will follow). 
-\end{itemize}
-}
-
-\subsubsection{The Jones Polynomial}
-\frame{\frametitle{definition}
-Jones polynomial is different from Kaufmann bracket polynimial only with some normalization factor.
-We define by the w(k) for a knot k to be: \(w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}\)
-and Jones polynomial is defines as: \(V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)\).
-
-Notice that w(k) for the unknot is 0, so the Jones polynomial of the unknot is still equals to 1 at any point.
-}
-
-
-\frame{\frametitle{example}
-Lets see an example to the calculation of Kaufmann and jons polynomial. Consider the Hopf link.
-The Kaufmann polynomial of this link is:
+This comes directly from the definition, if we consider only one cross.
 \begin{figure}
 \includegraphics[scale=0.15]{hopf_link} 
 \caption{the kaufmann polynomial of the Hopf link}
 \end{figure}
 
-Moving to Jones Polynomial, we can see that w(HopfLink)=-2 (two cross with the same oreintation), so:
-\(V_{hopfLink}=(-A)^{-6}(A^{-4}+A^{4}) = A^{-2} + A^{-10})\).
-Remember that \(t = A^{-4}\) and we get \(V_{hopfLink}(t)=\sqrt{t}(1+t^{2})\)  
+\end{itemize}
 }
-
 
 \frame{\frametitle{the connection to Reidiemster moves}
 For Completion, we will note that it is easy to see that Jones Polynomial remains the same
@@ -338,6 +223,102 @@ under Reidiemster moves. We will show here only one of the three, the others can
 \caption{the kaufmann polynomial of the Hopf link}
 \end{figure}  
 }
+
+\subsubsection{The Jones Polynomial}
+\frame{\frametitle{The Jones Polynomial definition}
+Jones polynomial is different from Kaufmann bracket polynimial only with some normalization factor.
+We define by the w(k) for a knot k to be: \(w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}\)
+and Jones polynomial is defines as: \(V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)\).
+
+Notice that w(k) for the unknot is 0, so the Jones polynomial of the unknot is still equals to 1 at any point.
+}
+
+
+\frame{\frametitle{example}
+Consider the Hopf link.
+
+Moving to Jones Polynomial, we can see that w(HopfLink)=-2 (two cross with the same oreintation), so:
+\(V_{hopfLink}=(-A)^{-6}(-A^{-4}-A^{4}) = -A^{-2} - A^{-10}\).
+Remember that \(t = A^{-4}\) and we get \(V_{hopfLink}(t)=-\sqrt{t}(1+t^{2})\)  
+}
+
+
+
+
+\subsection{Tempely Lieb-algebra}
+\frame{\frametitle{Tempely Lieb algebra}
+Tempely Lieb {n,d} algebra group consists of two rows of pegs (button and top), and n-strands, such that:
+\begin{itemize}
+\item each strand connects to exactly two pegs (but they can be from the same side!)
+\item the strands cannot intersect between them.
+\item the operator of two objects like this is simply put them one below the other, 
+while erasing circuits created, but multiply the final result by d, for each circuit removed
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=1]{tempely_lieb_generators} 
+\caption{tempely lieb generators}\
+\end{figure}
+
+}
+
+\frame{\frametitle{Tempely Lieb algebra generators}
+The i-th generator send the ith-strand on the buttom and top the the i+1 peg, 
+and leaves all the others in place.
+
+Notice that these generators obeys the following rules 
+\begin{itemize}
+\item \(E_{i}E_{j} = E_{j}E_{i}\), when \(2 \leq |i-j|\)
+\item \(E_{i}E_{i+1}E_{i} = E_{i}\), \(E_{i}E_{i-1}E_{i} = E_{i}\)
+\item \({E_{i}}^2 = dE_{i}\)
+\end{itemize}
+
+
+\begin{figure}
+\includegraphics[scale=1]{tempely_lieb_operator} 
+\caption{plat and trace closures}
+\end{figure}
+
+}
+
+\subsubsection{From braid groups to tempely-lieb algebra }
+\frame{\frametitle{From braid groups to tempely-lieb algebra}
+ homomorphism from the braid groups to the tempely lied algebra can be defined by its operation on the generators. we will define:
+\(\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I\), when I is the identity in the lieb-algebra,
+and A is a number that satisfies \(A^{2}+A^{-2}=d\).
+We can show that this is indeed a representation of the braid groups, if we show that the relations
+of the braid group generators still hold (Appears in our full version paper).
+}
+
+\subsubsection{The MarkovTrace}
+\frame{\frametitle{The Markov Trace}
+The Markov Trace is a function on a tempely-Lieb algebra, such that:
+\begin{itemize}
+\item given a tempely-lieb algebra object, we connect its buttom and top bars, in a similar way to
+a trace closure.
+\item when denote the number of loops created like this with a, the trace closure is \(d^{a-n}\)
+\end{itemize}
+\begin{figure}
+\includegraphics[scale=0.35]{MarkovTraceExample} 
+\caption{plat and trace closures}
+\end{figure}
+}
+\frame{\frametitle{The Markov Trace Properties}
+The Markov trace Tr obeys the following:
+\begin{itemize}
+\item Tr[1] = 1 (the identity tempely-algebra has n loops in its clousre, \(d^{n-n} = 1\))
+\item \(\forall X,Y \in TL[n,d]\), Tr[XY] = Tr[YX] 
+\item \(\forall X \in TL[n-1, d], Tr[xE_{n-1}]=\frac{Tr[x]}{d}\) (add \(E_{n-1}\) add new peg but dont enlarge the number of loops).
+\end{itemize}
+
+An important claim (which we prove in the full paper), is that this three properties are enough to uniqely define the value of the markov trace.
+
+}
+
+
+
+
+
+
 
 \frame{\frametitle{the connection to markov trace and braid groups}
 We will now show a connection between the Jones Polynomial and the Markov trace.
@@ -412,7 +393,7 @@ The explicit representation is:
 We will show the Fibonacci representation of $\sigma_{1}$ with 3 strands:
 \[
 \begin{pmatrix} b & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & a & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & a & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & e & 0 & d & 0 & 0 \\ 0 & 0 & 0 & 0 & a & 0 & 0 & 0 \\ 0 & 0 & 0 & d & 0 & c & 0 & 0 \\0 & 0 & 0 & 0 & 0 & 0 & e & d \\0 & 0 & 0 & 0 & 0 & 0 & d & c \end{pmatrix} 
-  \begin{pmatrix} *p*p \\ *ppp \\ *pp* \\ pppp \\ pp*p \\ p*p* \\ ppp* \\ p*pp \end{pmatrix}
+  \begin{pmatrix} *p*p \\ *ppp \\ *pp* \\ pppp \\ pp*p \\ p*pp \\ ppp* \\ p*p* \end{pmatrix}
 \]
 }
 \subsubsection{unitarity}

@@ -70,15 +70,15 @@ We will show that this circuit indeed calculates the trace of U
 \frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}$
 \end{itemize}
 
- \title {The Hadamard Test (2) }
- Therefore, the probability for measuring 0 at the end of the calculation is:
- $ \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
-  \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
-  = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
-  =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) $
-  When we remember that in our case $\psi$ is actually the completely mixed state, we get that the probability is:
-  \begin{displaymath}
-  \frac{1}{2^{n}}\sum\limits_{\psi \in {0,1}^n} \frac{1+Re(\Bra{\psi}U\Ket{\psi})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
+\title {The Hadamard Test (2) }
+Therefore, the probability for measuring 0 at the end of the calculation is:
+\begin{align*}
+    \rho_{0} &= \sum_{x \in \{0,1\}^n} (\frac{\Bra{x} + \Bra{x}{U^\dagger}}{2})(\frac{\Ket{x} + U\Ket{x}}{2}) = \sum_{x \in \{0,1\}^n}\frac{1}{4}(\Bra{x}\Ket{x} + \Bra{x}{U^\dagger}\Ket{x} + \Bra{x}U\Ket{x} + \Bra{x}{U^\dagger}U\Ket{x}  ) = \\
+    &= \sum_{x \in \{0,1\}^n}\frac{1}{2} + \frac{1}{4}(\Bra{x}{U^\dagger}\Ket{x} + \Bra{x}U\Ket{x}) = \sum_{x \in \{0,1\}^n}\frac{1}{2} +  \frac{1}{2}Re(\Bra{x}U\Ket{x})
+\end{align*}
+And since $\bra{x}U\ket{x}$ is actually $U_{x,x}$
+\begin{displaymath}
+    \frac{1}{2^{n}}\sum\limits_{x \in \{0,1\}^n} \frac{1+Re(\Bra{x}U\Ket{x})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
 \end{displaymath}
 Therefore, the problem of trace estimation can be solved with one clean qubit.
 

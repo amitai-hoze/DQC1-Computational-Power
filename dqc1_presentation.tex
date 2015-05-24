@@ -128,7 +128,7 @@ component with zero in its first qubit, and then after implying U on that compon
 \subsection{adding few more clean bits don't give extra power}
 \title{adding few more clean bits don't give extra power}
 We showed that computing the matrix trace is DQC1-complete problem.
-We notice now that actually we didn't computed it accurately. Since only the expectation off the algorithm is the trace, we rather get an approximation. According to the Chernoff inequality, the approximation will be exponentially  good with polynomial number of repetitions. However here the matrix is exponentially large, so we get an approximation of $\frac{1}{poly(n)}$ to the expression $\frac{Tr(U)}{2^{n+1}}$, or  in other words we have a $\frac{2^{n}}{poly(n)}$ additive- approximation to the trace. 
+We notice now that actually we didn't computed it accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. According to the Chernoff inequality, the approximation will be exponentially  good with polynomial number of repetitions. However here the matrix is exponentially large, so we get an approximation of $\frac{1}{poly(n)}$ to the expression $\frac{Tr(U)}{2^{n+1}}$, or  in other words we have a $\frac{2^{n}}{poly(n)}$ additive- approximation to the trace. 
 
 
 \title{adding few more clean bits don't give extra power (2)}
@@ -157,16 +157,16 @@ As for the less trivial direction, assume we have some quantum algorithm in DQCK
 Similarly to the one-qubit option, final state is:
 $\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}$
 and therefore the probability of measuring 0 at the end is:
-$p_{0} = Tr[{\Ket{0}\Bra{0}}^{\otimes k} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})$
+$p_{0} = Tr[{\Ket{0}\Bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})$
 
 Now, we have the same problem at estimating this matrix: its not unitary!
 To resolve that issue, we build circuit similar to the one in the 1-clean qubit process,
-but now we add 2k ancilla qubits, when there is a CNOT gate between each i-th qubit and (i+k)-th qubit.
+but now we add k ancilla qubits, when there is a CNOT gate between each i-th qubit and (i+n)-th qubit (for the first k qubits).
 
 
 
 \title{adding few more clean bits don't give extra power (4)}
-Now, we can see (similarly to the proposition 1.1), that the trace of the new circuit $U^{*}$ follows the rule: $Tr[U^{*}] = 2^{k}Tr[U]$. Thus, in polynomial number of executions we can compute its trace up to a precision of $\frac{2^{n+k}}{poly(n,k}$, but this equals to $\frac{2^{n}}{poly(n}$ when $k  \leq \log{n}$, which means that in this case the precision is good enough to decide the original problem.
+Now, we can see (similarly to the proposition 1.1), that the trace of the new circuit $U^{*}$ follows the rule: $Tr[U^{*}] = 2^{k}Tr[U]$. Thus, in polynomial number of executions we can compute its trace up to a precision of $\frac{2^{n+k}}{poly(n,k)}$, but this equals to $\frac{2^{n}}{poly(n)}$ when $k  \leq \log{n}$, which means that in this case the precision is good enough to decide the original problem.
 
 
 
@@ -252,6 +252,81 @@ has this closures:
 \caption{plat and trace closures}
 \end{figure}
 
+\subsection{Jones Polynomials} 
+\subsubsection{The Kauffman Bracket Polynomial}
+\title{Introduction}
+After half a century of searching knots invariants in a geometric way, in 1984 the Jones polynomial
+was discovered. It matches each knot a polynom , that stays invariant under the Reidemeister moves.
+We will first define the Kauffman Bracket Polynomial, which is "almost" correct.
+
+Consider a knot K. for each crossing in K, from the form 
+\begin{center}
+\begin{tikzpicture}
+\braid[rotate=0, height=.3cm, style strands={1}{ red } ,style
+strands={2}{ blue } ] s_1;
+\end{tikzpicture}
+\end{center} 
+
+We decide at random to replace it with $E_{1}$, or with the Temperley-Lieb identity element.
+Each decision like this for all the crossings is a state $\sigma$
+
+\title{The Kauffman Bracket Polynomial - definition} 
+We denote by $\sigma_{+}$ the number of replaces we made with $E_{1}$, and by 
+$\sigma_{-}$ the number of replaces we made with the identity element.
+We denote by$N_{\sigma}$ the number of loops created when all the changes of $\sigma$ are applied.
+Then, the Kauffman Bracket Polynomial is defined as:
+$ L(A) = \sum\limits_{all_states_\sigma}{A^{\sigma_{+}} A^{-\sigma_{-}}d^{N_{\sigma} - 1}}$
+
+d is defined as: $d = -A^{-2} -A^2$ 
+
+
+
+\title{The Kauffman Bracket Polynomial - properties} 
+Note that the  Kauffman Bracket Polynomial holds the following rules:
+\begin{itemize}
+\item $\forall A$, L(A)=1 in the unknot (one state with $\sigma_{+}=0,\sigma_{-}=0, N_{\sigma} = 1$)
+\item 
+\begin{figure}
+\includegraphics[scale=1]{Kauffman_bracket_identity} 
+\caption{Kauffman bracket recursive nature}
+\end{figure}
+\item the other rules is the rule appears in the figure above
+This comes directly from the definition, if we consider only one cross, after choose a state sigma for all the others, or we choose to replace it with $E_{1}$ and multiply by A, or we choose to replace it by the identity and multiply by $A^{-1}$
+\item we can eliminate an isolated unknot and multiply the result with a factor of d. (examples will follow). 
+\end{itemize}
+
+
+\subsubsection{The Jones Polynomial}
+\title{definition}
+Jones polynomial is different from Kauffman bracket polynomial only with some normalization factor.
+We define by the w(k) for a knot k to be: $w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}$
+and Jones polynomial is defines as: $V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)$.
+
+Notice that w(k) for the unknot is 0, so the Jones polynomial of the unknot is still equals to 1 at any point.
+
+
+
+\title{example}
+Lets see an example to the calculation of Kauffman and Jones polynomial. Consider the Hopf link.
+The Kauffman polynomial of this link is:
+\begin{figure}
+\includegraphics[scale=0.15]{hopf_link} 
+\caption{the Kauffman polynomial of the Hopf link}
+\end{figure}
+
+Moving to Jones Polynomial, we can see that w(Hopf Link)=-2 (two cross with the same orientation), so:
+$V_{hopfLink}=(-A)^{-6}(A^{-4}+A^{4}) = A^{-2} + A^{-10}$.
+Remember that $t = A^{-4}$ and we get $V_{hopfLink}(t)=\sqrt{t}(1+t^{2})$  
+
+
+
+\title{the connection to Reidemeister moves}
+For Completion, we will note that it is easy to see that Jones Polynomial remains the same
+under Reidemeister moves. We will show here only one of the three, the others can be proved in a similar technique:
+\begin{figure}
+\includegraphics[scale=1]{jones_and_reidimister.jpg} 
+\caption{the Kauffman polynomial of the Hopf link}
+\end{figure}  
 
 
 \subsubsection{Temperley-Lieb-algebra}
@@ -283,7 +358,7 @@ and leaves all the others in place.
 \end{figure}
 Notice that these generators obeys the following rules (as demonstrated in the previous slide figure):
 \begin{itemize}
-\item $E_{i}E_{j} = E_{j}E_{i}$, when $2 \leq |i-j$
+\item $E_{i}E_{j} = E_{j}E_{i}$, when $2 \leq |i-j|$
 \item $E_{i}E_{i+1}E_{i} = E_{i}$, $E_{i}E_{i-1}E_{i} = E_{i}$
 \item ${E_{i}}^2 = dE_{i}$
 \end{itemize}
@@ -380,84 +455,11 @@ w=w_{1}v_{1}E_{n}E_{n-1}E_{n}v_{2}w_{3}
 
 
 
-\subsection{Jones Polynomials} 
-\subsubsection{The Kauffman Bracket Polynomial}
-\title{Introduction}
-After half a century of searching knots invariants in a geometric way, in 1984 the Jones polynomial
-was discovered. It matches each knot a polynom , that stays invariant under the Reidemeister moves.
-We will first define the Kauffman Bracket Polynomial, which is "almost" correct.
-
-Consider a knot K. for each crossing in K, from the form 
-\begin{center}
-\begin{tikzpicture}
-\braid[rotate=0, height=.3cm, style strands={1}{ red } ,style
-strands={2}{ blue } ] s_1;
-\end{tikzpicture}
-\end{center} 
-
-We decide at random to replace it with $E_{1}$, or with the Temperley-Lieb identity element.
-Each decision like this for all the crossings is a state $\sigma$
-
-\title{The Kauffman Bracket Polynomial - definition} 
-We denote by $\sigma_{+}$ the number of replaces we made with $E_{1}$, and by 
-$\sigma_{-}$ the number of replaces we made with the identity element.
-We denote by$N_{\sigma}$ the number of loops created when all the changes of $\sigma$ are applied.
-Then, the Kauffman Bracket Polynomial is defined as:
-$ L(A) = \sum\limits_{all_states_\sigma}{A^{\sigma_{+}} A^{-\sigma_{-}}d^{N_{\sigma} - 1}}$
-
-d is defined as: $d = -A^{-2} -A^2$ 
-
-
-
-\title{The Kauffman Bracket Polynomial - properties} 
-Note that the  Kauffman Bracket Polynomial holds the following rules:
-\begin{itemize}
-\item $\forall A$, L(A)=1 in the unknot (one state with $\sigma_{+}=0,\sigma_{-}=0, N_{\sigma} = 1$)
-\item 
-\begin{figure}
-\includegraphics[scale=1]{Kauffman_bracket_identity} 
-\caption{Kauffman bracket recursive nature}
-\end{figure}
-This comes directly from the definition, if we consider only one cross, after choose a state sigma for all the others, or we choose to replace it with $E_{1}$ and multiply by A, or we choose to replace it by the identity and multiply by $A^{-1}$
-\item we can eliminate an isolated unknot and multiply the result with a factor of d. (examples will follow). 
-\end{itemize}
-
-
-\subsubsection{The Jones Polynomial}
-\title{definition}
-Jones polynomial is different from Kauffman bracket polynomial only with some normalization factor.
-We define by the w(k) for a knot k to be: $w(k) = \sum\limits_{all crossings}{(-1)^{is the left arrow above the right one}}$
-and Jones polynomial is defines as: $V_{k}(t)=V_{k}(A^{-4})=(-A)^{3w(k)}L_{k}(A)$.
-
-Notice that w(k) for the unknot is 0, so the Jones polynomial of the unknot is still equals to 1 at any point.
-
-
-
-\title{example}
-Lets see an example to the calculation of Kauffman and Jones polynomial. Consider the Hopf link.
-The Kauffman polynomial of this link is:
-\begin{figure}
-\includegraphics[scale=0.15]{hopf_link} 
-\caption{the Kauffman polynomial of the Hopf link}
-\end{figure}
-
-Moving to Jones Polynomial, we can see that w(Hopf Link)=-2 (two cross with the same orientation), so:
-$V_{hopfLink}=(-A)^{-6}(A^{-4}+A^{4}) = A^{-2} + A^{-10})$.
-Remember that $t = A^{-4}$ and we get $V_{hopfLink}(t)=\sqrt{t}(1+t^{2})$  
-
-
-
-\title{the connection to Reidemeister moves}
-For Completion, we will note that it is easy to see that Jones Polynomial remains the same
-under Reidemeister moves. We will show here only one of the three, the others can be proved in a similar technique:
-\begin{figure}
-\includegraphics[scale=1]{jones_and_reidimister.jpg} 
-\caption{the Kauffman polynomial of the Hopf link}
-\end{figure}  
 
 
 \title{the connection to Markov trace and braid groups}
 We will now show a connection between the Jones Polynomial and the Markov trace.
+
 Proposition:
 $V_{B^{tr}}(A) = (-A)^{3w(B^{tr})}d^{n-1}Tr[\rho_{A}(B)]$
 That is, the Jones polynomial of a trace-closure of some braid is connected to the Markov trace value of its corresponding Temperley-Lieb object.
@@ -470,8 +472,8 @@ We only have to proof that $L(B^{tr}) = d^{n-1}Tr[\rho_{A}(B)]$. Recall that for
 The homomorphism also has the form of  $\rho_{A}(\sigma_{i}) = AE_{i} +A^{-1}I$ - exactly the same!.
 
 \title{the connection to Markov trace and braid groups(2) }
-After choosing a state $\sigma$, its value in the Kauffman polynomial is $d^{N_{\sigma} -1)}$, and its
-value i the Markov trace is $d^{N_{\sigma}} -n )$, therefore we need the $d^{n-1}$ factor. 
+After choosing a state $\sigma$, its value in the Kauffman polynomial is $d^{N_{\sigma} -1}$, and its
+value i the Markov trace is $d^{N_{\sigma}} -n$, therefore we need the $d^{n-1}$ factor. 
  
 
 \subsection{The Fibonacci representation}
@@ -529,7 +531,7 @@ $ a = -A^{4} $
 We will show the Fibonacci representation of $\sigma_{1}$ with 3 strands:
 \[
 \begin{pmatrix} b & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & a & 0 & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & a & 0 & 0 & 0 & 0 & 0 \\ 0 & 0 & 0 & e & 0 & d & 0 & 0 \\ 0 & 0 & 0 & 0 & a & 0 & 0 & 0 \\ 0 & 0 & 0 & d & 0 & e & 0 & 0 \\0 & 0 & 0 & 0 & 0 & 0 & e & d \\0 & 0 & 0 & 0 & 0 & 0 & d & c \end{pmatrix} 
-  \begin{pmatrix} *p*p \\ *ppp \\ *pp* \\ pppp \\ pp*p \\ pp*p \\ p*pp \\ ppp* \\ p*p* \end{pmatrix}
+  \begin{pmatrix} *p*p \\ *ppp \\ *pp* \\ pppp \\ pp*p \\ ppp* \\ p*p* \\ p*pp \end{pmatrix}
 \]
 
 \subsubsection{Unitarity}
@@ -846,7 +848,7 @@ $\tau_{b}(σn) → 1$
 Using this final lemma we will be able to finally complete the proof of the density of  $\rho^{n}_{**}$:
 
 Base case: clearly $\rho^{3}_{**}$ is dense in $SU(1)$ (which include only one matrix).
-            We showed that $\rho^{4}_{**}$ is dense in $SU(2)
+            We showed that $\rho^{4}_{**}$ is dense in $SU(2)$
             
 Step: Assume that  $\rho^{n-2}_{**}(B_{n-1})$ is dense in $SU(f_{n-3})$, and  $\rho^{n-2}_{**}(B_{n-1})$ is dense in $SU(f_{n-2})$, and we would like to prove that  $\rho^{n}_{**}(B_{n})$ is dense in $SU(f_{n-1})$. By the fact observed above $\rho^{n-2}_{**}(\sigma_{1}) ... \rho^{n-2}_{**}(\sigma_{n-3})$ remains unchanged when moving to  $\rho^{n}_{**}$. Therefore, by the induction assumption and the decoupeling lemma, using $\rho^{n}_{**}$ we can approximate any $U \oplus 1$ when $U \in SU(f_{n-3})$, and any  $1 \oplus U$ when $U \in SU(f_{n-2})$,
 

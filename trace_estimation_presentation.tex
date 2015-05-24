@@ -1,0 +1,204 @@
+%this is the DQC1 presentation
+
+\documentclass{beamer}
+\usepackage{etex}
+\usepackage{amsmath}
+\usepackage{beamerthemesplit} % new 
+\usepackage{braket}
+\usepackage{tikz}
+\usepackage{braids}
+\usepackage{qcircuit}
+\begin{document}
+\title{DQC1 complexity class and the trace estimation problem} 
+\author{Ohad Barta} 
+\date{\today} 
+
+\frame{\titlepage} 
+\begin{frame}[allowframebreaks]
+\frametitle{Table of contents}
+{\tableofcontents}
+\end{frame}
+
+
+\section{The DQC1 complexity class}
+\frame{\frametitle{the DQC1 complexity class}
+DQC1 class is the class of decidable languages with algorithm $A$ such that:
+\begin{itemize}
+\item $A$ starts with one clean qubit in state $\ket{0}$, and $n$ qubits in the maximally mixed state
+\item $A$ may perform any unitary operation
+\item $A$ can only perform a measurement of the clean qubit at the end of the algorithm
+\item $A$ has no access to a classical computer, so its not promised that $P \subset DQC1$ 
+\item $A$ cannot be invoked many times in parallel
+\item $A$ runs in polynomial time
+\item $\forall x$, $A$ decides if $x \in L$ correctly with probability of at least $\frac{2}{3}$
+\end{itemize}
+}
+
+\frame{\frametitle{The trace estimation problem}
+
+The trace estimation problem is the following: given a quantom circuit, what is the trace of it's unitary operation?
+
+We will prove that this problem is DQC1-complete.
+
+Reminder: in general, a language L is said to be "complete" in the class DQC1, if:
+\begin{itemize}
+\item $L \in DQC1$
+\item $\forall L_{0} \in DQC1$ there is a reduction from $L_{0}$ to L, such that the reduction algorithm is in DQC1  
+\end{itemize}
+}
+
+\section{The trace estimation problem is in DQC1}
+\frame{\frametitle{The trace estimation problem is in DQC1}
+The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and n-qubits in the maximally mixed state.
+That is, the start state is \begin{equation}
+\rho = \ket{0}\bra{0}\otimes\frac{I}{2^n}
+\end{equation}
+We can use the hadamard test, which gets as input this state, in order to acurratly estimate a trace
+of unitary operation U.
+}
+
+\frame{\frametitle{The Hadamard Test}
+The description of the Hadamard test for some unitary matrix U is:
+\Qcircuit @C=1em @R=.7em {
+	\lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
+	\lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw
+}
+
+We will show that this circuit indeed calculates the trace of U
+\begin{itemize}
+\item after the first hadamard gate, the state is \(\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}\)
+\item after the C-U operation, the new state is \(\frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}\)
+\item after the final hadamard operation, the final state becomes \(\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
+\frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}\)
+\end{itemize}
+ }
+ 
+ \frame{\frametitle {The Hadamard Test (2) }
+ Therefore, the propability for measure 0 in the end is:
+ \( \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
+  \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
+  = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
+  =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) \)
+  
+  }
+   \frame{\frametitle {The Hadamard Test (3) }
+  When we remember that in our case \(\psi\) is actually the completely mixed state (which is equivalent to choose from all the compiotational basis states with equal probability), we get that the probability is:
+  \begin{displaymath}
+  \frac{1}{2^{n}}\sum\limits_{\psi \in {0,1}^n} \frac{1+Re(\Bra{\psi}U\Ket{\psi})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
+\end{displaymath}
+Therefore, the problem of trace estimation can be solved with one clean quibit.
+ }
+ 
+ \section{hardness of trace estimation}
+\frame{\frametitle {The hardness of trace estimation}
+Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
+Suppose we have some language \(L \in DQC1\), and an some x, and we want to decide if \(x \in L\).
+
+\(L \in DQC1\), therefore its start state obeys equation 1. on this start state, we  imply some unitary matrix U, and get the state \(\rho_{final} = U\rho{U^\dagger} = U\ket{0}\bra{0}\frac{I}{2^n}{U^\dagger}\)
+Therefore, the probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
+\begin{equation}
+ p_{0} = Tr[\Ket{0}\Bra{0}\otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]
+\end{equation}
+Unfortunately - this matrix isn't unitary!!
+}
+
+\frame {\frametitle {The hardness of trace estimation (2)}
+To resove that issue, we exmine the following quantom circuit C:
+\Qcircuit @C=1em @R=.7em {
+	& \qw & \multigate{1}{U^\dag} & \ctrl{2} & \multigate{1}{U} & \ctrl{3} & \qw \\
+	& {/} \qw & \ghost{U^\dag} & \qw & \ghost{U} & \qw &  {/} \qw \\
+	&  \qw &\qw &  \targ  & \qw & \qw & \qw \\
+	&  \qw & \qw & \qw & \qw & \targ & \qw
+}
+
+Proposition 1: \(\frac{1}{4}\)tr[C]=\(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]\)
+}
+
+\frame {\frametitle {The hardness of trace estimation (3)}
+Proof:
+\begin{itemize}
+\item first, lets remember that \(tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}\)
+and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
+
+\item Suppose that after implying U on some state $\psi$, we got a non-zero component in the first qubit.
+\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to $\psi$
+
+\item by the equation above, we see that in this case, this component would contribute nothing to the trace of C.
+\end{itemize}
+}
+
+\frame{\frametitle{The hardness of trace estimation (4)}
+\begin{itemize}
+\item On the other hand, the zero-component we get after implying U on $\psi$, doesn't change the last qubit, so the contribution to
+the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
+\item After considering the two C'nots, we get that the contricution of $\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
+\item therefore, the two circuits traces has the exact same components and are equal, up to factor of 4
+(which come from the "free choice" in the values of the two last qbits in C)
+\end{itemize}
+}
+
+\section{adding few more clean bits dont give extra power}
+\frame{\frametitle{adding few more clean bits dont give extra power}
+\begin{itemize}
+\item We notice now that actually we didn't computed the trace accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. 
+\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O($\frac{1}{poly(n)}$) , and therefore with high probability we get a  O( \(\frac{1}{poly(n)}\)) estimation.
+\end{itemize}
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power(2) }
+\begin{itemize}
+\item On the other hand, an approximation of \(\frac{1}{poly(n)}\) to the expression \(\frac{Tr(U)}{2^{n+1}}\) is enough to decide every problem in DQC1 using the analysis above
+\item Therefore, we showed that getting a  \(\frac{2^{n}}{poly(n)}\) additive- approximation to the trace is a DQC1-complete problem
+ 
+\end{itemize}
+. 
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power (3)}
+We will define now the DQCK complexity class:
+DQCK is the same as DQC1, except the following differences:
+\begin{itemize}
+\item A's start state include K clean qubits. In case that the input $x \in L$, we will measure 0 in the first clean qubit at the end of A with probability of at least $\frac{2}{3}$
+\end{itemize}  
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power (4)}
+We will now prove that for \(k \leq \log{n}\), estimate the trace of unitary matrix with the same precision is still a complete problem \cite{SJ2008}, thus proving that adding logarithmic number of clean bits doesn't change the power. 
+
+Obviously we can calculate the trace of unitary matirx with \(\log{n}\) bits, since we can do it just with one. 
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power (3)}
+As for the less trivial direction, assume we have some quantum algorithm in DQCK.
+Similarly to the one-qubit option, final state is:
+\(\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}\)
+and therefore the probability of measuring 0 at the end is:
+\(p_{0} = Tr[{\Ket{0}\Bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})\)
+
+Now, we have the same problem at estimatimg this matrix: its not unitary!
+To resolve that issue, we build circuit similar to the one in the 1-clean quibit process,
+but now we add additional  $k-1$ ancila qubits, when there is a CNOT gate between the 2...k clean qubits, and the corresponding ancilla qubits.
+(Thus, enforcing them to be zero in order to contribute to the circuit's trace)/
+}
+
+\frame{\frametitle{adding few more clean bits dont give extra power (5)}
+\Qcircuit @C=1em @R=.7em {
+	& {/}  \qw &  \qw & \multigate{1}{U^\dag} & \ctrl{2} & \multigate{1}{U} & \ctrl{3} & \qw & \qw\\
+	& {/}  \qw & \qw & \ghost{U^\dag} & \qw & \ghost{U} & \qw  & \qw   {/} & \qw \\
+	&  {/}   \qw & \qw &\qw &  \targ  & \qw & \qw & \qw  &  {/} \qw \\
+	&  \qw & \qw & \qw & \qw & \qw & \targ & \qw  & \qw
+}
+Now, we can see (similary to the proposition 1), that the trace of the new circuit \(U^{*}\) follows the rule: \(Tr[U^{*}] = 2^{k}Tr[U]\). Thus, in polynomial number of executions we can compute its trace up to a percision of \(\frac{2^{n+k}}{poly(n,k)}\), but this equals to \(\frac{2^{n}}{poly(n)}\) when \(k  \leq \log{n}\), which means that in this case the precision is good enough to decide the original problem.
+}
+\section{References}
+\frame{\frametitle{References}
+\begin{thebibliography}{9}
+
+\bibitem{SJ2008}
+   Peter W. Shor,
+   Stephen P. Jordan,
+  Estimating Jones Polynomials is a Complete Problem for One Clean Qubit,
+   2008.
+\end{thebibliography}
+}
+\end{document}

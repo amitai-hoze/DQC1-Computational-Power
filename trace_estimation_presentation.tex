@@ -19,26 +19,7 @@
 {\tableofcontents}
 \end{frame}
 
-
-\section{The DQC1 complexity class}
-
- \frame{\frametitle {The Hadamard Test (2) }
- Therefore, the propability for measure 0 in the end is:
- \( \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
-  \frac{1}{4}(\Bra{\psi}\Ket{\psi} + \Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi} + \Bra{\psi}{U^\dagger}U\Ket{\psi}  )
-  = \frac{1}{2} + \frac{1}{4}(\Bra{\psi}{U^\dagger}\Ket{\psi} + \Bra{\psi}U\Ket{\psi})
-  =  \frac{1}{2} +  \frac{1}{2}Re(\Bra{\psi}U\Ket{\psi}) \)
-  
-  }
-   \frame{\frametitle {The Hadamard Test (3) }
-  When we remember that in our case \(\psi\) is actually the completely mixed state (which is equivalent to choose from all the compiotational basis states with equal probability), we get that the probability is:
-  \begin{displaymath}
-  \frac{1}{2^{n}}\sum\limits_{\psi \in {0,1}^n} \frac{1+Re(\Bra{\psi}U\Ket{\psi})}{2} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
-\end{displaymath}
-Therefore, the problem of trace estimation can be solved with one clean quibit.
- }
- 
- \section{hardness of trace estimation}
+\section{hardness of trace estimation}
 \frame{\frametitle {The hardness of trace estimation}
 Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
 Suppose we have some language \(L \in DQC1\), and an some x, and we want to decide if \(x \in L\).

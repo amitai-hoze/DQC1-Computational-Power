@@ -1,4 +1,4 @@
-% Created 2015-05-26 Tue 08:18
+% Created 2015-05-27 Wed 00:39
 \documentclass[leqno,fleqn]{beamer}
 \tolerance=1000
 \input{dqc1_headers}
@@ -56,7 +56,9 @@ A language L is said to be "complete" in the class DQC1, if:
   \lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
   \lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw \\
 }
+\end{frame}
 
+\begin{frame}[label=sec-1-4]{The Hadamard test}
 We will show that this circuit indeed calculates the trace of U
 \begin{block}{After the first hadamard gate}
 \begin{align*}
@@ -75,7 +77,26 @@ We will show that this circuit indeed calculates the trace of U
 \end{align*}
 \end{block}
 \end{frame}
-\begin{frame}[label=sec-1-4]{The trace estimation problem is in DQC1}
+
+\begin{frame}[label=sec-1-5]{The Hadamard test}
+Therefore, the propability to measure 0 at the end is:
+
+\begin{align*}
+\rho_{0} &= (\frac{\bra{\psi} + \bra{\psi}U^\dagger}{2})(\frac{\ket{\psi} + U\ket{\psi}}{2}) = \\
+    &= \frac{1}{4}(\bra{\psi}\ket{\psi} + \bra{\psi}U^\dagger\ket{\psi} + \bra{\psi}U\ket{\psi} + \bra{\psi}U^\dagger U\ket{\psi}) = \\
+    &= \frac{1}{2} + \frac{1}{4}(\bra{\psi}U^\dagger\ket{\psi} + \bra{\psi}U\ket{\psi}) = \\
+    &=  \frac{1}{2} + \frac{1}{2}Re(\bra{\psi}U\ket{\psi})
+\end{align*}
+\end{frame}
+\begin{frame}[label=sec-1-6]{The Hadamard test}
+As \(\psi\) is the completely mixed state, the probability is: \\
+\begin{align*}
+  \frac{1}{2^{n}}\sum_{x \in \{0,1\}^n}{\frac{1+Re(\bra{x}U\ket{x})}{2}} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
+\end{align*}
+Therefore, the problem of trace estimation can be solved with one clean qubit.
+\end{frame}
+
+\begin{frame}[label=sec-1-7]{The trace estimation problem is in DQC1}
 The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and \(n\)-qubits in the maximally mixed state. That is, the start state is \(\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}\) We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace of unitary operation U.
 \end{frame}
 \section{hardness of trace estimation}

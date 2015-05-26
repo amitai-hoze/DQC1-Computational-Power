@@ -21,58 +21,7 @@
 
 
 \section{The DQC1 complexity class}
-\frame{\frametitle{the DQC1 complexity class}
-DQC1 class is the class of decidable languages with algorithm $A$ such that:
-\begin{itemize}
-\item $A$ starts with one clean qubit in state $\ket{0}$, and $n$ qubits in the maximally mixed state
-\item $A$ may perform any unitary operation
-\item $A$ can only perform a measurement of the clean qubit at the end of the algorithm
-\item $A$ has no access to a classical computer, so its not promised that $P \subset DQC1$ 
-\item $A$ cannot be invoked many times in parallel
-\item $A$ runs in polynomial time
-\item $\forall x$, $A$ decides if $x \in L$ correctly with probability of at least $\frac{2}{3}$
-\end{itemize}
-}
 
-\frame{\frametitle{The trace estimation problem}
-
-The trace estimation problem is the following: given a quantom circuit, what is the trace of it's unitary operation?
-
-We will prove that this problem is DQC1-complete.
-
-Reminder: in general, a language L is said to be "complete" in the class DQC1, if:
-\begin{itemize}
-\item $L \in DQC1$
-\item $\forall L_{0} \in DQC1$ there is a reduction from $L_{0}$ to L, such that the reduction algorithm is in DQC1  
-\end{itemize}
-}
-
-\section{The trace estimation problem is in DQC1}
-\frame{\frametitle{The trace estimation problem is in DQC1}
-The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and n-qubits in the maximally mixed state.
-That is, the start state is \begin{equation}
-\rho = \ket{0}\bra{0}\otimes\frac{I}{2^n}
-\end{equation}
-We can use the hadamard test, which gets as input this state, in order to acurratly estimate a trace
-of unitary operation U.
-}
-
-\frame{\frametitle{The Hadamard Test}
-The description of the Hadamard test for some unitary matrix U is:
-\Qcircuit @C=1em @R=.7em {
-	\lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
-	\lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw
-}
-
-We will show that this circuit indeed calculates the trace of U
-\begin{itemize}
-\item after the first hadamard gate, the state is \(\Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}\)
-\item after the C-U operation, the new state is \(\frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}\)
-\item after the final hadamard operation, the final state becomes \(\frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = 
-\frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}\)
-\end{itemize}
- }
- 
  \frame{\frametitle {The Hadamard Test (2) }
  Therefore, the propability for measure 0 in the end is:
  \( \rho_{0} = (\frac{\Bra{\psi} + \Bra{\psi}{U^\dagger}}{2})(\frac{\Ket{\psi} + U\Ket{\psi}}{2}) = 
@@ -120,8 +69,8 @@ Proof:
 \item first, lets remember that \(tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}\)
 and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
 
-\item Suppose that after implying U on some state $\psi$, we got a non-zero component in the first qubit.
-\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to $\psi$
+\item Suppose that after implying U on some state \(\psi\), we got a non-zero component in the first qubit.
+\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to \(\psi\)
 
 \item by the equation above, we see that in this case, this component would contribute nothing to the trace of C.
 \end{itemize}
@@ -129,9 +78,9 @@ and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^
 
 \frame{\frametitle{The hardness of trace estimation (4)}
 \begin{itemize}
-\item On the other hand, the zero-component we get after implying U on $\psi$, doesn't change the last qubit, so the contribution to
-the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
-\item After considering the two C'nots, we get that the contricution of $\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
+\item On the other hand, the zero-component we get after implying U on \(\psi\), doesn't change the last qubit, so the contribution to
+the trace of C will be \(\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}\)
+\item After considering the two C'nots, we get that the contricution of \(\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
 \item therefore, the two circuits traces has the exact same components and are equal, up to factor of 4
 (which come from the "free choice" in the values of the two last qbits in C)
 \end{itemize}
@@ -141,7 +90,7 @@ the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
 \frame{\frametitle{adding few more clean bits dont give extra power}
 \begin{itemize}
 \item We notice now that actually we didn't computed the trace accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. 
-\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O($\frac{1}{poly(n)}$) , and therefore with high probability we get a  O( \(\frac{1}{poly(n)}\)) estimation.
+\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O(\(\frac{1}{poly(n)}\)) , and therefore with high probability we get a  O( \(\frac{1}{poly(n)}\)) estimation.
 \end{itemize}
 }
 
@@ -158,7 +107,7 @@ the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
 We will define now the DQCK complexity class:
 DQCK is the same as DQC1, except the following differences:
 \begin{itemize}
-\item A's start state include K clean qubits. In case that the input $x \in L$, we will measure 0 in the first clean qubit at the end of A with probability of at least $\frac{2}{3}$
+\item A's start state include K clean qubits. In case that the input \(x \in L$, we will measure 0 in the first clean qubit at the end of A with probability of at least $\frac{2}{3}\)
 \end{itemize}  
 }
 
@@ -177,7 +126,7 @@ and therefore the probability of measuring 0 at the end is:
 
 Now, we have the same problem at estimatimg this matrix: its not unitary!
 To resolve that issue, we build circuit similar to the one in the 1-clean quibit process,
-but now we add additional  $k-1$ ancila qubits, when there is a CNOT gate between the 2...k clean qubits, and the corresponding ancilla qubits.
+but now we add additional  \(k-1\) ancila qubits, when there is a CNOT gate between the 2...k clean qubits, and the corresponding ancilla qubits.
 (Thus, enforcing them to be zero in order to contribute to the circuit's trace)/
 }
 

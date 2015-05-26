@@ -1,0 +1,87 @@
+% Created 2015-05-26 Tue 08:18
+\documentclass[leqno,fleqn]{beamer}
+\tolerance=1000
+\input{dqc1_headers}
+\usetheme{PaloAlto}
+\author{Amitai}
+\date{\today}
+\title{DQC1 complexity class and the trace estimation problem}
+\hypersetup{
+ pdfauthor={Amitai},
+ pdftitle={DQC1 complexity class and the trace estimation problem},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 24.3.1 (Org mode 8.3beta)}, 
+ pdflang={English}}
+\begin{document}
+
+\maketitle
+\begin{frame}{Outline}
+\tableofcontents
+\end{frame}
+
+\section{The DQC1 complexity class}
+\label{sec-1}
+\begin{frame}[label=sec-1-1]{The DQC1 complexity class}
+DQC1 class is the class of decidable languages with algorithm \(A\) such that:
+
+\begin{itemize}
+\item \(A\) starts with one clean qubit in state \(\ket{0}\), and \(n\) qubits in
+the maximally mixed state
+\item \(A\) may perform any unitary operation
+\item \(A\) can only perform a measurement of the clean qubit at the end of
+the algorithm
+\item \(A\) has no access to a classical computer, so its not promised that
+\(P \subset DQC1\)
+\item \(A\) cannot be invoked many times in parallel
+\item \(A\) runs in polynomial time
+\item \(\forall x\), \(A\) decides if \(x \in L\) correctly with probability of
+at least \(\frac{2}{3}\)
+\end{itemize}
+\end{frame}
+\begin{frame}[label=sec-1-2]{The trace estimation problem is in DQC1}
+\begin{block}{Trace estimation problem}
+Given a quantom circuit, what is the trace of its unitary operation?
+\end{block}
+\begin{block}{Completeness}
+A language L is said to be "complete" in the class DQC1, if:
+\begin{itemize}
+\item \(L \in DQC1\)
+\item \(\forall L_{0} \in DQC1\) there is a reduction from \(L_{0}\) to \(L\), such that the reduction algorithm is in DQC1
+\end{itemize}
+\end{block}
+\end{frame}
+\begin{frame}[label=sec-1-3]{The Hadamard test}
+\inlineQcircuit{
+  \lstick{\ket{0}} & \gate {H} & \ctrl{1} & \gate {H} & \meter & \qw \\
+  \lstick{\psi} & {/} \qw & \gate {U} & {/} \qw & \qw & \qw \\
+}
+
+We will show that this circuit indeed calculates the trace of U
+\begin{block}{After the first hadamard gate}
+\begin{align*}
+   \Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}
+\end{align*}
+\end{block}
+\begin{block}{After the C-U operation}
+\begin{align*}
+   \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}
+\end{align*}
+\end{block}
+\begin{block}{After the final hadamard operation}
+\begin{align*}
+   \frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = \\
+   \frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}
+\end{align*}
+\end{block}
+\end{frame}
+\begin{frame}[label=sec-1-4]{The trace estimation problem is in DQC1}
+The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and \(n\)-qubits in the maximally mixed state. That is, the start state is \(\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}\) We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace of unitary operation U.
+\end{frame}
+\section{hardness of trace estimation}
+\label{sec-2}
+\section{adding few more clean bits dont give extra power}
+\label{sec-3}
+\section{References}
+\label{sec-4}
+\end{document}

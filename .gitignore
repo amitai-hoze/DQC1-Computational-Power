@@ -1,3 +1,7 @@
+*.dvi
+*.nav
+*.out
+*.snm
 *.aux
 *.log
 *.pdf

@@ -1,0 +1,107 @@
+* DQC1 complexity class and the trace estimation problem
+:PROPERTIES:
+:EXPORT_LaTeX_CLASS: beamer
+:EXPORT_LaTeX_CLASS_OPTIONS: [leqno,fleqn]
+:EXPORT_BEAMER_THEME: PaloAlto
+:EXPORT_OPTIONS: H:2
+:EXPORT_LaTeX_HEADER: \input{dqc1_headers}
+:END:
+
+#+begin_comment
+This was in the original presentation
+\frame{\titlepage} 
+\begin{frame}[allowframebreaks]
+\frametitle{Table of contents}
+{\tableofcontents}
+\end{frame}
+#+end_comment
+** The DQC1 complexity class
+*** The DQC1 complexity class
+DQC1 class is the class of decidable languages with algorithm $A$ such that:
+
+-  $A$ starts with one clean qubit in state $\ket{0}$, and $n$ qubits in
+   the maximally mixed state
+-  $A$ may perform any unitary operation
+-  $A$ can only perform a measurement of the clean qubit at the end of
+   the algorithm
+-  $A$ has no access to a classical computer, so its not promised that
+   $P \subset DQC1$
+-  $A$ cannot be invoked many times in parallel
+-  $A$ runs in polynomial time
+-  $\forall x$, $A$ decides if $x \in L$ correctly with probability of
+   at least $\frac{2}{3}$
+*** The trace estimation problem is in DQC1
+**** Trace estimation problem
+Given a quantom circuit, what is the trace of its unitary operation?
+**** Completeness
+A language L is said to be "complete" in the class DQC1, if:
+- $L \in DQC1$
+- $\forall L_{0} \in DQC1$ there is a reduction from $L_{0}$ to $L$, such that the reduction algorithm is in DQC1
+*** The Hadamard test
+:source_table:
+#+name: hadamard-test
+| \lstick{\ket{0}} | \gate {H} | \ctrl{1}  | \gate {H} | \meter | \qw |
+| \lstick{\psi}   | {/} \qw    | \gate {U} | {/} \qw    | \qw    | \qw |
+:end:
+#+begin_src latex :noweb yes
+\inlineQcircuit{
+  <<org-table-to-latex-matrix(hadamard-test)>>
+}
+#+end_src
+We will show that this circuit indeed calculates the trace of U
+**** After the first hadamard gate
+\begin{align*}
+   \Ket{+}\psi = \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}\Ket{\psi}
+\end{align*}
+**** After the C-U operation
+\begin{align*}
+   \frac{1}{\sqrt{2}}\Ket{0}\Ket{\psi} + \frac{1}{\sqrt{2}}\Ket{1}U\Ket{\psi}
+\end{align*}
+**** After the final hadamard operation
+\begin{align*}
+   \frac{1}{2}\Ket{0}\Ket{\psi} + \frac{1}{2}\Ket{1}\Ket{\psi}\ +\frac{1}{2}\Ket{0}U\Ket{\psi}\ -  \frac{1}{2}\Ket{1}U\Ket{\psi} = \\
+   \frac{\Ket{\psi} + U\Ket{\psi}}{2}\Ket{0} + \frac{\Ket{\psi} - U\Ket{\psi}}{2}\Ket{1}
+\end{align*}
+*** The trace estimation problem is in DQC1
+The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$ We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace of unitary operation U.
+** hardness of trace estimation
+** adding few more clean bits dont give extra power
+** References
+* Settings
+** Export Options
+#+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")
+** Babel Library
+#+name: org-table-to-latex-matrix
+#+begin_src emacs-lisp :var table='((:head) hline (:body))
+(require 'cl)
+(flet ((to-tab (tab)
+               (orgtbl-to-generic
+                (mapcar (lambda (lis)
+                          (if (listp lis)
+                              (mapcar (lambda (el)
+                                        (if (stringp el)
+                                            el
+                                          (format "%S" el))) lis)
+                            lis)) tab)
+                (list :lend " \\\\" :sep " & " :hline "\\hline"))))
+  (org-fill-template
+   "%table"
+   (list
+    (cons "table"
+          ;; only use \midrule if it looks like there are column headers
+          (if (equal 'hline (second table))
+              (concat (to-tab (list (first table)))
+                      "\n\\midrule\n"
+                      (to-tab (cddr table)))
+            (to-tab table))))))
+#+end_src
+** In buffer
+#+STARTUP: entitiespretty
+#+STARTUP: inlineimages
+#+STARTUP: hideblocks
+** Mobile Org
+#+LAST_MOBILE_CHANGE: 2014-11-24 23:09:51
+** Emacs
+# Local Variables:
+# eval: (load "qc.el")
+# End:

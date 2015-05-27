@@ -20,17 +20,6 @@
 \end{frame}
 
 \section{hardness of trace estimation}
-\frame{\frametitle {The hardness of trace estimation}
-Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
-Suppose we have some language \(L \in DQC1\), and an some x, and we want to decide if \(x \in L\).
-
-\(L \in DQC1\), therefore its start state obeys equation 1. on this start state, we  imply some unitary matrix U, and get the state \(\rho_{final} = U\rho{U^\dagger} = U\ket{0}\bra{0}\frac{I}{2^n}{U^\dagger}\)
-Therefore, the probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
-\begin{equation}
- p_{0} = Tr[\Ket{0}\Bra{0}\otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]
-\end{equation}
-Unfortunately - this matrix isn't unitary!!
-}
 
 \frame {\frametitle {The hardness of trace estimation (2)}
 To resove that issue, we exmine the following quantom circuit C:

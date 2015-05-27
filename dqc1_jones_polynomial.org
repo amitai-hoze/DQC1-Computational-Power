@@ -84,7 +84,19 @@ Therefore, the problem of trace estimation can be solved with one clean qubit.
 
 *** The trace estimation problem is in DQC1
 The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$ We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace of unitary operation U.
-** hardness of trace estimation
+** Hardness of trace estimation
+*** The hardness of trace estimation
+# Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
+**** Trace estimation is in DQC1
+Suppose we have some language $L \in DQC1$, and some $x$, and we want to decide if $x \in L$.
+$L \in DQC1$, therefore its start state obeys equation 1. We apply a unitary matrix $U$ on the DQC1 start state $\rho=\ket{0}\bra{0}\frac{I}{2^n}$ and get the state $\rho_{final} = U \rho U^\dagger = U\ket{0}\bra{0}\frac{I}{2^n}U^\dagger$.
+The probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
+\begin{align*}
+ p_{0} &= Tr[(\ket{0}\bra{0}\otimes I)\rho_{final}] \\
+     &= 2^{-n}Tr[(\ket{0}\bra{0} \otimes I)U(\ket{0} \bra{0} \otimes I)U^\dagger]
+\end{align*}
+Unfortunately - this matrix isn't unitary!!
+
 ** adding few more clean bits dont give extra power
 ** References
 * Settings

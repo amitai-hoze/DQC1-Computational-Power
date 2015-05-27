@@ -19,31 +19,6 @@
 {\tableofcontents}
 \end{frame}
 
-\section{hardness of trace estimation}
-
-\frame {\frametitle {The hardness of trace estimation (3)}
-Proof:
-\begin{itemize}
-\item first, lets remember that $tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}$
-and in a similar way, $Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
-
-\item Suppose that after implying U on some state $\psi$, we got a non-zero component in the first qubit.
-\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to $\psi$
-
-\item by the equation above, we see that in this case, this component would contribute nothing to the trace of C.
-\end{itemize}
-}
-
-\frame{\frametitle{The hardness of trace estimation (4)}
-\begin{itemize}
-\item On the other hand, the zero-component we get after implying U on $\psi$, doesn't change the last qubit, so the contribution to
-the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
-\item After considering the two C'nots, we get that the contricution of $\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
-\item therefore, the two circuits traces has the exact same components and are equal, up to factor of 4
-(which come from the "free choice" in the values of the two last qbits in C)
-\end{itemize}
-}
-
 \section{adding few more clean bits dont give extra power}
 \frame{\frametitle{adding few more clean bits dont give extra power}
 \begin{itemize}
@@ -80,7 +55,7 @@ As for the less trivial direction, assume we have some quantum algorithm in DQCK
 Similarly to the one-qubit option, final state is:
 $\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}$
 and therefore the probability of measuring 0 at the end is:
-$p_{0} = Tr[{\Ket{0}\Bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})$
+$p_{0} = Tr[{\ket{0}\bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\ket{0}\bra{0}\otimes I)U({\ket{0}\bra{0}}^{\otimes k}\otimes I{U^\dagger})$
 
 Now, we have the same problem at estimatimg this matrix: its not unitary!
 To resolve that issue, we build circuit similar to the one in the 1-clean quibit process,

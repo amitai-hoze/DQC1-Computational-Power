@@ -81,15 +81,13 @@ As $\psi$ is the completely mixed state, the probability is: \\
   \frac{1}{2^{n}}\sum_{x \in \{0,1\}^n}{\frac{1+Re(\bra{x}U\ket{x})}{2}} = \frac{1}{2} + \frac{Re(TrU)}{2^{n+1}}
 \end{align*}
 Therefore, the problem of trace estimation can be solved with one clean qubit.
-
-*** The trace estimation problem is in DQC1
-The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$ We can use the Hadamard test, which gets as input this state, in order to accurately estimate a trace of unitary operation U.
 ** Hardness of trace estimation
+*** The trace estimation problem is in DQC1
+The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$. We can use the Hadamard test in order to estimate a trace of a unitary operation $U$.
 *** Trace estimation is in DQC1
 # Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
 **** Proof
-Suppose we have some language $L \in DQC1$, and some $x$, and we want to decide if $x \in L$.
-$L \in DQC1$, therefore its start state obeys equation 1. We apply a unitary matrix $U$ on the DQC1 start state $\rho=\ket{0}\bra{0}\frac{I}{2^n}$ and get the state $\rho_{final} = U \rho U^\dagger = U\ket{0}\bra{0}\frac{I}{2^n}U^\dagger$.
+Suppose we have some language $L \in DQC1$, and some $x$, and we want to decide if $x \in L$. We apply a unitary matrix $U$ on the DQC1 start state $\rho=\ket{0}\bra{0}\frac{I}{2^n}$ and get the state $\rho_{final} = U \rho U^\dagger = U\ket{0}\bra{0}\frac{I}{2^n}U^\dagger$.
 The probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
 \begin{align*}
  p_{0} &= Tr[(\ket{0}\bra{0}\otimes I)\rho_{final}] \\
@@ -112,7 +110,26 @@ To resolve this issue, we examine the following quantom circuit C:
 #+end_src
 **** Proposition 1
  $\frac{1}{4}Tr[C]=Tr[(\ket{0}\bra{0}\otimes I)U(\ket{0}\bra{0}\otimes I)U^\dagger]$
-
+*** Trace estimation is in DQC1
+**** 
+$Tr[C] = \sum_{x \in \{0,1\}^n} \bra{x}C\ket{x}$, and in a similar way,
+\begin{align*}
+&Tr[(\ket{0}\bra{0} \otimes I)U(\ket{0}\bra{0} \otimes I)U^\dagger] = \\
+&= \sum_{x \in \{0,1\}^n} \bra{x}(\ket{0}\bra{0}\otimes I)U(\ket{0}\bra{0}\otimes I{U^\dagger})\ket{x}
+\end{align*}
+**** 
+Suppose that after applying $U$ on some state $\psi$, we got a non-zero component in the first qubit.
+**** 
+After the CNOT gate, this component will flip one of the last qubits, creating a new state that is orthogonal to $\psi$.
+**** 
+By the equation above, we see that in this case, this component would contribute nothing to the trace of C.
+*** Trace estimation is in DQC1
+**** 
+On the other hand, the zero-component we get after applying $U$ on $\psi$, doesn't change the last qubit, so the contribution to the trace of C will be $\bra{\psi}(\bra{0}\ket{0} \otimes U)\ket{\psi}$
+**** 
+After considering the two CNOT gates, the contribution of $\psi$ to the trace of C will be $\bra{\psi}(\ket{0}\bra{0}\otimes I)U(\ket{0}\bra{0}\otimes I{U^\dagger})\ket{\psi}$
+**** 
+Therefore, the two circuit traces has the exact same components and are equal, up to factor of 4, which comes from the "free choice" in the values of the two last qubits in C.
 ** adding few more clean bits dont give extra power
 ** References
 * Settings

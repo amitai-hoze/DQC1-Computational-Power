@@ -8,6 +8,8 @@
 :EXPORT_FILE_NAME: dqc1_trace_estimation_beamer
 :END:
 
+#+author:Ohad Barta, Amitai Hoze
+
 #+begin_comment
 This was in the original presentation
 \frame{\titlepage} 
@@ -85,7 +87,7 @@ Therefore, the problem of trace estimation can be solved with one clean qubit.
 *** Trace estimation is in DQC1
 The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$. We can use the Hadamard test in order to estimate a trace of a unitary operation $U$.
 *** Trace estimation is in DQC1
-# Next, we will want to show that trace estimation is hard in DQC1 \cite{SJ2008}.
+# Next, we will want to show that trace estimation is hard in DQC1 \cite{shor2008estimating}.
 **** Proof
 Suppose we have some language $L \in DQC1$, and some $x$, and we want to decide if $x \in L$. We apply a unitary matrix $U$ on the DQC1 start state $\rho=\ket{0}\bra{0}\frac{I}{2^n}$ and get the state $\rho_{final} = U \rho U^\dagger = U\ket{0}\bra{0}\frac{I}{2^n}U^\dagger$.
 The probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
@@ -144,7 +146,7 @@ Therefore, the two circuit traces has the exact same components and are equal, u
 **** DQCK
 A's start state includes K clean qubits. In case that the input $x \in L$, 0 will be measured in the first clean qubit at the end of A with probability of at least $\frac{2}{3}$
 *** Adding few more clean bits doesn't give extra power
-We will now prove that for $k \leq \log{n}$, estimating the trace of a unitary matrix with the same precision is still a complete problem \cite{SJ2008}.
+We will now prove that for $k \leq \log{n}$, estimating the trace of a unitary matrix with the same precision is still a complete problem \cite{shor2008estimating}.
 
 This proves that adding logarithmic number of clean bits doesn't change the computaional power.
 Obviously we can calculate the trace of unitary matrix with $\log{n}$ bits, since we can do it just with one. 
@@ -174,6 +176,10 @@ but now we add additional $k-1$ ancilla qubits with a CNOT gate between the $2 \
 Now, we can see (similarly to the proposition 1), that the trace of the new circuit $U^*$ follows the rule: $Tr[U^{*}] = 2^{k}Tr[U]$. Thus, in polynomial number of executions we can compute its trace up to a percision of $\frac{2^{n+k}}{poly(n,k)}$, but this equals to $\frac{2^{n}}{poly(n)}$ when $k  \leq \log{n}$, which means that in this case the precision is good enough to decide the original problem.
 
 ** References
+*** References
+\bibliographystyle{plain}
+\bibliography{dqc1}
+
 * Settings
 ** Export Options
 #+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")

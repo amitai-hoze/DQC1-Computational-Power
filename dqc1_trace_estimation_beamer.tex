@@ -1,13 +1,13 @@
-% Created 2015-05-27 Wed 07:23
+% Created 2015-05-27 Wed 07:37
 \documentclass[leqno,fleqn]{beamer}
 \tolerance=1000
 \input{dqc1_headers}
 \usetheme{PaloAlto}
-\author{Amitai}
+\author{Ohad Barta, Amitai Hoze}
 \date{\today}
 \title{DQC1 complexity class and the trace estimation problem}
 \hypersetup{
- pdfauthor={Amitai},
+ pdfauthor={Ohad Barta, Amitai Hoze},
  pdftitle={DQC1 complexity class and the trace estimation problem},
  pdfkeywords={},
  pdfsubject={},
@@ -19,6 +19,7 @@
 \begin{frame}{Outline}
 \tableofcontents
 \end{frame}
+
 
 \section{The DQC1 complexity class}
 \label{sec-1}
@@ -176,7 +177,7 @@ A's start state includes K clean qubits. In case that the input \(x \in L\), 0 w
 \end{block}
 \end{frame}
 \begin{frame}[label=sec-3-2]{Adding few more clean bits doesn't give extra power}
-We will now prove that for \(k \leq \log{n}\), estimating the trace of a unitary matrix with the same precision is still a complete problem \cite{SJ2008}.
+We will now prove that for \(k \leq \log{n}\), estimating the trace of a unitary matrix with the same precision is still a complete problem \cite{shor2008estimating}.
 
 This proves that adding logarithmic number of clean bits doesn't change the computaional power.
 Obviously we can calculate the trace of unitary matrix with \(\log{n}\) bits, since we can do it just with one. 
@@ -205,4 +206,8 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 
 \section{References}
 \label{sec-4}
+\begin{frame}[label=sec-4-1]{References}
+\bibliographystyle{plain}
+\bibliography{dqc1}
+\end{frame}
 \end{document}

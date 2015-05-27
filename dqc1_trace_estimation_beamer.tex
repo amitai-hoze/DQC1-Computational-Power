@@ -1,4 +1,4 @@
-% Created 2015-05-27 Wed 06:29
+% Created 2015-05-27 Wed 06:52
 \documentclass[leqno,fleqn]{beamer}
 \tolerance=1000
 \input{dqc1_headers}
@@ -95,9 +95,9 @@ As \(\psi\) is the completely mixed state, the probability is: \\
 \end{align*}
 Therefore, the problem of trace estimation can be solved with one clean qubit.
 \end{frame}
-\section{Hardness of trace estimation}
+\section{Completeness of trace estimation in DQC1}
 \label{sec-2}
-\begin{frame}[label=sec-2-1]{The trace estimation problem is in DQC1}
+\begin{frame}[label=sec-2-1]{Trace estimation is in DQC1}
 The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and \(n\)-qubits in the maximally mixed state. That is, the start state is \(\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}\). We can use the Hadamard test in order to estimate a trace of a unitary operation \(U\).
 \end{frame}
 \begin{frame}[label=sec-2-2]{Trace estimation is in DQC1}
@@ -153,8 +153,29 @@ After considering the two CNOT gates, the contribution of \(\psi\) to the trace 
 Therefore, the two circuit traces has the exact same components and are equal, up to factor of 4, which comes from the "free choice" in the values of the two last qubits in C.
 \end{block}
 \end{frame}
-\section{adding few more clean bits dont give extra power}
+\begin{frame}[label=sec-2-6]{Trace estimation is DQC1 complete}
+\begin{itemize}
+\item We didn't compute the trace accurately, rather got an approximation via the expectation of the algorithm.
+\item We measure a polynomial number of points on the trace, so the variance of our estimation is \(O(\frac{1}{poly(n)})\), and with high probability we get a  \(O(\frac{1}{poly(n)})\) estimation.
+\end{itemize}
+\end{frame}
+\begin{frame}[label=sec-2-7]{Trace estimation is DQC1 complete}
+\begin{itemize}
+\item On the other hand, an approximation of \(\frac{1}{poly(n)}\) to the
+expression \(\frac{Tr(U)}{2^{n+1}}\) is enough to decide every problem
+in DQC1 using the analysis above
+\item Therefore, we showed that getting a \(\frac{2^{n}}{poly(n)}\) additive-
+approximation to the trace is a DQC1-complete problem
+\end{itemize}
+\end{frame}
+\section{Adding few more clean bits doesn't give extra power}
 \label{sec-3}
+\begin{frame}[label=sec-3-1]{Adding few more clean bits doesn't give extra power}
+\end{frame}
+\begin{frame}[label=sec-3-2]{Adding few more clean bits doesn't give extra power}
+\end{frame}
+\begin{frame}[label=sec-3-3]{Adding few more clean bits doesn't give extra power}
+\end{frame}
 \section{References}
 \label{sec-4}
 \end{document}

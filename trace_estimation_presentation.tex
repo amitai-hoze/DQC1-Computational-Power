@@ -21,26 +21,14 @@
 
 \section{hardness of trace estimation}
 
-\frame {\frametitle {The hardness of trace estimation (2)}
-To resove that issue, we exmine the following quantom circuit C:
-\Qcircuit @C=1em @R=.7em {
-	& \qw & \multigate{1}{U^\dag} & \ctrl{2} & \multigate{1}{U} & \ctrl{3} & \qw \\
-	& {/} \qw & \ghost{U^\dag} & \qw & \ghost{U} & \qw &  {/} \qw \\
-	&  \qw &\qw &  \targ  & \qw & \qw & \qw \\
-	&  \qw & \qw & \qw & \qw & \targ & \qw
-}
-
-Proposition 1: \(\frac{1}{4}\)tr[C]=\(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})]\)
-}
-
 \frame {\frametitle {The hardness of trace estimation (3)}
 Proof:
 \begin{itemize}
-\item first, lets remember that \(tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}\)
-and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
+\item first, lets remember that $tr[C] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}C\Ket{\psi}$
+and in a similar way, $Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})] = \sum\limits_{\psi \in {0,1}^n} \Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
 
-\item Suppose that after implying U on some state \(\psi\), we got a non-zero component in the first qubit.
-\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to \(\psi\)
+\item Suppose that after implying U on some state $\psi$, we got a non-zero component in the first qubit.
+\item After the Cnot gate, this component will flip one of the last qubits, creating new state that is orthogonal to $\psi$
 
 \item by the equation above, we see that in this case, this component would contribute nothing to the trace of C.
 \end{itemize}
@@ -48,9 +36,9 @@ and in a similar way, \(Tr[(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^
 
 \frame{\frametitle{The hardness of trace estimation (4)}
 \begin{itemize}
-\item On the other hand, the zero-component we get after implying U on \(\psi\), doesn't change the last qubit, so the contribution to
-the trace of C will be \(\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}\)
-\item After considering the two C'nots, we get that the contricution of \(\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}\)
+\item On the other hand, the zero-component we get after implying U on $\psi$, doesn't change the last qubit, so the contribution to
+the trace of C will be $\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}$
+\item After considering the two C'nots, we get that the contricution of $\psi$ to the trace of C will be $\Bra{\psi}(\Ket{0}\Bra{0}\otimes I)U(\Ket{0}\Bra{0}\otimes I{U^\dagger})\Ket{\psi}$
 \item therefore, the two circuits traces has the exact same components and are equal, up to factor of 4
 (which come from the "free choice" in the values of the two last qbits in C)
 \end{itemize}
@@ -60,14 +48,14 @@ the trace of C will be \(\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}\)
 \frame{\frametitle{adding few more clean bits dont give extra power}
 \begin{itemize}
 \item We notice now that actually we didn't computed the trace accurately. Since only the expectation of the algorithm is the trace, we rather get an approximation. 
-\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O(\(\frac{1}{poly(n)}\)) , and therefore with high probability we get a  O( \(\frac{1}{poly(n)}\)) estimation.
+\item We measure a polynimial number of points on the trace. Therefore, the variance of our estimation is O($\frac{1}{poly(n)}$) , and therefore with high probability we get a  O( $\frac{1}{poly(n)}$) estimation.
 \end{itemize}
 }
 
 \frame{\frametitle{adding few more clean bits dont give extra power(2) }
 \begin{itemize}
-\item On the other hand, an approximation of \(\frac{1}{poly(n)}\) to the expression \(\frac{Tr(U)}{2^{n+1}}\) is enough to decide every problem in DQC1 using the analysis above
-\item Therefore, we showed that getting a  \(\frac{2^{n}}{poly(n)}\) additive- approximation to the trace is a DQC1-complete problem
+\item On the other hand, an approximation of $\frac{1}{poly(n)}$ to the expression $\frac{Tr(U)}{2^{n+1}}$ is enough to decide every problem in DQC1 using the analysis above
+\item Therefore, we showed that getting a  $\frac{2^{n}}{poly(n)}$ additive- approximation to the trace is a DQC1-complete problem
  
 \end{itemize}
 . 
@@ -77,26 +65,26 @@ the trace of C will be \(\bra{\psi}(\bra{0}\ket{0}\otimes{U})\ket{\psi}\)
 We will define now the DQCK complexity class:
 DQCK is the same as DQC1, except the following differences:
 \begin{itemize}
-\item A's start state include K clean qubits. In case that the input \(x \in L$, we will measure 0 in the first clean qubit at the end of A with probability of at least $\frac{2}{3}\)
+\item A's start state include K clean qubits. In case that the input $x \in L$, we will measure 0 in the first clean qubit at the end of A with probability of at least $\frac{2}{3}$
 \end{itemize}  
 }
 
 \frame{\frametitle{adding few more clean bits dont give extra power (4)}
-We will now prove that for \(k \leq \log{n}\), estimate the trace of unitary matrix with the same precision is still a complete problem \cite{SJ2008}, thus proving that adding logarithmic number of clean bits doesn't change the power. 
+We will now prove that for $k \leq \log{n}$, estimate the trace of unitary matrix with the same precision is still a complete problem \cite{SJ2008}, thus proving that adding logarithmic number of clean bits doesn't change the power. 
 
-Obviously we can calculate the trace of unitary matirx with \(\log{n}\) bits, since we can do it just with one. 
+Obviously we can calculate the trace of unitary matirx with $\log{n}$ bits, since we can do it just with one. 
 }
 
 \frame{\frametitle{adding few more clean bits dont give extra power (3)}
 As for the less trivial direction, assume we have some quantum algorithm in DQCK.
 Similarly to the one-qubit option, final state is:
-\(\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}\)
+$\rho_{final} = U\rho{U^\dagger} = U{\ket{0}\bra{0}}^{\otimes k}\frac{I}{2^n}{U^\dagger}$
 and therefore the probability of measuring 0 at the end is:
-\(p_{0} = Tr[{\Ket{0}\Bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})\)
+$p_{0} = Tr[{\Ket{0}\Bra{0}} \otimes I\rho_{final}] = 2^{-n}Tr[(\Ket{0}\Bra{0}\otimes I)U({\Ket{0}\Bra{0}}^{\otimes k}\otimes I{U^\dagger})$
 
 Now, we have the same problem at estimatimg this matrix: its not unitary!
 To resolve that issue, we build circuit similar to the one in the 1-clean quibit process,
-but now we add additional  \(k-1\) ancila qubits, when there is a CNOT gate between the 2...k clean qubits, and the corresponding ancilla qubits.
+but now we add additional  $k-1$ ancila qubits, when there is a CNOT gate between the 2...k clean qubits, and the corresponding ancilla qubits.
 (Thus, enforcing them to be zero in order to contribute to the circuit's trace)/
 }
 
@@ -107,7 +95,7 @@ but now we add additional  \(k-1\) ancila qubits, when there is a CNOT gate betw
 	&  {/}   \qw & \qw &\qw &  \targ  & \qw & \qw & \qw  &  {/} \qw \\
 	&  \qw & \qw & \qw & \qw & \qw & \targ & \qw  & \qw
 }
-Now, we can see (similary to the proposition 1), that the trace of the new circuit \(U^{*}\) follows the rule: \(Tr[U^{*}] = 2^{k}Tr[U]\). Thus, in polynomial number of executions we can compute its trace up to a percision of \(\frac{2^{n+k}}{poly(n,k)}\), but this equals to \(\frac{2^{n}}{poly(n)}\) when \(k  \leq \log{n}\), which means that in this case the precision is good enough to decide the original problem.
+Now, we can see (similary to the proposition 1), that the trace of the new circuit $U^{*}$ follows the rule: $Tr[U^{*}] = 2^{k}Tr[U]$. Thus, in polynomial number of executions we can compute its trace up to a percision of $\frac{2^{n+k}}{poly(n,k)}$, but this equals to $\frac{2^{n}}{poly(n)}$ when $k  \leq \log{n}$, which means that in this case the precision is good enough to decide the original problem.
 }
 \section{References}
 \frame{\frametitle{References}

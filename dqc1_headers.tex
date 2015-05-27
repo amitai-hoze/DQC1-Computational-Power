@@ -1,4 +1,27 @@
-\input{qc_beamer}
+\usepackage{dsfont,etex,amsthm,multirow,bigdelim,tikz,amssymb}
+\usepackage{fixme}
+\fxsetup{
+    status=draft,
+    author=,
+    theme=color
+}
+%\definecolor{fxnote}{rgb}{0.8000,0.0000,0.0000}
+\def\dblbackslash{\\}
+\newcommand{\polylog}{\mathop{\mathrm{polylog}}}
+\input{Qcircuit}
+\newcommand{\inlineQcircuit}[1] {
+\\\\
+\centerline{
+  \Qcircuit @C=1em @R=.7em {
+    #1
+   }
+ }
+\\\\\\
+}
+
+\usepackage[backend=cairo, extension=pdf, outputdir=diagrams]{diagrams-latex}
+\usepackage{graphicx}
+\AtBeginDocument{\setlength\abovedisplayskip{0pt}}
 \usepackage{amsmath}
 \usepackage{beamerthemesplit} % new 
 \usepackage{braket}

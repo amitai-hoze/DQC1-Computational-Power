@@ -1,4 +1,4 @@
-% Created 2015-05-28 Thu 06:26
+% Created 2015-05-28 Thu 06:35
 \documentclass[leqno,fleqn]{beamer}
 \tolerance=1000
 \input{dqc1_headers}
@@ -45,22 +45,19 @@ Given a quantom circuit, what is the trace of its unitary operation?
 \end{frame}
 \begin{frame}[label=sec-1-3]{Languages and Completness}
 \begin{block}{Language}
-A Language is a finite, or infinite group of words. We will say that a
-word x is in language L (denoted by \(x \in L\)), if the word x is in this
-group.
-
-We say that L is decidable in polynomial time, if there is some
-algorithm A (which runs in polynomial time), such that for every word x,
-it decides correctly if \(x \in L\) or not. We will say that such an
-algotrithm "Solves L" Here are some examples:
-
+A Language is a finite, or an infinite set of words. \(x \in L\) if the word \(x\) is in this set.
+\end{block}
+\begin{block}{Examples}
 \begin{itemize}
-\item L - the language of all the strings that start with 0. \(015 \in L\),
-but 501 isn't.
-
-\item L - the languane of all the prime numbers. \(1 \in L\), \(101 \in L\),
-but 15 is not in L.
+\item \(L\) is the language of all the strings that start with 0. \(015 \in L\),
+but \(501 \notin L\).
+\item \(L\) is the language of all prime numbers. \(1 \in L\), \(101 \in L\),
+but \(15 \notin L\).
 \end{itemize}
+\end{block}
+\begin{block}{\(L \in P\)}
+\(L\) is decidable in polynomial time, if there is some algorithm \(A\) which runs in polynomial time, such that for every word \(x\)
+it decides correctly if \(x \in L\). We will say that such an algotrithm "Solves L"
 \end{block}
 \end{frame}
 \begin{frame}[label=sec-1-4]{Languages and Completness}

@@ -36,20 +36,15 @@ DQC1 class is the class of decidable languages with algorithm $A$ such that:
 Given a quantom circuit, what is the trace of its unitary operation?
 *** Languages and Completness
 **** Language
-A Language is a finite, or infinite group of words. We will say that a
-word x is in language L (denoted by \(x \in L\)), if the word x is in this
-group.
-
-We say that L is decidable in polynomial time, if there is some
-algorithm A (which runs in polynomial time), such that for every word x,
-it decides correctly if $x \in L$ or not. We will say that such an
-algotrithm "Solves L" Here are some examples:
-
--  L - the language of all the strings that start with 0. $015 \in L$,
-   but 501 isn't.
-
--  L - the languane of all the prime numbers. $1 \in L$, $101 \in L$,
-   but 15 is not in L.
+A Language is a finite, or an infinite set of words. $x \in L$ if the word $x$ is in this set.
+**** Examples
+-  $L$ is the language of all the strings that start with 0. $015 \in L$,
+   but $501 \notin L$.
+-  $L$ is the language of all prime numbers. $1 \in L$, $101 \in L$,
+   but $15 \notin L$.
+**** $L \in P$
+$L$ is decidable in polynomial time, if there is some algorithm $A$ which runs in polynomial time, such that for every word $x$
+it decides correctly if $x \in L$. We will say that such an algotrithm "Solves L"
 *** Languages and Completness
 **** Reduction
 Say that we have two languages $L_{1}, L_{2}$. Assume that we can easily

@@ -1,4 +1,4 @@
-% Created 2015-05-28 Thu 06:35
+% Created 2015-05-28 Thu 07:29
 \documentclass[leqno,fleqn]{beamer}
 \tolerance=1000
 \input{dqc1_headers}
@@ -62,27 +62,15 @@ it decides correctly if \(x \in L\). We will say that such an algotrithm "Solves
 \end{frame}
 \begin{frame}[label=sec-1-4]{Languages and Completness}
 \begin{block}{Reduction}
-Say that we have two languages \(L_{1}, L_{2}\). Assume that we can easily
-solve \(L_{2}\), yet we want to solve \(L_{1}\). One way to do it is to find
-fuction over words: \(F:{words} \rightarrow {words}\), such that:
+Let \(L_{1}, L_{2}\) be two languages. \(L_1\) is reducible to \(L_2\) if there is a
+function \(f:L_1 \rightarrow L_2\), such that:
 \(f(x) \in L_{2}\) iff \(x \in L_{1}\).
-
-That way, an algorithm to \(L_{1}\) will :
-
-\begin{itemize}
-\item transform a given word x to the word \(f(x)\), using the reduction
-function.
-
-\item will check if \(f(x) \in L_{2}\).
-\end{itemize}
-
-Example:
-
-\begin{itemize}
-\item \(L_{1}\) - all the words that start with "0", \(L_{2}\) - all the words
-that start with "1" A reduction from \(L_{1}\) to \(L_{2}\) will just
-flip the MSB of the given word
-\end{itemize}
+\end{block}
+\begin{block}{Algorithm}
+An algorithm for the decision problem \(x \in L_{1}\) will simply check if \(f(x) \in L_{2}\).
+\end{block}
+\begin{block}{Example}
+Let \(L_{1}\) be the set of all the words that start with "0", and \(L_{2}\) the set of all the words that start with "1". A reduction from \(L_{1}\) to \(L_{2}\) will just flip the MSB of the given word.
 \end{block}
 \end{frame}
 \begin{frame}[label=sec-1-5]{The trace estimation problem is in DQC1}

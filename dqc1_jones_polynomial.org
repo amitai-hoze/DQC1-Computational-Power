@@ -26,16 +26,50 @@ DQC1 class is the class of decidable languages with algorithm $A$ such that:
    the maximally mixed state
 -  $A$ may perform any unitary operation
 -  $A$ can only perform a measurement of the clean qubit at the end of
-   the algorithm
--  $A$ has no access to a classical computer, so its not promised that
-   $P \subset DQC1$
--  $A$ cannot be invoked many times in parallel
+   the algorithm (no middle-algorithm measurements allowed)
+-  $A$ has access to a classical computer for the circuit-building purposes (or for just decide the problem, so \(P \subset DQC1\))
 -  $A$ runs in polynomial time
 -  $\forall x$, $A$ decides if $x \in L$ correctly with probability of
    at least $\frac{2}{3}$
 *** The trace estimation problem is in DQC1
 **** Trace estimation problem
 Given a quantom circuit, what is the trace of its unitary operation?
+*** Languages and Completness
+**** Language
+A Language is a finite, or infinite group of words. We will say that a
+word x is in language L (denoted by \(x \in L\)), if the word x is in this
+group.
+
+We say that L is decidable in polynomial time, if there is some
+algorithm A (which runs in polynomial time), such that for every word x,
+it decides correctly if $x \in L$ or not. We will say that such an
+algotrithm "Solves L" Here are some examples:
+
+-  L - the language of all the strings that start with 0. $015 \in L$,
+   but 501 isn't.
+
+-  L - the languane of all the prime numbers. $1 \in L$, $101 \in L$,
+   but 15 is not in L.
+*** Languages and Completness
+**** Reduction
+Say that we have two languages $L_{1}, L_{2}$. Assume that we can easily
+solve $L_{2}$, yet we want to solve $L_{1}$. One way to do it is to find
+fuction over words: $F:{words} \rightarrow {words}$, such that:
+$f(x) \in L_{2}$ iff $x \in L_{1}$.
+
+That way, an algorithm to $L_{1}$ will :
+
+-  transform a given word x to the word $f(x)$, using the reduction
+   function.
+
+-  will check if $f(x) \in L_{2}$.
+
+Example:
+
+-  $L_{1}$ - all the words that start with "0", $L_{2}$ - all the words
+   that start with "1" A reduction from $L_{1}$ to $L_{2}$ will just
+   flip the MSB of the given word
+*** The trace estimation problem is in DQC1
 **** Completeness
 A language L is said to be "complete" in the class DQC1, if:
 - $L \in DQC1$
@@ -133,8 +167,8 @@ After considering the two CNOT gates, the contribution of $\psi$ to the trace of
 **** 
 Therefore, the two circuit traces has the exact same components and are equal, up to factor of 4, which comes from the "free choice" in the values of the two last qubits in C.
 *** Trace estimation is DQC1 complete
--  We didn't compute the trace accurately, rather got an approximation via the expectation of the algorithm.
--  We measure a polynomial number of points on the trace, so the variance of our estimation is $O(\frac{1}{poly(n)})$, and with high probability we get a  $O(\frac{1}{poly(n)})$ estimation.
+- We didn't compute the trace accurately, rather got an approximation via the expectation of the algorithm.
+- According to the Chernoff inequality (which says: \(Pr[X > np +x] \leq e^{\frac{-x^{2}}{2np(1-p)}}\)), the probability of being wrong with more then $\frac{1}{n}$, is at most $O(e^{-n})$, so we can assume (with probability of almost 1), that we got a polynomial approximation to the trace.
 *** Trace estimation is DQC1 complete
 -  On the other hand, an approximation of $\frac{1}{poly(n)}$ to the
    expression $\frac{Tr(U)}{2^{n+1}}$ is enough to decide every problem

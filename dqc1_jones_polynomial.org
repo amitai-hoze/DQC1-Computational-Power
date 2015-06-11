@@ -212,7 +212,243 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 *** References
 \bibliographystyle{plain}
 \bibliography{dqc1}
+* Computing the Jones Polynomial in DQC1
+:PROPERTIES:
+:EXPORT_LaTeX_CLASS: beamer
+:EXPORT_LaTeX_CLASS_OPTIONS: [leqno,fleqn]
+:EXPORT_BEAMER_THEME: PaloAlto
+:EXPORT_OPTIONS: H:2 d:nil
+:EXPORT_LaTeX_HEADER: \input{dqc1_headers}
+:EXPORT_FILE_NAME: computing_the_jones_polynomial_in_dqc1_beamer
+:END:
 
+#+beamer: \beamerdefaultoverlayspecification{<+->}
+
+#+author:Ohad Barta, Amitai Hoze
+** Reminder
+*** A knot
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+
+**** A simple knot $k$ equivalent to the unknot
+
+#+name: unknot-equivalent
+#+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent.hs :exports none
+<<imports>>
+<<beside-operators>>
+knot pts = cubicSpline True pts # center
+pts = map p2 [(0,0), (1,1), (0,1), (1,0)]
+splineEnvelope = withEnvelope (cubicSpline True pts :: D R2)
+equivalent = arrowBetween' (with & arrowHead .~ dart & arrowTail .~ dart') (p2 (0,0)) (p2 (1,0))
+space = square 0.2 # opacity 0
+--main = mainWith (dia)
+--dia :: Diagram B R2
+dia = knot pts --> space --> equivalent --> space --> circle 0.7
+#+end_src
+:image:
+[[file:images/unknot_equivalent.svg]]
+:end:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=100,height=50]
+<<unknot-equivalent>>
+\end{diagram}
+#+end_src
+
+**** A braid $b$ such that $b^tr$ is $k$
+#+name: unknot-equivalent-braid-representation
+#+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
+<<imports>>
+import Diagrams.TwoD.Types
+import Diagrams.TwoD.Path.Metafont.Types
+import Diagrams.TwoD.Path.Metafont.Combinators
+<<beside-operators>>
+bottom i = p2 (i - 1, 0)
+top i = p2 (i - 1, 10)
+lowerMiddle i pos = p2 (i - 1, pos - 1)
+upperMiddle i pos = p2 (i - 1, pos + 1)
+
+p .---. q = p .- tension 100 -. q
+
+infixr 5 .---.
+
+cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
+closeTrace i mfpath = p2 (6 - i,5).--.mfpath
+main = mainWith (dia)
+dia :: Diagram B R2
+space n = square n # opacity 0
+colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
+--traceClosure = metafont $ bottom 1.- tension 100 -.lowerMiddle 1.--.upperMiddle 2.- tension 100 -.top 2.--.traceClosureDistantPoint 2.--.bottom 2.- tension 100 -.lowerMiddle 2.--.upperMiddle 1.- tension 100 -.top 1.--. traceClosureDistantPoint 1 .--. cyclePath
+--traceClosure = metafont $ p2 (0,0).--.cross 1 2 50.--.closeTrace 2.--.cross 2 1.--.closeTraceEnd 1
+--dia = traceClosure # explodeTrail # zipWith lc colors # mconcat
+using_func = metafont $ p2 (1,5).--.closeTrace 2 cyclePath
+not_using_func = metafont $ p2 (1,5).--.p2 (1,10).--.p2 (4,5).--.cyclePath
+i = 1
+j = 2
+pos = 3
+dia = metafont $ (cross 1 2 5 (closeTrace 2 (cross 2 1 5 (closeTrace 1 cyclePath))))
+#+end_src
+
+:image:
+[[file:images/unknot_equivalent_braid_representation.svg]]
+:end:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=100,height=50]
+<<unknot-equivalent>>
+\end{diagram}
+#+end_src
+
+*** Keep your eye on the ball
+**** What's the problem?
+As shown in the previous presentation, we have:
+- A method to approximate the Jones polynomial using the trace of a unitary matrix
+- An algorithm for trace estimation in DQC1
+
+#+latex: \onslide<4->{
+What more could we possibly need?
+#+latex: }
+**** An exponentially small submatrix
+Alas, as shown in the previous presentation, we can't compute an exponentially small submatrix efficiently..
+*** Calculation
+#+begin_src octave
+angle = -2 * pi / 5
+tao = 2 / (1 + sqrt(5))
+x = 1 + sqrt(2) + sqrt(2) * tao
+
+ans = e^(angle*i)*(sqrt(2)/tao + x) + e^(2 * angle * i)*x
+#+end_src
+
+#+RESULTS:
+: -0.9370160244488204-7.236340591481184i
+<<current-stage>>
+#+begin_src octave
+A = e^((-3 * pi / 5) * i)
+tao = 2 / (1 + sqrt(5))
+a = -A^4
+b = A^8
+c = A^8*tao^2 - A^4*tao
+d = A^8*tao^(3/2) + A^4*tao^(3/2)
+E = A^8*tao - A^4*tao^2 
+phi = (1 + sqrt(5))/sqrt(2)
+ans = phi * a + b + phi * c + a + phi * E
+#+end_src
+
+#+RESULTS:
+: -4.383477137944906+3.370776039040406i
+
+#+begin_src octave
+t = e^((2 * pi / 5) * i)
+#A = e^((-3 * pi / 5) * i)
+A = t^(-1/4)
+d = -A^2 - A^(-2)
+ans = A*d^(-1) + A^(-1)
+#+end_src
+
+#+RESULTS:
+: 0.3632712640026806+0.5i
+
+** The Zeckendorf representation
+*** Zeckendorf, you're a genius
+**** Definition
+- Let $P_n$ be the set of $n$ strings of the $p$ and $*$ symbols described earlier
+- Let $f_n$ be the $n^{th}$ Fibonacci number
+- Let the number $z(s)$ defined below be the number corresponding to the string $s$ in the Zeckendorf representation
+#+begin_src latex
+\begin{align*}
+z(s) = \sum_{i=1}^n{s_if_{i+1}}
+\end{align*}
+#+end_src
+**** Bit representation of the Zeckendorf representation
+For every string $s$ in $P_n$ there is a bit string of length $b=\lceil\log_2(f_{n+2})\rceil$ representing $z(s)$.
+*Show intuition*
+*** The Zeckendorf representation
+**** The resulting submatrix dimension
+As we get rid of unnecessary options, the dimension of the encoded sumatrix is at least half of the dimension of the total matrix
+*show proof/intuition*
+** The algorithm
+*** The algorithm
+**** The quantum computer
+The computer will consist of $O(1)$ pure qubits and $b$ maximally mixed qubits
+**** The quantum circuits
+- For each crossing in the braid, we construct a quantum circuit that decodes the corresponding qubits in the Zeckendorf representation to the Fibonacci representation triplet containing that crossing.
+- We then apply the *local* linear transformation that creates that crossing
+- We then encode the triplet back to the Zeckendorf representation
+*** The algorithm
+**** Obtaining the Jones polynomial approximation
+- We multiply the quantum circuits we built, and perform a trace estimation in DQC1,
+- We can use the resulting trace estimation to approximate the Jones polynomial
+
+Yes! we're done!
+**** Wait!
+Decoding with a DQC1 computer? How were you thinking to do that? You have only one pure qubit, all the others are mixed!
+** Getting the Fibonacci triplets for each crossing from the Zeckendorf representation
+*** We can get the leftmost symbol though..
+**** Getting the leftmost symbol
+- We know that $z(s) \ge f_{n-1} \Leftrightarrow \text{The leftmost symbol is *}$
+- Take a clean ancilla qubit $q$ in the state $\ket{0}$.
+- If $z(s) \ge f_{n-1}$ flip $q$.
+- Make a controlled $z(s)=z(s)-f_{n-1}$ where $q$ is the control.
+- The ancilla qubit now contains the leftmost symbol (\(p \to 0, * \to 1\))
+- The Zeckendorf representation now corresponds only to $n-1$ Fibonacci representation qubits
+*** Performing the arithmetic operations
+**** Potential problem with using classical circuits
+- Any classical circuit can be made reversible with constant overhead \cite{nielsen2010quantum}
+- The resulting reversible circuit may require additional clean ancilla qubits
+- We only have one..
+*** Performing the arithmetic operations
+**** Solution
+- The basic operations of arithmetic and comparison for integers can be implemented using logarithmic depth circuits \cite{wegener1987complexity}
+- As shown in \cite{ambainis2000computing}, any logarithmic depth classical circuit can be converted into a reversible circuit using only 3 clean ancillas
+- As shown in the presentation on trace estimation using DQC1, DQCK where $k \le \log(n)$ is equivalent to DQC1
+**** We don't want the leftmost, we want all of them! Focus!
+Well, we actually *can* reduce the problem of extracting an arbitrary symbol to the problem of extracting the leftmost
+*** See? there's a reduction..
+**** Example
+| \rightarrow |   |   |   |    |   |   |   |   | \leftarrow |
+| 1 | 2 | 3 | 5 | 13 | 8 | 5 | 3 | 2 | 1 |
+| / |   |   |   | >  | < |   |   |   |   |
+| * | p | p | * | p  | p | * | p | p | p |
+**** Splitting the string
+Instead of transforming the entire string to the Zeckendorf representation, we split the string into two strings, and for each of them find its Zeckendorf number. Now we can get the (mirrored) leftmost symbol of the right string as well.
+*** Algorithm for getting the \(i\)th symbol
+**** Moving the splitting point
+- Check whether the leftmost symbol of the right string is * as described above.
+- If so, subtract $f_l$ from the right string and add $f_m$ to the left string, where $l$ and $m$ are the lengths of the first and second strings correspondingly
+- Note that left string is read from right to left, and the right string is read from left to right
+**** Getting the $i^{th}$ symbol
+Just move the splitting point to be between the $i^{th}$ and the $(i-1)^{th}$, and then read the leftmost symbol of the right string.
+*** Getting an arbitrary symbol
+**** Cleaning up
+At the end we move the splitting point all the way to the left, leaving us with the original Zeckendorf representation.
+** Getting the weighted trace
+*** Getting the weighted trace
+**** Weighted?
+In order for the trace of the Fibonacci representation unitary matrix to be equal to the Jones polynomial we need it to be weighted
+**** How?
+We make think of this as the CNOT trick we did in the trace calculation of the submatrix. The CNOT trick caused the unwanted qubit to be orthogonal to all the others, and not to contribute anything. Instead of a CNOT we can perform a controlled rotation, where the orthogonal part will get cancelled, and the part in the same direction will get smaller.
+* Notes
+1. We need to find out how to translate a knot to a braid.
+2.
+3.
+** 
+#+begin_quote
+The main technical difficulty is obtaining the Jones polynomial
+as a trace over the entire Hilbert space rather than as a summation of some subset of the diagonal matrix
+elements. To do this we will not use the path model representation of the braid group, but rather the
+Fibonacci representation, as described in the next section.
+#+end_quote
+We want to compute only the valid inputs that follow the constraing the two * cannot be adjacent.
+** 
+
+#+begin_quote
+These rules do not allow the rightmost symbol or leftmost
+symbol of the string to change.
+#+end_quote
+As only the middle symbol changes, we are guaranteed that two * will not be formed with the string's neighbours.
+** 
+Why *formal* linear combinations?
 * Settings
 ** Export Options
 #+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")

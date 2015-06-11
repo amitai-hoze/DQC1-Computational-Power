@@ -11,3 +11,7 @@
 _region_.prv/
 _region_.tex
 prv_dqc1_presentation.fmt
+# Haskell diagrams
+diagrams/
+haskell/
+images/

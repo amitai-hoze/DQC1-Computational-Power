@@ -256,14 +256,18 @@ dia = knot pts --> space --> equivalent --> space --> circle 0.7
 \end{diagram}
 #+end_src
 
-**** A braid $b$ such that $b^tr$ is $k$
+**** A braid $b$ such that $b^{tr}$ is $k$
 #+name: unknot-equivalent-braid-representation
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
 <<imports>>
 import Diagrams.TwoD.Types
 import Diagrams.TwoD.Path.Metafont.Types
 import Diagrams.TwoD.Path.Metafont.Combinators
+import Diagrams.TwoD.Vector
 <<beside-operators>>
+(-*) n item = (replicate n item)
+
+n = 2
 bottom i = p2 (i - 1, 0)
 top i = p2 (i - 1, 10)
 lowerMiddle i pos = p2 (i - 1, pos - 1)
@@ -274,29 +278,26 @@ p .---. q = p .- tension 100 -. q
 infixr 5 .---.
 
 cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
-closeTrace i mfpath = p2 (6 - i,5).--.mfpath
-main = mainWith (dia)
-dia :: Diagram B R2
+closeTrace i mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
+--main = mainWith (dia)
+--dia :: Diagram B R2
 space n = square n # opacity 0
 colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
---traceClosure = metafont $ bottom 1.- tension 100 -.lowerMiddle 1.--.upperMiddle 2.- tension 100 -.top 2.--.traceClosureDistantPoint 2.--.bottom 2.- tension 100 -.lowerMiddle 2.--.upperMiddle 1.- tension 100 -.top 1.--. traceClosureDistantPoint 1 .--. cyclePath
---traceClosure = metafont $ p2 (0,0).--.cross 1 2 50.--.closeTrace 2.--.cross 2 1.--.closeTraceEnd 1
---dia = traceClosure # explodeTrail # zipWith lc colors # mconcat
-using_func = metafont $ p2 (1,5).--.closeTrace 2 cyclePath
-not_using_func = metafont $ p2 (1,5).--.p2 (1,10).--.p2 (4,5).--.cyclePath
-i = 1
-j = 2
-pos = 3
-dia = metafont $ (cross 1 2 5 (closeTrace 2 (cross 2 1 5 (closeTrace 1 cyclePath))))
-#+end_src
 
+traceClosure = metafont $ cross 1 2 5 . closeTrace 2 . cross 2 1 5 . closeTrace 1 $ cyclePath
+
+--traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
+traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+#+end_src
+<<current-stage>>
 :image:
 [[file:images/unknot_equivalent_braid_representation.svg]]
 :end:
 
 #+begin_src latex :noweb yes
 \begin{diagram}[width=100,height=50]
-<<unknot-equivalent>>
+<<unknot-equivalent-braid-representation>>
 \end{diagram}
 #+end_src
 
@@ -322,7 +323,7 @@ ans = e^(angle*i)*(sqrt(2)/tao + x) + e^(2 * angle * i)*x
 
 #+RESULTS:
 : -0.9370160244488204-7.236340591481184i
-<<current-stage>>
+
 #+begin_src octave
 A = e^((-3 * pi / 5) * i)
 tao = 2 / (1 + sqrt(5))

@@ -1,3 +1,30 @@
+* Libraries
+** Haskell
+#+name: knots-and-braids
+#+begin_src haskell
+import Diagrams.TwoD.Types
+import Diagrams.TwoD.Path.Metafont.Types
+import Diagrams.TwoD.Path.Metafont.Combinators
+import Diagrams.TwoD.Vector
+
+(-*) n item = (replicate n item)
+bottom i = p2 (i - 1, 0)
+top i = p2 (i - 1, 10)
+lowerMiddle i pos = p2 (i - 1, pos - 1)
+upperMiddle i pos = p2 (i - 1, pos + 1)
+
+-- A straight line
+p .---. q = p .- tension 100 -. q
+
+infixr 5 .---.
+
+cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
+closeTrace i n mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
+space n = square n # opacity 0
+
+-- For seeing different trails
+colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
+#+end_src
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:
 :EXPORT_LaTeX_CLASS: beamer
@@ -225,12 +252,11 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 #+beamer: \beamerdefaultoverlayspecification{<+->}
 
 #+author:Ohad Barta, Amitai Hoze
-** Reminder
+** A simple example
 *** A knot
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-
 **** A simple knot $k$ equivalent to the unknot
 
 #+name: unknot-equivalent
@@ -255,10 +281,36 @@ dia = knot pts --> space --> equivalent --> space --> circle 0.7
 <<unknot-equivalent>>
 \end{diagram}
 #+end_src
-
+*** The corresponding braid
 **** A braid $b$ such that $b^{tr}$ is $k$
 #+name: unknot-equivalent-braid-representation
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
+<<imports>>
+<<knots-and-braids>>
+<<beside-operators>>
+
+n = 2
+traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
+
+--traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
+traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+main = mainWith (dia)
+dia :: Diagram B R2
+dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+#+end_src
+
+:image:
+[[file:images/unknot_equivalent_braid_representation.svg]]
+:end:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=100,height=50]
+<<unknot-equivalent-braid-representation>>
+\end{diagram}
+#+end_src
+*** The braid represented with the generators
+#+name: braid-represented-with-generators
+#+begin_src haskell :noweb yes :tangle haskell/braid_represented_with_generators.hs :exports none
 <<imports>>
 import Diagrams.TwoD.Types
 import Diagrams.TwoD.Path.Metafont.Types
@@ -278,21 +330,24 @@ p .---. q = p .- tension 100 -. q
 infixr 5 .---.
 
 cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
+cross i j pos = cross i j pos (endpt (top j))
+
 closeTrace i mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
---main = mainWith (dia)
---dia :: Diagram B R2
 space n = square n # opacity 0
 colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
 
-traceClosure = metafont $ cross 1 2 5 . closeTrace 2 . cross 2 1 5 . closeTrace 1 $ cyclePath
+braid = metafont $ cross 1 2 5 <> metafont cross 2 1 5. closeTrace 2 . cross 2 1 5 . closeTrace 1 $ cyclePath
 
 --traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
 traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+
+main = mainWith (dia)
+dia :: Diagram B R2
 dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
 <<current-stage>>
 :image:
-[[file:images/unknot_equivalent_braid_representation.svg]]
+[[file:images/braid_represented_with_generators.svg]]
 :end:
 
 #+begin_src latex :noweb yes

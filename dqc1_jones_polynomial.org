@@ -19,6 +19,7 @@ p .---. q = p .- tension 100 -. q
 infixr 5 .---.
 
 cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
+crossAndEnd i j pos = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.endpt (top j)
 closeTrace i n mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
 space n = square n # opacity 0
 
@@ -312,38 +313,14 @@ dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -*
 #+name: braid-represented-with-generators
 #+begin_src haskell :noweb yes :tangle haskell/braid_represented_with_generators.hs :exports none
 <<imports>>
-import Diagrams.TwoD.Types
-import Diagrams.TwoD.Path.Metafont.Types
-import Diagrams.TwoD.Path.Metafont.Combinators
-import Diagrams.TwoD.Vector
+<<knots-and-braids>>
 <<beside-operators>>
-(-*) n item = (replicate n item)
 
-n = 2
-bottom i = p2 (i - 1, 0)
-top i = p2 (i - 1, 10)
-lowerMiddle i pos = p2 (i - 1, pos - 1)
-upperMiddle i pos = p2 (i - 1, pos + 1)
-
-p .---. q = p .- tension 100 -. q
-
-infixr 5 .---.
-
-cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
-cross i j pos = cross i j pos (endpt (top j))
-
-closeTrace i mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
-space n = square n # opacity 0
-colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
-
-braid = metafont $ cross 1 2 5 <> metafont cross 2 1 5. closeTrace 2 . cross 2 1 5 . closeTrace 1 $ cyclePath
-
---traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
-traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+braid = (metafont $ crossAndEnd 1 2 5) <> (metafont $ crossAndEnd 2 1 5)
 
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+dia = braid
 #+end_src
 <<current-stage>>
 :image:

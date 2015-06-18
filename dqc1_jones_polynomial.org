@@ -22,6 +22,8 @@ cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.t
 crossAndEnd i j pos = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.endpt (top j)
 closeTrace i n mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
 space n = square n # opacity 0
+hequivalent n = arrowBetween' (with & arrowHead .~ dart & arrowTail .~ dart') (p2 (0,0)) (p2 (n,0))
+vequivalent n = arrowBetween' (with & arrowHead .~ dart & arrowTail .~ dart') (p2 (0,0)) (p2 (0,n))
 
 -- For seeing different trails
 colors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
@@ -267,22 +269,24 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 knot pts = cubicSpline True pts # center
 pts = map p2 [(0,0), (1,1), (0,1), (1,0)]
 splineEnvelope = withEnvelope (cubicSpline True pts :: D R2)
-equivalent = arrowBetween' (with & arrowHead .~ dart & arrowTail .~ dart') (p2 (0,0)) (p2 (1,0))
 space = square 0.2 # opacity 0
 --main = mainWith (dia)
 --dia :: Diagram B R2
-dia = knot pts --> space --> equivalent --> space --> circle 0.7
+dia = knot pts --> space --> hequivalent 1--> space --> circle 0.7
 #+end_src
 :image:
 [[file:images/unknot_equivalent.svg]]
 :end:
 
 #+begin_src latex :noweb yes
-\begin{diagram}[width=100,height=50]
+\begin{diagram}[width=200,height=100]
 <<unknot-equivalent>>
 \end{diagram}
 #+end_src
 *** The corresponding braid
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
 **** A braid $b$ such that $b^{tr}$ is $k$
 #+name: unknot-equivalent-braid-representation
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
@@ -295,8 +299,8 @@ traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrac
 
 --traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
 traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
-main = mainWith (dia)
-dia :: Diagram B R2
+--main = mainWith (dia)
+--dia :: Diagram B R2
 dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
 
@@ -305,11 +309,14 @@ dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -*
 :end:
 
 #+begin_src latex :noweb yes
-\begin{diagram}[width=100,height=50]
+\begin{diagram}[width=300,height=150]
 <<unknot-equivalent-braid-representation>>
 \end{diagram}
 #+end_src
 *** The braid represented with the generators
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
 #+name: braid-represented-with-generators
 #+begin_src haskell :noweb yes :tangle haskell/braid_represented_with_generators.hs :exports none
 <<imports>>
@@ -318,9 +325,9 @@ dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -*
 
 braid = (metafont $ crossAndEnd 1 2 5) <> (metafont $ crossAndEnd 2 1 5)
 
-main = mainWith (dia)
-dia :: Diagram B R2
-dia = braid
+--main = mainWith (dia)
+--dia :: Diagram B R2
+dia = (braid # center)-.-space 1-.-vequivalent 4
 #+end_src
 <<current-stage>>
 :image:
@@ -328,12 +335,18 @@ dia = braid
 :end:
 
 #+begin_src latex :noweb yes
-\begin{diagram}[width=100,height=50]
-<<unknot-equivalent-braid-representation>>
+\begin{diagram}[width=300,height=150]
+<<braid-represented-with-generators>>
 \end{diagram}
+\\
+\begin{center}
+  $\text{          }\sigma_1$
+\end{center}
 #+end_src
 
 *** Keep your eye on the ball
+
+*** What's the problem
 **** What's the problem?
 As shown in the previous presentation, we have:
 - A method to approximate the Jones polynomial using the trace of a unitary matrix

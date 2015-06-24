@@ -243,6 +243,7 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 \bibliographystyle{plain}
 \bibliography{dqc1}
 * Computing the Jones Polynomial in DQC1
+** Computing the Jones Polynomial in DQC1
 :PROPERTIES:
 :EXPORT_LaTeX_CLASS: beamer
 :EXPORT_LaTeX_CLASS_OPTIONS: [leqno,fleqn]
@@ -255,12 +256,31 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 #+beamer: \beamerdefaultoverlayspecification{<+->}
 
 #+author:Ohad Barta, Amitai Hoze
-** A simple example
-*** A knot
+*** Reminder
+**** The main results
+***** 
+The relation between the trace of the Temperley-Lieb object and the Jones Polynomial:
+\\
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4})=(-A)^{3w(b^{tr})}D^{n-1}Tr(\rho_A(b^{tr}))
+\end{align*}
+#+end_src
+***** 
+The relation between the trace of the Temperley-Lieb and the trace of the Fibonacci representation of braid $b$, when $A=e^{-i3\pi/5}$
+\\
+#+begin_src latex
+\begin{align*}
+Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
+\end{align*}
+#+end_src
+
+*** A simple example
+**** A knot
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-**** A simple knot $k$ equivalent to the unknot
+***** A simple knot $k$ equivalent to the unknot
 
 #+name: unknot-equivalent
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent.hs :exports none
@@ -283,11 +303,11 @@ dia = knot pts --> space --> hequivalent 1--> space --> circle 0.7
 <<unknot-equivalent>>
 \end{diagram}
 #+end_src
-*** The corresponding braid
+**** The corresponding braid
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-**** A braid $b$ such that $b^{tr}$ is $k$
+***** A braid $b$ such that $b^{tr}$ is $k$
 #+name: unknot-equivalent-braid-representation
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
 <<imports>>
@@ -313,7 +333,7 @@ dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -*
 <<unknot-equivalent-braid-representation>>
 \end{diagram}
 #+end_src
-*** The braid represented with the generators
+**** The braid represented with the generators
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
@@ -343,11 +363,15 @@ dia = (braid # center)-.-space 1-.-vequivalent 4
   $\text{          }\sigma_1$
 \end{center}
 #+end_src
-
-*** Keep your eye on the ball
-
-*** What's the problem
-**** What's the problem?
+**** COMMENT The Homomorphism between the braids group and the Temperley-Lieb objects
+***** 
+#+begin_src latex
+\begin{align*}
+\rho_A(\sigma_i)=AE_i+A^{-1}I
+\end{algin*}
+#+end_src
+**** COMMENT What's the problem
+***** What's the problem?
 As shown in the previous presentation, we have:
 - A method to approximate the Jones polynomial using the trace of a unitary matrix
 - An algorithm for trace estimation in DQC1
@@ -355,9 +379,9 @@ As shown in the previous presentation, we have:
 #+latex: \onslide<4->{
 What more could we possibly need?
 #+latex: }
-**** An exponentially small submatrix
+***** An exponentially small submatrix
 Alas, as shown in the previous presentation, we can't compute an exponentially small submatrix efficiently..
-*** Calculation
+**** COMMENT Calculation
 #+begin_src octave
 angle = -2 * pi / 5
 tao = 2 / (1 + sqrt(5))
@@ -395,9 +419,9 @@ ans = A*d^(-1) + A^(-1)
 #+RESULTS:
 : 0.3632712640026806+0.5i
 
-** The Zeckendorf representation
-*** Zeckendorf, you're a genius
-**** Definition
+*** The Zeckendorf representation
+**** Zeckendorf, you're a genius
+***** Definition
 - Let $P_n$ be the set of $n$ strings of the $p$ and $*$ symbols described earlier
 - Let $f_n$ be the $n^{th}$ Fibonacci number
 - Let the number $z(s)$ defined below be the number corresponding to the string $s$ in the Zeckendorf representation
@@ -406,74 +430,115 @@ ans = A*d^(-1) + A^(-1)
 z(s) = \sum_{i=1}^n{s_if_{i+1}}
 \end{align*}
 #+end_src
-**** Bit representation of the Zeckendorf representation
+***** Bit representation of the Zeckendorf representation
 For every string $s$ in $P_n$ there is a bit string of length $b=\lceil\log_2(f_{n+2})\rceil$ representing $z(s)$.
-*Show intuition*
-*** The Zeckendorf representation
-**** The resulting submatrix dimension
+# *Show intuition*
+**** The Zeckendorf representation
+***** The resulting submatrix dimension
 As we get rid of unnecessary options, the dimension of the encoded sumatrix is at least half of the dimension of the total matrix
-*show proof/intuition*
-** The algorithm
+# *show proof/intuition*
 *** The algorithm
-**** The quantum computer
+**** The algorithm
+***** The quantum computer
 The computer will consist of $O(1)$ pure qubits and $b$ maximally mixed qubits
-**** The quantum circuits
+***** The quantum circuits
 - For each crossing in the braid, we construct a quantum circuit that decodes the corresponding qubits in the Zeckendorf representation to the Fibonacci representation triplet containing that crossing.
 - We then apply the *local* linear transformation that creates that crossing
 - We then encode the triplet back to the Zeckendorf representation
-*** The algorithm
-**** Obtaining the Jones polynomial approximation
+**** The algorithm
+***** Obtaining the Jones polynomial approximation
 - We multiply the quantum circuits we built, and perform a trace estimation in DQC1,
 - We can use the resulting trace estimation to approximate the Jones polynomial
 
 Yes! we're done!
-**** Wait!
+***** Wait!
 Decoding with a DQC1 computer? How were you thinking to do that? You have only one pure qubit, all the others are mixed!
-** Getting the Fibonacci triplets for each crossing from the Zeckendorf representation
-*** We can get the leftmost symbol though..
-**** Getting the leftmost symbol
+*** Getting the Fibonacci triplets for each crossing from the Zeckendorf representation
+**** We can get the leftmost symbol though..
+***** Getting the leftmost symbol
 - We know that $z(s) \ge f_{n-1} \Leftrightarrow \text{The leftmost symbol is *}$
 - Take a clean ancilla qubit $q$ in the state $\ket{0}$.
 - If $z(s) \ge f_{n-1}$ flip $q$.
 - Make a controlled $z(s)=z(s)-f_{n-1}$ where $q$ is the control.
 - The ancilla qubit now contains the leftmost symbol (\(p \to 0, * \to 1\))
 - The Zeckendorf representation now corresponds only to $n-1$ Fibonacci representation qubits
-*** Performing the arithmetic operations
-**** Potential problem with using classical circuits
+**** Performing the arithmetic operations
+***** Potential problem with using classical circuits
 - Any classical circuit can be made reversible with constant overhead \cite{nielsen2010quantum}
 - The resulting reversible circuit may require additional clean ancilla qubits
 - We only have one..
-*** Performing the arithmetic operations
-**** Solution
+**** Performing the arithmetic operations
+***** Solution
 - The basic operations of arithmetic and comparison for integers can be implemented using logarithmic depth circuits \cite{wegener1987complexity}
 - As shown in \cite{ambainis2000computing}, any logarithmic depth classical circuit can be converted into a reversible circuit using only 3 clean ancillas
 - As shown in the presentation on trace estimation using DQC1, DQCK where $k \le \log(n)$ is equivalent to DQC1
-**** We don't want the leftmost, we want all of them! Focus!
+***** We don't want the leftmost, we want all of them! Focus!
 Well, we actually *can* reduce the problem of extracting an arbitrary symbol to the problem of extracting the leftmost
-*** See? there's a reduction..
-**** Example
+**** See? there's a reduction..
+***** Example
 | \rightarrow |   |   |   |    |   |   |   |   | \leftarrow |
 | 1 | 2 | 3 | 5 | 13 | 8 | 5 | 3 | 2 | 1 |
 | / |   |   |   | >  | < |   |   |   |   |
 | * | p | p | * | p  | p | * | p | p | p |
-**** Splitting the string
+***** Splitting the string
 Instead of transforming the entire string to the Zeckendorf representation, we split the string into two strings, and for each of them find its Zeckendorf number. Now we can get the (mirrored) leftmost symbol of the right string as well.
-*** Algorithm for getting the \(i\)th symbol
-**** Moving the splitting point
+**** Algorithm for getting the \(i\)th symbol
+***** Moving the splitting point
 - Check whether the leftmost symbol of the right string is * as described above.
 - If so, subtract $f_l$ from the right string and add $f_m$ to the left string, where $l$ and $m$ are the lengths of the first and second strings correspondingly
 - Note that left string is read from right to left, and the right string is read from left to right
-**** Getting the $i^{th}$ symbol
+***** Getting the $i^{th}$ symbol
 Just move the splitting point to be between the $i^{th}$ and the $(i-1)^{th}$, and then read the leftmost symbol of the right string.
-*** Getting an arbitrary symbol
-**** Cleaning up
+**** Getting an arbitrary symbol
+***** Cleaning up
 At the end we move the splitting point all the way to the left, leaving us with the original Zeckendorf representation.
-** Getting the weighted trace
 *** Getting the weighted trace
-**** Weighted?
+**** Getting the weighted trace
+***** Weighted?
 In order for the trace of the Fibonacci representation unitary matrix to be equal to the Jones polynomial we need it to be weighted
-**** How?
+***** How?
 We make think of this as the CNOT trick we did in the trace calculation of the submatrix. The CNOT trick caused the unwanted qubit to be orthogonal to all the others, and not to contribute anything. Instead of a CNOT we can perform a controlled rotation, where the orthogonal part will get cancelled, and the part in the same direction will get smaller.
+** Main Concepts
+:PROPERTIES:
+:EXPORT_LaTeX_CLASS: beamer
+:EXPORT_LaTeX_CLASS_OPTIONS: [leqno,fleqn]
+:EXPORT_BEAMER_THEME: PaloAlto
+:EXPORT_OPTIONS: H:2 d:nil
+:EXPORT_LaTeX_HEADER: \input{dqc1_headers}
+:EXPORT_FILE_NAME: main_concepts
+:END:
+
+#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt)
+ 
+*** Main Concepts
+**** Main Concepts
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+
+***** A simple knot $k$ equivalent to the unknot                :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.48
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex
+\begin{diagram}[width=30,height=20]
+  {-# LANGUAGE FlexibleContexts #-}
+  import Data.List
+
+  foo = circle 1 # fc green
+  dia = foo ||| foo
+\end{diagram}
+#+end_src
+***** Thanks to everyone else                             :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.48
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+for contributing to the discussion
+
 * Notes
 1. We need to find out how to translate a knot to a braid.
 2.
@@ -533,3 +598,5 @@ Why *formal* linear combinations?
 # Local Variables:
 # eval: (load "qc.el")
 # End:
+
+

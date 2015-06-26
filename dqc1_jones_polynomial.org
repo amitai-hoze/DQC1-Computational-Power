@@ -35,17 +35,37 @@ trailColors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
 <<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
-knot pts = cubicSpline True pts # explodeTrail # zipWith lc trailColors # mconcat # center
-underLinePoint x = (x, 1-x)
-pts = map p2 [(0,0), (1,1), (0,1), underLinePoint 0.45, underLinePoint 0.55, (1,0)]
-splineEnvelope = withEnvelope (cubicSpline True pts :: D R2)
+
+underLinePoint x = p2 (x, 1-x)
+
+unknotEquivalent = metafont $ p2 (0,0).---.p2 (1,1).--.underLinePoint 0.---.underLinePoint 0.45.---.underLinePoint 0.55.---.underLinePoint 1.--.cyclePath
+
+unknotEquivalentColored = unknotEquivalent # explodeTrail # zipWith lc trailColors # mconcat
+
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = knot pts --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 0.7
+dia = (unknotEquivalentColored # center) --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 1
 #+end_src
 
 [[file:images/unknot_equivalent.svg]]
+** Unknot equivalent braid representation
+#+name: unknot-equivalent-braid-representation
+#+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
+<<imports>>
+<<knots-and-braids>>
+<<beside-operators>>
 
+n = 2
+traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
+
+--traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
+traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+--main = mainWith (dia)
+--dia :: Diagram B R2
+dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+#+end_src
+
+[[file:images/unknot_equivalent_braid_representation.svg]]
 
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:
@@ -311,25 +331,6 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :BEAMER_opt: fragile
 :END:
 ***** A braid $b$ such that $b^{tr}$ is $k$
-#+name: unknot-equivalent-braid-representation
-#+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
-<<imports>>
-<<knots-and-braids>>
-<<beside-operators>>
-
-n = 2
-traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
-
---traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
-traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
---main = mainWith (dia)
---dia :: Diagram B R2
-dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
-#+end_src
-
-:image:
-[[file:images/unknot_equivalent_braid_representation.svg]]
-:end:
 
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]

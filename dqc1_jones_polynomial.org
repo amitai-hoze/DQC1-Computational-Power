@@ -27,6 +27,9 @@ vequivalent n = arrowBetween' (with & arrowHead .~ dart & arrowTail .~ dart') (p
 
 -- For seeing different trails
 trailColors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
+
+-- Coloring trails
+trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mconcat
 #+end_src
 * Diagrams
 ** Unknot equivalent
@@ -40,11 +43,13 @@ underLinePoint x = p2 (x, 1-x)
 
 unknotEquivalent = metafont $ p2 (0,0).---.p2 (1,1).--.underLinePoint 0.---.underLinePoint 0.45.---.underLinePoint 0.55.---.underLinePoint 1.--.cyclePath
 
-unknotEquivalentColored = unknotEquivalent # explodeTrail # zipWith lc trailColors # mconcat
+unknotEquivalentColors = (3 -* black) ++ [white] ++ (3 -* black)
+
+unknotEquivalentColored = trailsColored unknotEquivalent unknotEquivalentColors
 
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = (unknotEquivalentColored # center) --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 1
+dia = (unknotEquivalentColored # center) --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 1.5
 #+end_src
 
 [[file:images/unknot_equivalent.svg]]

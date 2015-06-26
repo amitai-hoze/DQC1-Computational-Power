@@ -285,15 +285,16 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 #+name: unknot-equivalent
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent.hs :exports none
 <<imports>>
+<<knots-and-braids>>
 <<beside-operators>>
 knot pts = cubicSpline True pts # center
 pts = map p2 [(0,0), (1,1), (0,1), (1,0)]
 splineEnvelope = withEnvelope (cubicSpline True pts :: D R2)
-space = square 0.2 # opacity 0
 --main = mainWith (dia)
 --dia :: Diagram B R2
-dia = knot pts --> space --> hequivalent 1--> space --> circle 0.7
+dia = knot pts --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 0.7
 #+end_src
+
 :image:
 [[file:images/unknot_equivalent.svg]]
 :end:
@@ -349,7 +350,7 @@ braid = (metafont $ crossAndEnd 1 2 5) <> (metafont $ crossAndEnd 2 1 5)
 --dia :: Diagram B R2
 dia = (braid # center)-.-space 1-.-vequivalent 4
 #+end_src
-<<current-stage>>
+
 :image:
 [[file:images/braid_represented_with_generators.svg]]
 :end:
@@ -508,8 +509,7 @@ We make think of this as the CNOT trick we did in the trace calculation of the s
 :EXPORT_FILE_NAME: main_concepts
 :END:
 
-#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt)
- 
+#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt) 
 *** Main Concepts
 **** Main Concepts
 :PROPERTIES:
@@ -522,15 +522,12 @@ We make think of this as the CNOT trick we did in the trace calculation of the s
 :BEAMER_ENV: block
 :END:
 
-#+begin_src latex
-\begin{diagram}[width=30,height=20]
-  {-# LANGUAGE FlexibleContexts #-}
-  import Data.List
-
-  foo = circle 1 # fc green
-  dia = foo ||| foo
+#+begin_src latex :noweb yes
+\begin{diagram}[width=200,height=100]
+<<unknot-equivalent>>
 \end{diagram}
 #+end_src
+<<current-stage>>
 ***** Thanks to everyone else                             :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_COL: 0.48

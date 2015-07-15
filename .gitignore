@@ -7,6 +7,7 @@
 *.log
 *.pdf
 *.toc
+*.vrb
 # Preview
 _region_.prv/
 _region_.tex

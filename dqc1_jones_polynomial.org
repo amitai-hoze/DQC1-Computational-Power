@@ -79,7 +79,48 @@ dia :: Diagram B R2
 dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
 
-[[file:images/unknot_equivalent_braid_representation.svg]]
+#+begin_src emacs-lisp :results silent
+(find-function 'compile-haskell)
+(edebug-defun)
+(switch-to-buffer "dqc1_jones_polynomial.org")
+#+end_src
+** Temperley Lieb Diagram
+#+name: tl-diargram
+#+begin_src haskell :noweb yes :tangle haskell/tl_diagram.hs :exports none
+<<imports>>
+import Math.Projects.KnotTheory.TemperleyLieb
+import Math.Projects.KnotTheory.Braid
+import Math.Algebra.NonCommutative.NCPoly hiding (lc)
+<<knots-and-braids>>
+<<beside-operators>>
+
+f % i = f . fromIntegral $ i
+
+fromTlGen :: TemperleyLiebGens -> Diagram B R2
+fromTlGen e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]])
+
+fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
+fromTL f@(NP [(M g, i)]) = vcat [fromTlGen e | e <- g]
+
+n = 2
+traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
+
+--traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
+traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+
+main = mainWith (dia)
+dia :: Diagram B R2
+upArc i = metafont $ p2 (i,2).--.p2 (i+1/2,1.5).--.endpt (p2 (i+1,2))
+downArc i = metafont $ p2 (i,0).--.p2 (i+1/2,1/2).--.endpt (p2 (i+1,0))
+line i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
+e1' = downArc 1 <> upArc 1 <> (mconcat [line i | i <- ([1..0] ++ [3..3])])
+e2' = upArc 2 <> downArc 2 <> line 1
+-- dia = e1' -.- e2'
+dia = fromTL e1
+-- dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+#+end_src
+
+[[file:haskell/images/tl_diagram.svg]]
 
 ** Trefoil
 :PROPERTIES:

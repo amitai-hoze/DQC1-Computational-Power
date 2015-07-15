@@ -94,6 +94,8 @@ dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosure
 import Math.Projects.KnotTheory.TemperleyLieb
 import Math.Projects.KnotTheory.Braid
 import Math.Algebra.NonCommutative.NCPoly hiding (lc)
+import Diagrams.TwoD.Text
+import Diagrams.TwoD.Combinators
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -110,8 +112,10 @@ fromTlGens :: [TemperleyLiebGens] -> Diagram B R2
 fromTlGens [] = mconcat [line % i | i <- [1..n]]
 fromTlGens g  = vcat [fromTlGen e | e <- g]
 
+text' str = (text str <> strutX 2)
+
 fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
-fromTL f@(NP ts) = hcat [fromTlGens g --> triangle 1 | (m@(M g),c) <- ts]
+fromTL f@(NP ts) = hcat [text' (show c) --> (fromTlGens g # center) | (m@(M g),c) <- ts]
 
 n = 3
 traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath

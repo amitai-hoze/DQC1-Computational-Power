@@ -28,6 +28,8 @@ p .---. q = p .- tension 100 -. q
 
 infixr 5 .---.
 
+f % i = f . fromIntegral $ i
+
 cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
 crossAndEnd i j pos = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.endpt (top j)
 closeTrace i n mfpath = p2 (2 * n - i,10).--.p2 (2 * n - i,0).--.mfpath where heightOffset = (n - (i - 1))
@@ -107,8 +109,6 @@ dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosure
 <<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
-
-f % i = f . fromIntegral $ i
 
 upArc i = metafont $ p2 (i,2).--.p2 (i+1/2,1.5).--.endpt (p2 (i+1,2))
 downArc i = metafont $ p2 (i,0).--.p2 (i+1/2,1/2).--.endpt (p2 (i+1,0))
@@ -211,23 +211,33 @@ dia = trefoil
 :PROPERTIES:
 :ID:       f2e012db-950a-4034-8887-336184ab3cc2
 :END:
-#+name: unknot-equivalent-braid-representation
-#+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
+#+name: fibonacci-representation
+#+begin_src haskell :noweb yes :tangle haskell/fibonacci_representation.hs :exports none
 <<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
-n = 2
-traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
+line i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
 
---traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
-traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
+upper i = metafont $ p2 (i,0).- leaving unitY <> arriving unitY -.endpt (p2 (i+1,2))
+
+lower i = (metafont $ p2 (i+1,0).- leaving unitY <> arriving (r2 (-0.28-0.55,2-0.9)) -.endpt (p2 (i+0.55,0.9))) <>
+          (metafont $ p2 (i+0.45,1.1).- leaving (r2 (-0.28-0.45,2-1.1)) <> arriving unitY -.endpt (p2 (i,2)))
+
+
+fromBraidGen (S i) = upper % i <> lower % i <> (mconcat [line % j | j <- [1..(i-1)] ++ [(i+2)..n]])
+
+fromBraidGens :: NPoly LPQ BraidGens -> Diagram B R2
+fromBraidGens (NP [(M xs,c)]) = vcat [fromBraidGen bg | bg <- xs]
+
+n = 2
 
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+dia = fromBraidGens s1
 #+end_src
 
+[[file:haskell/images/fibonacci_representation.svg]]
 
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:

@@ -124,10 +124,33 @@ fromTlGens g  = vcat [fromTlGen e | e <- g]
 text' s t = text t # fontSize (Local s) # scale 0.5 <> strutX (s * 1.4)
 --text' str = text str # fontSizeL 1 # scale 0.5 <> strutR2 (r2 (2,2))
 
-fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
-fromTL f@(NP ts) = hcat [text' 1.15 (show c) --> (fromTlGens g # center) | (m@(M g),c) <- ts]
+charMapping c = case c of
+            'a' -> 'A'
+            '0' -> '\x2070'
+            '1' -> '\xb9'
+            '2' -> '\xb2'
+            '3' -> '\xb3'
+            '4' -> '\x2074'
+            '5' -> '\x2075'
+            '6' -> '\x2076'
+            '7' -> '\x2077'
+            '8' -> '\x2078'
+            '9' -> '\x2079'
+            '+' -> '\x207A'
+            '-' -> '\x207B'
+            '=' -> '\x207C'
+            '(' -> '\x207D'
+            ')' -> '\x207E'
+            'i' -> '\x2071'
+            'n' -> '\x207F'
+            otherwise -> c
 
-n = 3
+toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
+
+fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
+fromTL f@(NP ts) = hcat [text' 1.15 (toArticleRepresentation (show c)) ||| (fromTlGens g # center) | (m@(M g),c) <- ts]
+
+n = 2
 traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath
 
 --traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat

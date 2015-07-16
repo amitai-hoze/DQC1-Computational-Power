@@ -88,6 +88,15 @@ dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosure
 :PROPERTIES:
 :ID:       155444b9-fe48-4d2c-b0e5-333c1a7173d6
 :END:
+
+#+begin_src emacs-lisp
+(let ((buffer (current-buffer)))
+  (find-function 'compile-haskell)
+  (edebug-defun)
+  (switch-to-buffer buffer))
+#+end_src
+
+
 #+name: tl-diargram
 #+begin_src haskell :noweb yes :tangle haskell/tl_diagram.hs :exports none
 <<imports>>
@@ -112,10 +121,11 @@ fromTlGens :: [TemperleyLiebGens] -> Diagram B R2
 fromTlGens [] = mconcat [line % i | i <- [1..n]]
 fromTlGens g  = vcat [fromTlGen e | e <- g]
 
-text' str = (text str <> strutX 2)
+text' s t = text t # fontSize (Local s) # scale 0.5 <> strutX (s * 1.4)
+--text' str = text str # fontSizeL 1 # scale 0.5 <> strutR2 (r2 (2,2))
 
 fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
-fromTL f@(NP ts) = hcat [text' (show c) --> (fromTlGens g # center) | (m@(M g),c) <- ts]
+fromTL f@(NP ts) = hcat [text' 1.15 (show c) --> (fromTlGens g # center) | (m@(M g),c) <- ts]
 
 n = 3
 traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath

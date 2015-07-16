@@ -220,18 +220,17 @@ dia = trefoil
 -- The number of strands
 n = 2
 
-
 -- The intersection rectangle height/2
-rY = 1/20
+rX = 1/20
 
 -- The intersection rectangle width/2
-rX = rY*3*l*(l-1)/4
+rY = rX*l/3
 
 -- the intersection direction depending on the x-axis direction d
 rV2 d = r2 (rX*d,rY)
 
 -- The height of a strand
-l = 2
+l = 1.5
 
 -- The x axis distance between two pegs/2
 mX = 1/2
@@ -276,6 +275,31 @@ dia = fromBraidGens (s1)
 #+end_src
 
 [[file:haskell/images/fibonacci_representation.svg]]
+*** l/3 explanation
+In order to get to the coefficient of the intersection rectangle [[l/3]], I took a polynom:
+
+\begin{align*}
+P(x)=x^3+bx^2+cx+d
+\end{align*}
+
+and said that
+\begin{align*}
+&P(0)=1, P'(0)=0 \\
+&P(l)=0, P'(l)=0
+\end{align*}
+
+so:
+\begin{align*}
+P(0)=1 \Rightarrow a\cdot0^3+b\cdot0^2+c\cdot0+d=1 &\Rightarrow d=1 \\
+P'(0)=0 \Rightarrow 3a\cdot0^2+2b\cdot0+c=0 &\Rightarrow c=0 \\
+P'(l)=0 \Rightarrow 3a \cdot l^2 + 2b \cdot l = 0 &\Rightarrow b=-\frac{3}{2}a \cdot l \\
+P(l)=0 \Rightarrow a \cdot l^3 + b \cdot l^2 + 1 = 0 \Rightarrow a \cdot l^3 - \frac{3}{2}a \cdot l^3 +1=0 &\Rightarrow a=\frac{2}{l^3} \\
+\end{align*}
+
+And:
+\begin{align*}
+P'\left(\frac{l}{2}\right)=3a \cdot \left(\frac{l}{2}\right)^2 + 2b \cdot \frac{l}{2} = \dots = \frac{l}{3}
+\end{align*}
 
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:

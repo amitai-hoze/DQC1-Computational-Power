@@ -157,7 +157,7 @@ n = 2
 
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = fromTL (fromBraid s1)
+dia = fromTL (fromBraid s1^3)
 #+end_src
 
 [[file:haskell/images/tl_diagram.svg]]
@@ -217,24 +217,61 @@ dia = trefoil
 <<knots-and-braids>>
 <<beside-operators>>
 
-line i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
+-- The number of strands
+n = 2
 
-upper i = metafont $ p2 (i,0).- leaving unitY <> arriving unitY -.endpt (p2 (i+1,2))
+-- The intersection rectangle width/2
+rX = 1/10
 
-lower i = (metafont $ p2 (i+1,0).- leaving unitY <> arriving (r2 (-0.28-0.55,2-0.9)) -.endpt (p2 (i+0.55,0.9))) <>
-          (metafont $ p2 (i+0.45,1.1).- leaving (r2 (-0.28-0.45,2-1.1)) <> arriving unitY -.endpt (p2 (i,2)))
+-- The intersection rectangle height/2
+rY = l/10
 
+-- the intersection direction depending on the x-axis direction d
+rV2 d = r2 (rX*d,rY)
 
-fromBraidGen (S i) = upper % i <> lower % i <> (mconcat [line % j | j <- [1..(i-1)] ++ [(i+2)..n]])
+-- The height of a strand
+l = 2
+
+-- The x axis distance between two pegs/2
+mX = 1/2
+
+-- The y axis distance between two pegs/2
+mY = l/2
+
+straightStrand i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
+
+startX i = abs(i)-((signum i)-1)/2
+
+upperStrand i = metafont $
+            p2 (s,0)               .-    leaving unitY <> arriving (rV2 d) -.
+            p2 (s+d*(mX-rX),mY-rY) .--.
+            p2 (s+d*(mX+rX),mY+rY) .-    leaving (rV2 d) <> arriving unitY  -.
+            endpt (p2 (s+d,l))
+                  where s = startX i
+                        d = signum i
+
+lowerStrandHalf1 i = metafont $
+                 p2 (e,0)        .-    leaving unitY <> arriving (rV2 (-d))  -.
+                 endpt (p2 (e-d*(mX-rX),mY-rY))
+                       where e = (startX i) + (signum i)
+                             d = signum i
+
+lowerStrandHalf2 i = metafont $
+                 p2 (e-d*(mX+rX),mY+rY) .- leaving (rV2 (-d)) <> arriving unitY -.
+                 endpt (p2 (e-d,l))
+                       where e = (startX i) + (signum i)
+                             d = signum i
+
+lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
+
+fromBraidGen (S i) = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(i-1)] ++ [(i+2)..n]])
 
 fromBraidGens :: NPoly LPQ BraidGens -> Diagram B R2
 fromBraidGens (NP [(M xs,c)]) = vcat [fromBraidGen bg | bg <- xs]
 
-n = 2
-
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = fromBraidGens s1
+dia = fromBraidGens (s1^3)
 #+end_src
 
 [[file:haskell/images/fibonacci_representation.svg]]

@@ -220,11 +220,12 @@ dia = trefoil
 -- The number of strands
 n = 2
 
--- The intersection rectangle width/2
-rX = 1/10
 
 -- The intersection rectangle height/2
-rY = l/10
+rY = 1/20
+
+-- The intersection rectangle width/2
+rX = rY*3*l*(l-1)/4
 
 -- the intersection direction depending on the x-axis direction d
 rV2 d = r2 (rX*d,rY)
@@ -271,7 +272,7 @@ fromBraidGens (NP [(M xs,c)]) = vcat [fromBraidGen bg | bg <- xs]
 
 main = mainWith (dia)
 dia :: Diagram B R2
-dia = fromBraidGens (s1^3)
+dia = fromBraidGens (s1)
 #+end_src
 
 [[file:haskell/images/fibonacci_representation.svg]]

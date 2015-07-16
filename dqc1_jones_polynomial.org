@@ -148,7 +148,7 @@ charMapping c = case c of
 toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
 
 fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
-fromTL f@(NP ts) = hcat [text' 1.15 (toArticleRepresentation (show c)) ||| (fromTlGens g # center) | (m@(M g),c) <- ts]
+fromTL f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c))) ||| (fromTlGens g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
 
 n = 2
 traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrace 1 n $ cyclePath

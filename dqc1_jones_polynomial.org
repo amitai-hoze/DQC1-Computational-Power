@@ -166,7 +166,7 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 |   17 |     4 |       |
 |   18 |     5 |       |
 |   19 |       |     3 |
-|   20 |     2 |       |
+|   20 |     1 |       |
 
 #+name: culprit-stage-7
 | step | below | above |
@@ -191,7 +191,6 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 |   18 |     5 |       |
 |   19 |       |     3 |
 |   20 |     1 |       |
-
 
 * Diagrams
 ** Unknot equivalent

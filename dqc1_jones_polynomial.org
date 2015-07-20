@@ -192,6 +192,58 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 |   19 |       |     3 |
 |   20 |     1 |       |
 
+** Simple unknot                                                    :ATTACH:
+:PROPERTIES:
+:Attachments: simple%20unknot_1.jpg simple%20unknot_2.jpg simple%20unknot_3.jpg simple%20unknot_4.jpg simple%20unknot_5.jpg
+:ID:       a80e6450-c92f-49a0-b07f-f42473ddd5ad
+:END:
+
+#+begin_src emacs-lisp :results silent
+(setq org-image-actual-width 10)
+#+end_src
+
+# +ATTR_HTML: width 10px
+[[file:data/a8/0e6450-c92f-49a0-b07f-f42473ddd5ad/simple unknot_1.jpg]]
+
+#+name: simple-unknot-2
+| > | 1 | < | 1 | > | 1 |
+
+#+name: simple-unknot-3
+| > | 1 | < | 2 | < | 3 | < | 1 | > | 2 | > | 3 | > | 1 |
+
+#+name: simple-unknot-4
+| > | 1 | < | 2 | < | 4 | > | 4 | < | 3 | < | 1 | > | 2 | > | 3 | > | 1 |
+
+#+name: simple-unknot-5
+| > | 1 | < | 4 | < | 3 | < | 2 | > | 4 | < | 1 | > | 2 | > | 3 | > | 1 |
+
+#+begin_src haskell :tangle haskell/unknot.hs :results output
+import Data.List.Split
+simple_unknot_2 = ">1<2<3<1>2>3>1"
+
+separate_ops :: [Char] -> [[Char]]
+separate_ops exp = tail (split (oneOf "<>") exp)
+
+sep = separate_ops simple_unknot_2
+
+simplify :: [[Char]] -> [[Char]]
+simplify [] = []
+--simplify ["<", a, "<", b] = ["<", a++b]
+simplify (">":a:">":b:tail) = [">",a++b] ++ (simplify tail)
+simplify ("<":a:"<":b:tail) = [">",a++b] ++ (simplify tail)
+simplify (">":a:tail) = [">",a] ++ simplify(tail)
+simplify ("<":a:tail) = ["<",a] ++ simplify(tail)
+simplify tail = tail
+
+main = do
+     --putStrLn (concat (reduce [">1<2<3"]))
+     putStrLn (concat (simplify sep))
+     --putStrLn (concat (simplify simple_unknot_2))
+#+end_src
+
+#+RESULTS:
+: >1test2<1test1>1
+
 * Diagrams
 ** Unknot equivalent
 #+name: unknot-equivalent

@@ -218,6 +218,7 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 | > | 1 | < | 4 | < | 3 | < | 2 | > | 4 | < | 1 | > | 2 | > | 3 | > | 1 |
 
 #+begin_src haskell :tangle haskell/unknot.hs :results output
+import Data.List
 import Data.List.Split
 simple_unknot_2 = ">1<2<3<1>2>3>1"
 
@@ -228,21 +229,19 @@ sep = separate_ops simple_unknot_2
 
 simplify :: [[Char]] -> [[Char]]
 simplify [] = []
---simplify ["<", a, "<", b] = ["<", a++b]
-simplify (">":a:">":b:tail) = [">",a++b] ++ (simplify tail)
-simplify ("<":a:"<":b:tail) = [">",a++b] ++ (simplify tail)
-simplify (">":a:tail) = [">",a] ++ simplify(tail)
-simplify ("<":a:tail) = ["<",a] ++ simplify(tail)
+simplify (">":a:"<":b:"<":c:"<":d:">":e:">":f:tail)
+         | a==d&&b==e&&c==f = simplify(tail)
+         | otherwise = [">",a,"<",b,"<",c,"<",d,">",e,">",f] ++ simplify(tail)
 simplify tail = tail
 
 main = do
      --putStrLn (concat (reduce [">1<2<3"]))
-     putStrLn (concat (simplify sep))
+     putStrLn (show (simplify sep))
      --putStrLn (concat (simplify simple_unknot_2))
 #+end_src
 
 #+RESULTS:
-: >1test2<1test1>1
+: /run/current-system/sw/bin/bash: /home/amitai/dqc1/haskell/unknot: No such file or directory
 
 * Diagrams
 ** Unknot equivalent

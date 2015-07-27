@@ -1,0 +1,3 @@
+[submodule "diagrams-builder"]
+	path = diagrams-builder
+	url = https://github.com/diagrams/diagrams-builder.git

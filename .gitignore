@@ -16,3 +16,5 @@ prv_dqc1_presentation.fmt
 diagrams/
 haskell/
 images/
+# Latex preview
+ltxpng/

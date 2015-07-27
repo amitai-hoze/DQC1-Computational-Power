@@ -192,18 +192,17 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 |   19 |       |     3 |
 |   20 |     1 |       |
 
-** Simple unknot                                                    :ATTACH:
+** Unknotting algorithm attempt                                     :ATTACH:
 :PROPERTIES:
-:Attachments: simple%20unknot_1.jpg simple%20unknot_2.jpg simple%20unknot_3.jpg simple%20unknot_4.jpg simple%20unknot_5.jpg
+:Attachments: simple%20unknot_1.jpg simple%20unknot_2.jpg simple%20unknot_3.jpg simple%20unknot_4.jpg simple%20unknot_5.jpg recursive%20algorithm%20not%20working%20on%20trefoil.jpg
 :ID:       a80e6450-c92f-49a0-b07f-f42473ddd5ad
 :END:
+<<current-stage>>
+org-display-inline-images
 
-#+begin_src emacs-lisp :results silent
-(setq org-image-actual-width 10)
-#+end_src
+#+ATTR_HTML: :width 30px
 
-# +ATTR_HTML: width 10px
-[[file:data/a8/0e6450-c92f-49a0-b07f-f42473ddd5ad/simple unknot_1.jpg]]
+[[file:data/a8/0e6450-c92f-49a0-b07f-f42473ddd5ad/simple%20unknot_2.jpg]]
 
 #+name: simple-unknot-2
 | > | 1 | < | 1 | > | 1 |
@@ -220,12 +219,14 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 #+begin_src haskell :tangle haskell/unknot.hs :results output
 import Data.List
 import Data.List.Split
-simple_unknot_2 = ">1<2<3<1>2>3>1"
+simple_unknot_3 = ">1<2<3<1>2>3>1"
+simple_unknot_4 = ">1<2<4>4<3<1>2>3>1"
+simple_unknot_5 = ">1<4<3<2>4<1>2>3>1"
 
 separate_ops :: [Char] -> [[Char]]
 separate_ops exp = tail (split (oneOf "<>") exp)
 
-sep = separate_ops simple_unknot_2
+sep = separate_ops simple_unknot_4
 
 simplify :: [[Char]] -> [[Char]]
 simplify [] = []
@@ -241,7 +242,7 @@ main = do
 #+end_src
 
 #+RESULTS:
-: /run/current-system/sw/bin/bash: /home/amitai/dqc1/haskell/unknot: No such file or directory
+: [">","1","<","2","<","4",">","4","<","3","<","1",">","2",">","3",">","1"]
 
 * Diagrams
 ** Unknot equivalent
@@ -259,8 +260,8 @@ unknotEquivalentColors = (3 -* black) ++ [white] ++ (3 -* black)
 
 unknotEquivalentColored = trailsColored unknotEquivalent unknotEquivalentColors
 
-main = mainWith (dia)
-dia :: Diagram B R2
+--main = mainWith (dia)
+--dia :: Diagram B R2
 dia = (unknotEquivalentColored # center) --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 1.5
 #+end_src
 
@@ -281,8 +282,8 @@ traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrac
 --traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
 traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
 
-main = mainWith (dia)
-dia :: Diagram B R2
+--main = mainWith (dia)
+--dia :: Diagram B R2
 dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
 
@@ -295,14 +296,6 @@ dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosure
 :PROPERTIES:
 :ID:       155444b9-fe48-4d2c-b0e5-333c1a7173d6
 :END:
-
-#+begin_src emacs-lisp
-(let ((buffer (current-buffer)))
-  (find-function 'compile-haskell)
-  (edebug-defun)
-  (switch-to-buffer buffer))
-#+end_src
-
 
 #+name: tl-diargram
 #+begin_src haskell :noweb yes :tangle haskell/tl_diagram.hs :exports none
@@ -355,8 +348,8 @@ fromTL f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRep
 
 n = 2
 
-main = mainWith (dia)
-dia :: Diagram B R2
+--main = mainWith (dia)
+--dia :: Diagram B R2
 dia = fromTL (fromBraid s1^3)
 #+end_src
 
@@ -971,6 +964,11 @@ symbol of the string to change.
 As only the middle symbol changes, we are guaranteed that two * will not be formed with the string's neighbours.
 ** 
 Why *formal* linear combinations?
+* Screenshots                                                        :ATTACH:
+:PROPERTIES:
+:Attachments: trefoil%20braid.jpg
+:ID:       7003c715-88fc-4b3c-b2ce-4cef1637c279
+:END:
 * Settings
 ** Export Options
 #+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")

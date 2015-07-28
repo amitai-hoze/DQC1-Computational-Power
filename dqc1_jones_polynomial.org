@@ -197,7 +197,7 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 :Attachments: simple%20unknot_1.jpg simple%20unknot_2.jpg simple%20unknot_3.jpg simple%20unknot_4.jpg simple%20unknot_5.jpg recursive%20algorithm%20not%20working%20on%20trefoil.jpg
 :ID:       a80e6450-c92f-49a0-b07f-f42473ddd5ad
 :END:
-<<current-stage>>
+
 org-display-inline-images
 
 #+ATTR_HTML: :width 30px
@@ -462,9 +462,6 @@ fromBraidGen (S i) = upperStrand % i <> lowerStrand % i <> (mconcat [straightStr
 fromBraidGens :: NPoly LPQ BraidGens -> Diagram B R2
 fromBraidGens (NP [(M xs,c)]) = vcat [fromBraidGen bg | bg <- xs]
 
-main = mainWith (dia)
-dia :: Diagram B R2
-dia = fromBraidGens (s1)
 #+end_src
 
 [[file:haskell/images/fibonacci_representation.svg]]
@@ -506,14 +503,6 @@ P'\left(\frac{l}{2}\right)=3a \cdot \left(\frac{l}{2}\right)^2 + 2b \cdot \frac{
 
 #+author:Ohad Barta, Amitai Hoze
 
-#+begin_comment
-This was in the original presentation
-\frame{\titlepage} 
-\begin{frame}[allowframebreaks]
-\frametitle{Table of contents}
-{\tableofcontents}
-\end{frame}
-#+end_comment
 ** The DQC1 complexity class
 *** The DQC1 complexity class
 DQC1 class is the class of decidable languages with algorithm $A$ such that:
@@ -619,7 +608,6 @@ Therefore, the problem of trace estimation can be solved with one clean qubit.
 *** Trace estimation is in DQC1
 The start state of any DQC1 problem is one clean qubit (state \(\ket{0}\)), and $n$-qubits in the maximally mixed state. That is, the start state is $\rho = \ket{0}\bra{0} \otimes \frac{I}{2^n}$. We can use the Hadamard test in order to estimate a trace of a unitary operation $U$.
 *** Trace estimation is in DQC1
-# Next, we will want to show that trace estimation is hard in DQC1 \cite{shor2008estimating}.
 **** Proof
 Suppose we have some language $L \in DQC1$, and some $x$, and we want to decide if $x \in L$. We apply a unitary matrix $U$ on the DQC1 start state $\rho=\ket{0}\bra{0}\frac{I}{2^n}$ and get the state $\rho_{final} = U \rho U^\dagger = U\ket{0}\bra{0}\frac{I}{2^n}U^\dagger$.
 The probability to measure 0 equals to the trace of the final matrix, when we enforce the first bit to be zero, or:
@@ -771,6 +759,16 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
+
+***** s1
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=300,height=150]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1)
+\end{diagram}
+#+end_src
+
 **** COMMENT The Homomorphism between the braids group and the Temperley-Lieb objects
 ***** 
 #+begin_src latex

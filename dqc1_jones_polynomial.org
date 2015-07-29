@@ -411,7 +411,7 @@ dia = trefoil
 <<beside-operators>>
 
 -- The number of strands
-n = 2
+--n = 2
 
 -- The intersection rectangle height/2
 rX = 1/20
@@ -423,7 +423,7 @@ rY = rX*l/3
 rV2 d = r2 (rX*d,rY)
 
 -- The height of a strand
-l = 1.5
+l = 2
 
 -- The x axis distance between two pegs/2
 mX = 1/2
@@ -457,13 +457,12 @@ lowerStrandHalf2 i = metafont $
 
 lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
 
-fromBraidGen (S i) = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(i-1)] ++ [(i+2)..n]])
+fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(i-1)] ++ [(i+2)..n]])
 
-fromBraidGens :: NPoly LPQ BraidGens -> Diagram B R2
-fromBraidGens (NP [(M xs,c)]) = vcat [fromBraidGen bg | bg <- xs]
+fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
+fromBraidGens (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
 
 #+end_src
-
 [[file:haskell/images/fibonacci_representation.svg]]
 *** l/3 explanation
 In order to get to the coefficient of the intersection rectangle [[l/3]], I took a polynom:
@@ -755,19 +754,32 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 <<unknot-equivalent-braid-representation>>
 \end{diagram}
 #+end_src
-**** The braid represented with the generators
+**** The braid group generators
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-
 ***** s1
 
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1)
+dia = fromBraidGens (s1) 2
 \end{diagram}
 #+end_src
+
+**** The braid group generators
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $s_1 s_2$
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=300,height=150]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1*s2) 3
+\end{diagram}
+#+end_src
+
 
 **** COMMENT The Homomorphism between the braids group and the Temperley-Lieb objects
 ***** 

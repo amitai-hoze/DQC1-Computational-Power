@@ -18,3 +18,6 @@ haskell/
 images/
 # Latex preview
 ltxpng/
+# specific org-mode generated tex files
+computing_the_jones_polynomial_in_dqc1_beamer.tex
+main_concepts.tex

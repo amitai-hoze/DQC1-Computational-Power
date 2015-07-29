@@ -289,9 +289,7 @@ traceClosure = metafont $ cross 1 2 5 . closeTrace 2 n . cross 2 1 5 . closeTrac
 --traceClosureColored = traceClosure # explodeTrail # zipWith lc colors # mconcat
 traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
 
---main = mainWith (dia)
---dia :: Diagram B R2
-dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
+dia = traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
 ** Temperley Lieb Diagram
 :PROPERTIES:
@@ -759,6 +757,19 @@ dia = fromBraidGens (s1) 2
 dia = fromBraidGens (s1*s2) 3
 \end{diagram}
 #+end_src
+**** Temperley-Lieb objects
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $E_1$
+#+begin_src latex :noweb yes
+\begin{diagram}[width=300,height=150]
+<<tl-diagram>>
+n = 2
+dia = fromTL (e1)
+\end{diagram}
+#+end_src
+**** Temperley-Lieb objects
 ***** The Homomorphism between the braids group and the Temperley-Lieb objects
 #+begin_src latex
 \begin{align*}
@@ -769,7 +780,7 @@ dia = fromBraidGens (s1*s2) 3
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** $\rho_A(\sigma_1)=AE_i+A^{-1}I$
+***** $\rho_A(\sigma_1)=AE_1+A^{-1}I$
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>

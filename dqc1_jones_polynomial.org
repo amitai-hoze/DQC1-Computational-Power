@@ -309,10 +309,10 @@ traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
 tlTraceClosure i = (metafont $ p2 (i,0).- leaving unitX <> tension 7 -.endpt (p2 (i,2))) # traceStyle
 
 fromTlGen :: Bool -> Int -> TemperleyLiebGens -> Diagram B
-fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (mconcat [tlTraceClosure % i | i <- [1..n]])
+fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (if tc then (mconcat [tlTraceClosure % i | i <- [1..n]]) else mempty)
 
 fromTlGens :: Bool -> Int -> [TemperleyLiebGens] -> Diagram B
-fromTlGens tc n [] = mconcat [line % i <> tlTraceClosure % i | i <- [1..n]]
+fromTlGens tc n [] = mconcat [line % i <> (if tc then tlTraceClosure % i else mempty) | i <- [1..n]]
 fromTlGens tc n g  = vcat [fromTlGen tc n e | e <- g]
 
 text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
@@ -765,7 +765,7 @@ dia = fromBraidGens (s1*s2) 3
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>
-dia = fromTL True 2 (e1*e1)
+dia = fromTL False 2 (e1)
 \end{diagram}
 #+end_src
 **** Temperley-Lieb objects

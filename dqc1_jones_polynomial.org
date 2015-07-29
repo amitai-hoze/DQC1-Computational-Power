@@ -5,6 +5,17 @@
 :END:
 #+name: knots-and-braids
 #+begin_src haskell
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE TypeFamilies #-}
+import Diagrams.Prelude hiding (E)
+import Data.List
+import Data.Colour.SRGB
+import Diagrams.TrailLike
+import Diagrams.TwoD.Arrow
+import Diagrams.TwoD.Arrowheads
+import Diagrams.TwoD.Arc
+import Diagrams.TwoD.Path.Metafont
 import Diagrams.TwoD.Types
 import Diagrams.TwoD.Path.Metafont.Types
 import Diagrams.TwoD.Path.Metafont.Combinators
@@ -248,7 +259,6 @@ main = do
 ** Unknot equivalent
 #+name: unknot-equivalent
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent.hs :exports none
-<<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -264,15 +274,12 @@ unknotEquivalentColored = trailsColored unknotEquivalent unknotEquivalentColors
 --dia :: Diagram B R2
 dia = (unknotEquivalentColored # center) --> space 0.2 --> hequivalent 1--> space 0.2 --> circle 1.5
 #+end_src
-
-[[file:haskell/images/unknot_equivalent.svg]]
 ** Unknot equivalent braid representation
 :PROPERTIES:
 :ID:       f2e012db-950a-4034-8887-336184ab3cc2
 :END:
 #+name: unknot-equivalent-braid-representation
 #+begin_src haskell :noweb yes :tangle haskell/unknot_equivalent_braid_representation.hs :exports none
-<<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -286,20 +293,12 @@ traceClosureDashing = (2 -* ((3 -* []) ++ (3 -* [0.01, 0.01]))) # concat
 --dia :: Diagram B R2
 dia = (square 1) -- traceClosure # explodeTrail # zipWith3 dashingN traceClosureDashing (12 -* 0) # mconcat
 #+end_src
-
-#+begin_src emacs-lisp :results silent
-(find-function 'compile-haskell)
-(edebug-defun)
-(switch-to-buffer "dqc1_jones_polynomial.org")
-#+end_src
 ** Temperley Lieb Diagram
 :PROPERTIES:
 :ID:       155444b9-fe48-4d2c-b0e5-333c1a7173d6
 :END:
-
-#+name: tl-diargram
+#+name: tl-diagram
 #+begin_src haskell :noweb yes :tangle haskell/tl_diagram.hs :exports none
-<<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -311,14 +310,14 @@ traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
 
 tlTraceClosure i = (metafont $ p2 (i,0).- leaving unitX <> tension 7 -.endpt (p2 (i,2))) # traceStyle
 
-fromTlGen :: TemperleyLiebGens -> Diagram B R2
+fromTlGen :: TemperleyLiebGens -> Diagram B
 fromTlGen e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (mconcat [tlTraceClosure % i | i <- [1..n]])
 
-fromTlGens :: [TemperleyLiebGens] -> Diagram B R2
+fromTlGens :: [TemperleyLiebGens] -> Diagram B
 fromTlGens [] = mconcat [line % i <> tlTraceClosure % i | i <- [1..n]]
 fromTlGens g  = vcat [fromTlGen e | e <- g]
 
-text' s t = text t # fontSize (Local s) # scale 0.5 <> strutX (s * 1.4)
+text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
 
 charMapping c = case c of
             'a' -> 'A'
@@ -343,26 +342,15 @@ charMapping c = case c of
 
 toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
 
-fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B R2
+fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B
 fromTL f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c))) ||| (fromTlGens g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
-
-n = 2
-
---main = mainWith (dia)
---dia :: Diagram B R2
-dia = fromTL (fromBraid s1^3)
 #+end_src
-
-[[file:haskell/images/tl_diagram.svg]]
-
 ** Trefoil
 :PROPERTIES:
 :ID:       6eb07fb0-818e-421a-904b-379925cc8870
 :END:
-
 #+name: trefoil
 #+begin_src haskell :noweb yes :tangle haskell/trefoil.hs :exports none
-<<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -397,16 +385,12 @@ main = mainWith (dia)
 dia :: Diagram B R2
 dia = trefoil
 #+end_src
-
-[[file:haskell/images/trefoil.svg]]
-
 ** Fibonacci representation
 :PROPERTIES:
 :ID:       f2e012db-950a-4034-8887-336184ab3cc2
 :END:
 #+name: fibonacci-representation
 #+begin_src haskell :noweb yes :tangle haskell/fibonacci_representation.hs :exports none
-<<imports>>
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -463,7 +447,6 @@ fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
 fromBraidGens (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
 
 #+end_src
-[[file:haskell/images/fibonacci_representation.svg]]
 *** l/3 explanation
 In order to get to the coefficient of the intersection rectangle [[l/3]], I took a polynom:
 
@@ -758,35 +741,41 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** s1
-
+***** $s_1$
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<fibonacci-representation>>
 dia = fromBraidGens (s1) 2
 \end{diagram}
 #+end_src
-
 **** The braid group generators
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
 ***** $s_1 s_2$
-
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<fibonacci-representation>>
 dia = fromBraidGens (s1*s2) 3
 \end{diagram}
 #+end_src
-
-
-**** COMMENT The Homomorphism between the braids group and the Temperley-Lieb objects
-***** 
+***** The Homomorphism between the braids group and the Temperley-Lieb objects
 #+begin_src latex
 \begin{align*}
 \rho_A(\sigma_i)=AE_i+A^{-1}I
-\end{algin*}
+\end{align*}
+#+end_src
+**** Temperley-Lieb objects
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $\rho_A(\sigma_1)=AE_i+A^{-1}I$
+#+begin_src latex :noweb yes
+\begin{diagram}[width=300,height=150]
+<<tl-diagram>>
+n = 2
+dia = fromTL (fromBraid s1)
+\end{diagram}
 #+end_src
 **** COMMENT What's the problem
 ***** What's the problem?

@@ -21,3 +21,5 @@ ltxpng/
 # specific org-mode generated tex files
 computing_the_jones_polynomial_in_dqc1_beamer.tex
 main_concepts.tex
+# test scripts output
+pdf_gen_out.txt

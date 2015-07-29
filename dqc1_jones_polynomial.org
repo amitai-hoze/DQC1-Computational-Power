@@ -308,12 +308,12 @@ traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
 
 tlTraceClosure i = (metafont $ p2 (i,0).- leaving unitX <> tension 7 -.endpt (p2 (i,2))) # traceStyle
 
-fromTlGen :: TemperleyLiebGens -> Diagram B
-fromTlGen e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (mconcat [tlTraceClosure % i | i <- [1..n]])
+fromTlGen :: Bool -> Int -> TemperleyLiebGens -> Diagram B
+fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (mconcat [tlTraceClosure % i | i <- [1..n]])
 
-fromTlGens :: [TemperleyLiebGens] -> Diagram B
-fromTlGens [] = mconcat [line % i <> tlTraceClosure % i | i <- [1..n]]
-fromTlGens g  = vcat [fromTlGen e | e <- g]
+fromTlGens :: Bool -> Int -> [TemperleyLiebGens] -> Diagram B
+fromTlGens tc n [] = mconcat [line % i <> tlTraceClosure % i | i <- [1..n]]
+fromTlGens tc n g  = vcat [fromTlGen tc n e | e <- g]
 
 text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
 
@@ -340,8 +340,8 @@ charMapping c = case c of
 
 toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
 
-fromTL :: NPoly LPQ TemperleyLiebGens -> Diagram B
-fromTL f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c))) ||| (fromTlGens g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
+fromTL :: Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
+fromTL tc n f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c))) ||| (fromTlGens tc n g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
 #+end_src
 ** Trefoil
 :PROPERTIES:
@@ -765,8 +765,7 @@ dia = fromBraidGens (s1*s2) 3
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>
-n = 2
-dia = fromTL (e1)
+dia = fromTL True 2 (e1*e1)
 \end{diagram}
 #+end_src
 **** Temperley-Lieb objects
@@ -785,7 +784,7 @@ dia = fromTL (e1)
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>
 n = 2
-dia = fromTL (fromBraid s1)
+dia = fromTL False 2 (fromBraid s1)
 \end{diagram}
 #+end_src
 **** COMMENT What's the problem

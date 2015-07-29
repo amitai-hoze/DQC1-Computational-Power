@@ -340,8 +340,10 @@ charMapping c = case c of
 
 toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
 
-fromTL :: Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
-fromTL tc n f@(NP ts) = hcat [text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c))) ||| (fromTlGens tc n g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
+tlCoefficient i c = text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c)))
+
+fromTL :: Bool -> Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
+fromTL ce tc n f@(NP ts) = hcat [(if ce then (tlCoefficient i c) else mempty) ||| (fromTlGens tc n g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
 #+end_src
 ** Trefoil
 :PROPERTIES:
@@ -765,7 +767,7 @@ dia = fromBraidGens (s1*s2) 3
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>
-dia = fromTL False 2 (e1)
+dia = fromTL False False 2 (e1)
 \end{diagram}
 #+end_src
 **** Temperley-Lieb objects
@@ -783,8 +785,7 @@ dia = fromTL False 2 (e1)
 #+begin_src latex :noweb yes
 \begin{diagram}[width=300,height=150]
 <<tl-diagram>>
-n = 2
-dia = fromTL False 2 (fromBraid s1)
+dia = fromTL True False 2 (fromBraid s1)
 \end{diagram}
 #+end_src
 **** COMMENT What's the problem

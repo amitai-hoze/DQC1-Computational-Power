@@ -696,48 +696,7 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 
 #+beamer: \beamerdefaultoverlayspecification{<+->}
 #+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt) 
-*** Reminder
-**** The main results
-***** 
-The relation between the trace of the Temperley-Lieb object and the Jones Polynomial:
-\\
-#+begin_src latex
-\begin{align*}
-V_{b^{tr}}(A^{-4})=(-A)^{3w(b^{tr})}D^{n-1}Tr(\rho_A(b^{tr}))
-\end{align*}
-#+end_src
-***** 
-The relation between the trace of the Temperley-Lieb and the trace of the Fibonacci representation of braid $b$, when $A=e^{-i3\pi/5}$
-\\
-#+begin_src latex
-\begin{align*}
-Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
-\end{align*}
-#+end_src
-
-*** A simple example
-**** A knot
-:PROPERTIES:
-:BEAMER_opt: fragile
-:END:
-***** A simple knot $k$ equivalent to the unknot
-
-#+begin_src latex :noweb yes
-\begin{diagram}[width=200,height=100]
-<<unknot-equivalent>>
-\end{diagram}
-#+end_src
-**** The corresponding braid
-:PROPERTIES:
-:BEAMER_opt: fragile
-:END:
-***** A braid $b$ such that $b^{tr}$ is $k$
-
-#+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
-<<unknot-equivalent-braid-representation>>
-\end{diagram}
-#+end_src
+*** Reminders
 **** The braid group generators
 :PROPERTIES:
 :BEAMER_opt: fragile
@@ -825,6 +784,9 @@ Definition:\\
   &\forall t \in TL_n(d) \\
   &Tr(t) = d^{a-n}
 \end{align*}
+Such that:\\
+$a$ is the number of loops\\
+$n$ is the number of strands\\
 Therefore\\
 \begin{align*}
 Tr(E_1) = d^{a-n} = d^{1-2} = d^{-1}
@@ -850,6 +812,46 @@ $\rho_A(\sigma_1)=A^{-1} \cdot E_1+A \cdot \mathrm{I} = $
 \end{diagram}
 \\
 #+end_src
+**** The main results
+***** 
+The relation between the trace of the Temperley-Lieb object and the Jones Polynomial:
+\\
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4})=(-A)^{3w(b^{tr})}D^{n-1}Tr(\rho_A(b^{tr}))
+\end{align*}
+#+end_src
+***** 
+The relation between the trace of the Temperley-Lieb and the trace of the Fibonacci representation of braid $b$, when $A=e^{-i3\pi/5}$
+\\
+#+begin_src latex
+\begin{align*}
+Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
+\end{align*}
+#+end_src
+*** A simple example
+**** A knot
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** A simple knot $k$ equivalent to the unknot
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=200,height=100]
+<<unknot-equivalent>>
+\end{diagram}
+#+end_src
+**** The corresponding braid
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** A braid $b$ such that $b^{tr}$ is $k$
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=300,height=150]
+<<unknot-equivalent-braid-representation>>
+\end{diagram}
+#+end_src
 
 **** Calculating the trace
 :PROPERTIES:
@@ -862,7 +864,6 @@ $\rho_A(\sigma_1)=A^{-1} \cdot E_1+A \cdot \mathrm{I} = $
 dia = fromTL True True 2 (fromBraid s1)
 \end{diagram}
 #+end_src
-
 **** COMMENT What's the problem
 ***** What's the problem?
 As shown in the previous presentation, we have:
@@ -911,7 +912,6 @@ ans = A*d^(-1) + A^(-1)
 
 #+RESULTS:
 : 0.3632712640026806+0.5i
-
 *** The Zeckendorf representation
 **** Zeckendorf, you're a genius
 ***** Definition

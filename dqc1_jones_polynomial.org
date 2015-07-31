@@ -805,22 +805,27 @@ Therefore\\
 Tr(E_1) = d^{a-n} = d^{1-2} = d^{-1}
 \end{align*}
 #+end_src
-**** Temperley-Lieb objects
-***** The Homomorphism between the braids group and the Temperley-Lieb objects
-#+begin_src latex
-\begin{align*}
-\rho_A(\sigma_i)=AE_i+A^{-1}I
-\end{align*}
-#+end_src
-**** The $\rho_A$ Homomorphism
+**** Homomorphism from $B_n$ to $TL_n(d)$
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** $\rho_A(\sigma_1)=AE_1+A^{-1}I$
+
+***** Definition      
+#+begin_src latex
+\begin{align*}
+\rho_A(\sigma_i)=A^{-1}E_i+AI
+\end{align*}
+#+end_src
+***** $\rho_A(\sigma_1)$
 #+begin_src latex :noweb yes
-\begin{diagram}[width=200,height=100]
-<<tl-diagram>>
-dia = fromTL True False 2 (fromBraid s1)
+So,
+\begin{align*}
+  \rho_A(\sigma_1)=A^{-1}E_1+AI
+\end{align*}
+Which is:
+\begin{diagram}[width=100,height=20]
+  <<tl-diagram>>
+  dia = fromTL True False 2 (fromBraid s1)
 \end{diagram}
 #+end_src
 

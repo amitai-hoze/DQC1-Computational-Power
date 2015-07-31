@@ -813,20 +813,17 @@ Tr(E_1) = d^{a-n} = d^{1-2} = d^{-1}
 ***** Definition      
 #+begin_src latex
 \begin{align*}
-\rho_A(\sigma_i)=A^{-1}E_i+AI
+\rho_A(\sigma_i)=A^{-1} \cdot E_i + A \cdot \mathrm{I}
 \end{align*}
 #+end_src
 ***** $\rho_A(\sigma_1)$
 #+begin_src latex :noweb yes
-So,
-\begin{align*}
-  \rho_A(\sigma_1)=A^{-1}E_1+AI
-\end{align*}
-Which is:
-\begin{diagram}[width=100,height=20]
+$\rho_A(\sigma_1)=A^{-1} \cdot E_1+A \cdot \mathrm{I} = $
+\begin{diagram}[width=100,height=50]
   <<tl-diagram>>
   dia = fromTL True False 2 (fromBraid s1)
 \end{diagram}
+\\
 #+end_src
 
 **** Calculating the trace

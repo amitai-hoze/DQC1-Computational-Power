@@ -771,11 +771,29 @@ dia = fromBraidGens (s1*s2) 3
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** $E_1$
+***** $E_1$                                                    :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=50,height=75]
 <<tl-diagram>>
 dia = fromTL False False 2 (e1)
+\end{diagram}
+#+end_src
+***** $E_1 E_2$                                               :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=100,height=150]
+<<tl-diagram>>
+dia = fromTL False False 3 (e1*e2)
 \end{diagram}
 #+end_src
 **** The Markov trace for TL objects

@@ -742,20 +742,27 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** $s_1$
+***** $s_1$                                                    :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
 dia = fromBraidGens (s1) 2
 \end{diagram}
 #+end_src
-**** The braid group generators
+***** $s_1 s_2$                                                 :B_block:BMCOL:
 :PROPERTIES:
-:BEAMER_opt: fragile
+:BEAMER_COL: 0.4
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
 :END:
-***** $s_1 s_2$
+
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=100,height=150]
 <<fibonacci-representation>>
 dia = fromBraidGens (s1*s2) 3
 \end{diagram}

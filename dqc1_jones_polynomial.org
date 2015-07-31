@@ -697,7 +697,7 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 #+beamer: \beamerdefaultoverlayspecification{<+->}
 #+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt) 
 *** Reminders
-**** The braid group generators
+**** The braid group $B_n$ generators
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
@@ -726,7 +726,7 @@ dia = fromBraidGens (s1) 2
 dia = fromBraidGens (s1*s2) 3
 \end{diagram}
 #+end_src
-**** Temperley-Lieb objects
+**** Temperley-Lieb objects - $TL_n(d)$
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
@@ -845,24 +845,60 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** A braid $b$ such that $b^{tr}$ is $k$
+***** $b^{tr}$ such that its trace closure is $k$                    :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.3
+:BEAMER_ENV: block
+:END:
 
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=100,height=150]
 <<unknot-equivalent-braid-representation>>
 \end{diagram}
 #+end_src
-
+***** $b^{tr}$ Represented with generators                        :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+#+begin_src latex :noweb yes
+$b = s_1 =$
+\begin{diagram}[width=20,height=40]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1) 2
+\end{diagram}
+#+end_src
+**** The Jones polynomial
+***** The main theorem
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4})=(-A)^{3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr}))
+\end{align*}
+#+end_src
+***** Calculating the Markov trace of $\rho_A(b^{tr})$
+#+begin_src latex
+\begin{align*}
+Tr(\rho_A(\sigma_1)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
+             &= A^{-1} \cdot Tr(E_1)+A \cdot Tr(\mathrm{I})
+\end{align*}
+#+end_src
 **** Calculating the trace
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** $Tr(\rho_A(\sigma_1))=A \cdot Tr(E_1)+A^{-1} \cdot Tr(I)$
+***** The trace closure of $\rho_A(b^{tr})$
 #+begin_src latex :noweb yes
 \begin{diagram}[width=200,height=100]
 <<tl-diagram>>
 dia = fromTL True True 2 (fromBraid s1)
 \end{diagram}
+#+end_src
+***** The trace of $\rho_A(b^{tr})$
+#+begin_src latex
+\begin{align*}
+Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
+\end{align*}
 #+end_src
 **** COMMENT What's the problem
 ***** What's the problem?

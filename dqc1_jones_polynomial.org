@@ -692,9 +692,10 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 :EXPORT_FILE_NAME: computing_the_jones_polynomial_in_dqc1_beamer
 :END:
 
-#+beamer: \beamerdefaultoverlayspecification{<+->}
-
 #+author:Ohad Barta, Amitai Hoze
+
+#+beamer: \beamerdefaultoverlayspecification{<+->}
+#+COLUMNS: %45ITEM %10BEAMER_ENV(Env) %10BEAMER_ACT(Act) %4BEAMER_COL(Col) %8BEAMER_OPT(Opt) 
 *** Reminder
 **** The main results
 ***** 
@@ -770,6 +771,40 @@ dia = fromBraidGens (s1*s2) 3
 dia = fromTL False False 2 (e1)
 \end{diagram}
 #+end_src
+**** The Markov trace for TL objects
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $E_1$ trace closure                                        :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.3
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=60,height=100]
+<<tl-diagram>>
+dia = fromTL False True 2 (e1)
+\end{diagram}
+#+end_src
+***** Calculating the trace                              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.6
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex
+Definition:\\
+\begin{align*}
+  &\forall t \in TL_n(d) \\
+  &Tr(t) = d^{a-n}
+\end{align*}
+Therefore\\
+\begin{align*}
+Tr(E_1) = d^{a-n} = d^{1-2} = d^{-1}
+\end{align*}
+#+end_src
 **** Temperley-Lieb objects
 ***** The Homomorphism between the braids group and the Temperley-Lieb objects
 #+begin_src latex
@@ -783,7 +818,7 @@ dia = fromTL False False 2 (e1)
 :END:
 ***** $\rho_A(\sigma_1)=AE_1+A^{-1}I$
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=200,height=100]
 <<tl-diagram>>
 dia = fromTL True False 2 (fromBraid s1)
 \end{diagram}
@@ -795,7 +830,7 @@ dia = fromTL True False 2 (fromBraid s1)
 :END:
 ***** $Tr(\rho_A(\sigma_1))=A \cdot Tr(E_1)+A^{-1} \cdot Tr(I)$
 #+begin_src latex :noweb yes
-\begin{diagram}[width=300,height=150]
+\begin{diagram}[width=200,height=100]
 <<tl-diagram>>
 dia = fromTL True True 2 (fromBraid s1)
 \end{diagram}

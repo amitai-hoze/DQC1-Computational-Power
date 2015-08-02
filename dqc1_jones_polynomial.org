@@ -873,7 +873,7 @@ dia = fromBraidGens (s1) 2
 ***** The main theorem
 #+begin_src latex
 \begin{align*}
-V_{b^{tr}}(A^{-4})=(-A)^{3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr}))
+V_{b^{tr}}(A^{-4})=(-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr}))
 \end{align*}
 #+end_src
 ***** Calculating the Markov trace of $\rho_A(b^{tr})$
@@ -933,10 +933,28 @@ dia = fromBraidGens (s_ (-1)) 2
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
-***** Calculation
+***** Definition
 #+begin_src latex
 \begin{align*}
-w(b^{tr}) = w(s_1) = 1
+&b = \prod_{i=0}^n{\sigma_i} \\
+&w(b) = \sum_{i=0}^n{sign(\sigma_i)}
+\end{align*}
+#+end_src
+***** Calculation of our writhe
+#+begin_src latex
+\begin{align*}
+w(b^{tr}) = \sum_{i=0}^n{sign(\sigma_i)} = sign(s_1) = 1
+\end{align*}
+#+end_src
+**** The Jones Polynomial
+***** The jones polynomial of our unknot equivalent
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
+                &= -A^{-3} \cdot d^1 \cdot (A^{-1} \cdot d^{-1} + A) = \\
+                &= -A^{-4} - A^{-2} \cdot d = \\
+                &= -A^{-4} - A^{-2} \cdot (-A^2 - A^{-2}) = \\
+                &= -A^{-4} + 1 + A^{-4} = 1
 \end{align*}
 #+end_src
 *** Introduction

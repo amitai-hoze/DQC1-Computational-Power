@@ -441,7 +441,7 @@ lowerStrandHalf2 i = metafont $
 
 lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
 
-fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(i-1)] ++ [(i+2)..n]])
+fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(abs(i)-1)] ++ [(abs(i)+2)..n]])
 
 fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
 fromBraidGens (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
@@ -900,7 +900,47 @@ dia = fromTL True True 2 (fromBraid s1)
 Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
 \end{align*}
 #+end_src
-**** COMMENT What's the problem
+**** The sign of a braid
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** s_1                                                   :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1) 2
+\end{diagram}
+#+end_src
+***** s_{-1}                                                :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+<<fibonacci-representation>>
+dia = fromBraidGens (s_ (-1)) 2
+\end{diagram}
+#+end_src
+**** Calculating the writhe
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** Calculation
+#+begin_src latex
+\begin{align*}
+w(b^{tr}) = w(s_1) = 1
+\end{align*}
+#+end_src
+*** Introduction
+**** What's the problem
 ***** What's the problem?
 As shown in the previous presentation, we have:
 - A method to approximate the Jones polynomial using the trace of a unitary matrix
@@ -911,7 +951,7 @@ What more could we possibly need?
 #+latex: }
 ***** An exponentially small submatrix
 Alas, as shown in the previous presentation, we can't compute an exponentially small submatrix efficiently..
-**** COMMENT Calculation
+**** Calculation
 #+begin_src octave
 angle = -2 * pi / 5
 tao = 2 / (1 + sqrt(5))

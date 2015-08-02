@@ -934,10 +934,11 @@ dia = fromBraidGens (s_ (-1)) 2
 :BEAMER_opt: fragile
 :END:
 ***** Definition
+Let $b = \prod_{i=0}^n{\sigma_i}$ be a braid where $\sigma_i$ is a $B_n$ generator. \\
+The writhe of braid $b$, $w(b)$ is:
 #+begin_src latex
 \begin{align*}
-&b = \prod_{i=0}^n{\sigma_i} \\
-&w(b) = \sum_{i=0}^n{sign(\sigma_i)}
+w(b) = \sum_{i=0}^n{sign(\sigma_i)}
 \end{align*}
 #+end_src
 ***** Calculation of our writhe
@@ -957,6 +958,25 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
                 &= -A^{-4} + 1 + A^{-4} = 1
 \end{align*}
 #+end_src
+**** The Fibonacci representation
+<<current-stage>>
+:table:
+#+name: fib-i-2
+| *pp |
+| *p* |
+| p*p |
+| pp* |
+| ppp |
+:end:
+
+#+begin_src latex :noweb yes
+\begin{align*}
+    \mathrm{I} =
+    \begin{pmatrix}
+     <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+    \end{pmatrix}
+\end{align*}
+#+end_src
 *** Introduction
 **** What's the problem
 ***** What's the problem?
@@ -969,7 +989,7 @@ What more could we possibly need?
 #+latex: }
 ***** An exponentially small submatrix
 Alas, as shown in the previous presentation, we can't compute an exponentially small submatrix efficiently..
-**** Calculation
+**** COMMENT Calculation
 #+begin_src octave
 angle = -2 * pi / 5
 tao = 2 / (1 + sqrt(5))

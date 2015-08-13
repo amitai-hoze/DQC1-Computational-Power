@@ -959,7 +959,28 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 \end{align*}
 #+end_src
 **** The Fibonacci representation
-<<current-stage>>
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $\mathrm{I} \in B_2$                                      :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+  <<fibonacci-representation>>
+  dia = fromBraidGens (s_ 0) 2
+\end{diagram} &
+#+end_src
+***** $\mathrm{I} \in B_2$              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
 :table:
 #+name: fib-i-2
 | *pp |
@@ -968,14 +989,49 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 | pp* |
 | ppp |
 :end:
+#+begin_src latex :noweb yes
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+\end{pmatrix}
+#+end_src
+**** The Fibonacci representation
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $s_1 \in B_2$                                              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ENV: block
+:END:
 
 #+begin_src latex :noweb yes
-\begin{align*}
-    \mathrm{I} =
-    \begin{pmatrix}
-     <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
-    \end{pmatrix}
-\end{align*}
+\begin{diagram}[width=50,height=75]
+  <<fibonacci-representation>>
+  dia = fromBraidGens (s1) 2
+\end{diagram} &
+#+end_src
+***** $s_1 \in B_2$                                              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+:table:
+#+name: fib-s-1
+| a |   |   |   |   |
+|   | b |   |   |   |
+|   |   | c |   | d |
+|   |   |   | a |   |
+|   |   | d |   | e |
+:end:
+#+begin_src latex :noweb yes
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(fib-s-1)>>
+\end{pmatrix}
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+\end{pmatrix}
 #+end_src
 *** Introduction
 **** What's the problem
@@ -1168,7 +1224,7 @@ Why *formal* linear combinations?
 :Attachments: trefoil%20braid.jpg
 :ID:       7003c715-88fc-4b3c-b2ce-4cef1637c279
 :END:
-* Testing diagrams slide
+* Experiments
 :PROPERTIES:
 :EXPORT_LaTeX_CLASS: beamer
 :EXPORT_LaTeX_CLASS_OPTIONS: [leqno,fleqn]
@@ -1181,8 +1237,8 @@ Why *formal* linear combinations?
 #+beamer: \beamerdefaultoverlayspecification{<+->}
 
 #+author:Ohad Barta, Amitai Hoze
-** Test
-*** Test
+** Section
+*** Title
 :PROPERTIES:
 :BEAMER_opt: fragile
 :END:
@@ -1205,7 +1261,7 @@ Why *formal* linear combinations?
 #+begin_src latex :noweb yes
 <<example-diagrams()>>
 #+end_src
-**** Test
+**** Diagrams slide
 #+name: diagrams-slide
 #+header: :var diagram=tl-diagram
 #+begin_src latex :noweb yes :exports none
@@ -1219,7 +1275,24 @@ Why *formal* linear combinations?
 #+begin_src latex :noweb yes
 <<diagrams-slide()>>
 #+end_src
-
+**** Trying to center a diagram
+#+begin_src latex :noweb yes
+\begin{centering}
+\begin{tabular}{lll}
+ &  & \\
+  $\mathrm{I} =$ &
+  \begin{diagram}[width=50,height=75]
+    <<fibonacci-representation>>
+    dia = fromBraidGens (s1) 2
+  \end{diagram} &
+  =
+  \begin{pmatrix}
+    <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+  \end{pmatrix} \\
+ &  & \\
+\end{tabular}
+\end{centering}
+#+end_src
 * Settings
 ** Export Options
 #+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")

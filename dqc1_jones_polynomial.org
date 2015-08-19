@@ -472,7 +472,44 @@ And:
 \begin{align*}
 P'\left(\frac{l}{2}\right)=3a \cdot \left(\frac{l}{2}\right)^2 + 2b \cdot \frac{l}{2} = \dots = \frac{l}{3}
 \end{align*}
+* Matrices
+#+name: fib-s-1
+| a |   |   |   |   |
+|   | b |   |   |   |
+|   |   | c |   | d |
+|   |   |   | a |   |
+|   |   | d |   | e |
 
+#+name: fib-s-1-short
+|        |
+|        |
+| \ddots |
+|        |
+|        |
+
+#+name: fib-i-2
+| *pp |
+| *p* |
+| p*p |
+| pp* |
+| ppp |
+
+* References
+** Estimating Jones polynomials is a complete problem for one clean qubit :ATTACH:
+:PROPERTIES:
+:Attachments: 0707.2831v3.pdf
+:ID:       2d0360c5-52fe-4503-ae74-252686ad6cdd
+:END:
+** The Fibonacci Model and the Temperley-Lieb Algebra               :ATTACH:
+:PROPERTIES:
+:Attachments: 0804.4304.pdf
+:ID:       299e6f09-197a-45b8-8322-fcab396793f7
+:END:
+** Topological Quantum Computing and SU(2) Braid Group Representations :ATTACH:
+:PROPERTIES:
+:Attachments: 00463527fc67f80f35000000.pdf
+:ID:       606eb864-cd88-4970-9269-de1c8bf7d390
+:END:
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:
 :EXPORT_LaTeX_CLASS: beamer
@@ -964,7 +1001,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :END:
 ***** $\mathrm{I} \in B_2$                                      :B_block:BMCOL:
 :PROPERTIES:
-:BEAMER_COL: 0.4
+:BEAMER_COL: 0.2
 :BEAMER_ENV: block
 :END:
 
@@ -976,19 +1013,11 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+end_src
 ***** $\mathrm{I} \in B_2$              :B_block:BMCOL:
 :PROPERTIES:
-:BEAMER_COL: 0.4
+:BEAMER_COL: 0.15
 :BEAMER_ACT: <2->
 :BEAMER_ENV: block
 :END:
 
-:table:
-#+name: fib-i-2
-| *pp |
-| *p* |
-| p*p |
-| pp* |
-| ppp |
-:end:
 #+begin_src latex :noweb yes
 \begin{pmatrix}
   <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
@@ -1000,7 +1029,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :END:
 ***** $s_1 \in B_2$                                              :B_block:BMCOL:
 :PROPERTIES:
-:BEAMER_COL: 0.4
+:BEAMER_COL: 0.2
 :BEAMER_ENV: block
 :END:
 
@@ -1017,14 +1046,6 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :BEAMER_ENV: block
 :END:
 
-:table:
-#+name: fib-s-1
-| a |   |   |   |   |
-|   | b |   |   |   |
-|   |   | c |   | d |
-|   |   |   | a |   |
-|   |   | d |   | e |
-:end:
 #+begin_src latex :noweb yes
 \begin{pmatrix}
   <<org-table-to-latex-matrix(fib-s-1)>>
@@ -1033,6 +1054,66 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
   <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
 \end{pmatrix}
 #+end_src
+**** COMMENT The Fibonacci representation
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $s_1 s_2 \in B_2$                                           :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+  <<fibonacci-representation>>
+  dia = fromBraidGens (s1*s2) 3
+\end{diagram} &
+#+end_src
+***** $s_1 s_2 \in B_2$                                           :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(fib-s-1)>>
+\end{pmatrix}
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+\end{pmatrix}
+#+end_src
+**** The Markov trace and the trace of the Fibonacci matrix
+***** The constants
+#+begin_src latex
+\begin{align*}
+&a = -A^4, b = A^8, c = A^8\tau^2 - A^4\tau, d = A^8\tau^{\frac{3}{2}} + A^4\tau^{3/2}, e = A^8\tau - A^4\tau^2\\
+&A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5))
+\end{align*}
+#+end_src
+***** $Tr(\rho_F^{(n)}(s_1))$
+:PROPERTIES:
+:BEAMER_ACT: <2->
+:END:
+
+#+begin_src latex :noweb yes
+\begin{equation*}
+  \begin{overlayarea}{\linewidth}{5\baselineskip}
+    \only<2-3>{
+      <<pmatrix(fib-s-1)>>
+    }
+    \only<3-4>{
+      = a+b+c+a+e
+    }
+    \only<4-5>{
+      = -A^4+A^8+A^8\tau^2 - A^4\tau - A^4 +  A^8\tau - A^4\tau^2
+    }
+  \end{overlayarea}
+\end{equation*}
+#+end_src
+
 *** Introduction
 **** What's the problem
 ***** What's the problem?

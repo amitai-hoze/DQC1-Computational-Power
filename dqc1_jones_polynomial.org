@@ -1047,9 +1047,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :END:
 
 #+begin_src latex :noweb yes
-\begin{pmatrix}
-  <<org-table-to-latex-matrix(fib-s-1)>>
-\end{pmatrix}
+<<pmatrix(fib-s-1)>>
 \begin{pmatrix}
   <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
 \end{pmatrix}
@@ -1377,31 +1375,6 @@ Why *formal* linear combinations?
 * Settings
 ** Export Options
 #+options: todo:nil tags:nil d:(not "source_table" "comment" "todo")
-** Babel Library
-#+name: org-table-to-latex-matrix
-#+begin_src emacs-lisp :var table='((:head) hline (:body))
-(require 'cl)
-(flet ((to-tab (tab)
-               (orgtbl-to-generic
-                (mapcar (lambda (lis)
-                          (if (listp lis)
-                              (mapcar (lambda (el)
-                                        (if (stringp el)
-                                            el
-                                          (format "%S" el))) lis)
-                            lis)) tab)
-                (list :lend " \\\\" :sep " & " :hline "\\hline"))))
-  (org-fill-template
-   "%table"
-   (list
-    (cons "table"
-          ;; only use \midrule if it looks like there are column headers
-          (if (equal 'hline (second table))
-              (concat (to-tab (list (first table)))
-                      "\n\\midrule\n"
-                      (to-tab (cddr table)))
-            (to-tab table))))))
-#+end_src
 ** In buffer
 #+STARTUP: entitiespretty
 #+STARTUP: inlineimages

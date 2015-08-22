@@ -1076,9 +1076,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :END:
 
 #+begin_src latex :noweb yes
-\begin{pmatrix}
-  <<org-table-to-latex-matrix(fib-s-1)>>
-\end{pmatrix}
+<<pmatrix(fib-s-1)>>
 \begin{pmatrix}
   <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
 \end{pmatrix}
@@ -1099,13 +1097,17 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{equation*}
   \begin{overlayarea}{\linewidth}{5\baselineskip}
+    Tr
     \only<2-3>{
       <<pmatrix(fib-s-1)>>
     }
-    \only<3-4>{
+    \only<4->{
+      <<pmatrix(fib-s-1-short)>>
+    }
+    \only<3>{
       = a+b+c+a+e
     }
-    \only<4-5>{
+    \only<4>{
       = -A^4+A^8+A^8\tau^2 - A^4\tau - A^4 +  A^8\tau - A^4\tau^2
     }
   \end{overlayarea}
@@ -1268,7 +1270,6 @@ We make think of this as the CNOT trick we did in the trace calculation of the s
 <<unknot-equivalent>>
 \end{diagram}
 #+end_src
-<<current-stage>>
 ***** Thanks to everyone else                             :B_block:BMCOL:
 :PROPERTIES:
 :BEAMER_COL: 0.48

@@ -25,6 +25,7 @@ import Math.Projects.KnotTheory.Braid
 import Math.Algebra.NonCommutative.NCPoly hiding (lc)
 import Diagrams.TwoD.Text
 import Diagrams.TwoD.Combinators
+import Diagrams.Backend.SVG.CmdLine
 
 (-*) :: Int -> a -> [a]
 (-*) n item = (replicate n item)
@@ -39,7 +40,8 @@ p .---. q = p .- tension 100 -. q
 
 infixr 5 .---.
 
-f % i = f . fromIntegral $ i
+(%) f i = (f (fromIntegral i))
+infixl 9 %
 
 cross i j pos mfpath = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.top j.--.mfpath
 crossAndEnd i j pos = bottom i.---.lowerMiddle i pos.--.upperMiddle j pos.---.endpt (top j)
@@ -53,6 +55,10 @@ trailColors = cycle [aqua, orange, deeppink, blueviolet, crimson, darkgreen]
 
 -- Coloring trails
 trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mconcat
+
+traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
+
+traceClosure i h = (metafont $ p2 (i,0).- leaving unitX <> tension 7 <> arriving unit_X -.endpt (p2 (i,h*2))) # traceStyle
 #+end_src
 * Research
 ** Unknotting problem
@@ -304,16 +310,12 @@ upArc i = metafont $ p2 (i,2).--.p2 (i+1/2,1.5).--.endpt (p2 (i+1,2))
 downArc i = metafont $ p2 (i,0).--.p2 (i+1/2,1/2).--.endpt (p2 (i+1,0))
 line i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
 
-traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
+--fromTlGen :: Bool -> Int -> TemperleyLiebGens -> Diagram B
+fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]])
 
-tlTraceClosure i = (metafont $ p2 (i,0).- leaving unitX <> tension 7 <> arriving unit_X -.endpt (p2 (i,2))) # traceStyle
-
-fromTlGen :: Bool -> Int -> TemperleyLiebGens -> Diagram B
-fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]]) <> (if tc then (mconcat [tlTraceClosure % i | i <- [1..n]]) else mempty)
-
-fromTlGens :: Bool -> Int -> [TemperleyLiebGens] -> Diagram B
-fromTlGens tc n [] = mconcat [line % i <> (if tc then tlTraceClosure % i else mempty) | i <- [1..n]]
-fromTlGens tc n g  = vcat [fromTlGen tc n e | e <- g]
+--fromTlGens :: Bool -> Int -> [TemperleyLiebGens] -> Diagram B
+fromTlGens tc n [] = mconcat [line % i | i <- [1..n]]
+fromTlGens tc n g  = ((vcat [fromTlGen tc n e | e <- g]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length g) | i <- [1..n]]) else mempty)
 
 text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
 
@@ -342,15 +344,15 @@ toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
 
 tlCoefficient i c = text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c)))
 
-fromTL :: Bool -> Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
+--fromTL :: Bool -> Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
 fromTL ce tc n f@(NP ts) = hcat [(if ce then (tlCoefficient i c) else mempty) ||| (fromTlGens tc n g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
 #+end_src
-** Trefoil
+** Trefoil (old)
 :PROPERTIES:
 :ID:       6eb07fb0-818e-421a-904b-379925cc8870
 :END:
-#+name: trefoil
-#+begin_src haskell :noweb yes :tangle haskell/trefoil.hs :exports none
+#+name: trefoil-old
+#+begin_src haskell :noweb yes :tangle haskell/trefoil-old.hs :exports none
 <<knots-and-braids>>
 <<beside-operators>>
 
@@ -369,11 +371,11 @@ foldln f z (x:xs) = foldln f (f z x) xs
 --ptIndices :: [R2]
 --ptIndices = [x::R2 | x <- [1..3]]
 
-trefoil = metafont $ foldl traverse cyclePath (zip [1..] [1,2,3,1,2,3])
+trefoil = metafont $ foldl traverseKnot cyclePath (zip [1..] [1,2,3,1,2,3])
 --trefoil = metafont $ foldl rightJoin (endpt (trianglePoint 1)) (map trianglePoint [1,2,3,1,2,3])
 
-traverse :: MFPathData P -> (Int, R2) -> MFPathData P
-traverse mf (i,tp)
+traverseKnot :: MFPathData P -> (Int, R2) -> MFPathData P
+traverseKnot mf (i,tp)
          | (mod i 2) == 0 = (trianglePoint tp).--.mf
          | otherwise    = (trianglePoint tp).- tension 1.4 -.mf
 
@@ -382,7 +384,44 @@ unknotEquivalentColors = (3 -* black) ++ [white] ++ (3 -* black)
 --unknotEquivalentColored = trailsColored unknotEquivalent unknotEquivalentColors
 
 main = mainWith (dia)
-dia :: Diagram B R2
+dia :: Diagram B
+dia = trefoil
+#+end_src
+** Trefoil
+#+name: trefoil
+#+begin_src haskell :noweb yes :tangle haskell/trefoil.hs :exports none
+<<knots-and-braids>>
+<<beside-operators>>
+
+underLinePoint x = p2 (x, 1-x)
+
+trianglePoint :: Double -> P2 Double
+--trianglePoint i = (trailVertices (triangle 1)) !! i
+
+trianglePoint i = case i of 1 -> p2 (0,0)
+                            2 -> p2 ( 1, sqrt 3)
+                            3 -> p2 (-1, sqrt 3)
+
+
+foldln f z (x:xs) = foldln f (f z x) xs
+
+--ptIndices :: [R2]
+--ptIndices = [x::R2 | x <- [1..3]]
+
+trefoil = metafont $ foldl traverseKnot cyclePath (zip [1..] [1,2,3,1,2,3])
+--trefoil = metafont $ foldl rightJoin (endpt (trianglePoint 1)) (map trianglePoint [1,2,3,1,2,3])
+
+traverseKnot :: MFPathData P Double -> (Int, Double) -> MFPathData P Double
+traverseKnot mf (i,tp)
+         | (mod i 2) == 0 = (trianglePoint tp).--.mf
+         | otherwise    = (trianglePoint tp).- tension 1.4 -.mf
+
+unknotEquivalentColors = (3 -* black) ++ [white] ++ (3 -* black)
+
+--unknotEquivalentColored = trailsColored unknotEquivalent unknotEquivalentColors
+
+--main = mainWith (dia)
+--dia :: Diagram B
 dia = trefoil
 #+end_src
 ** Fibonacci representation
@@ -393,6 +432,7 @@ dia = trefoil
 #+begin_src haskell :noweb yes :tangle haskell/fibonacci_representation.hs :exports none
 <<knots-and-braids>>
 <<beside-operators>>
+tc = True
 
 -- The number of strands
 --n = 2
@@ -443,10 +483,20 @@ lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
 
 fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(abs(i)-1)] ++ [(abs(i)+2)..n]])
 
-fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
-fromBraidGens (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
-
+--fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
+fromBraidGens (NP [(M xs,c)]) n = ((vcat [fromBraidGen bg n | bg <- xs]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length xs) | i <- [1..n]]) else mempty)
 #+end_src
+
+#+begin_src haskell :noweb yes :tangle haskell/s1.hs
+<<tl-diagram>>
+
+main = mainWith (dia)
+dia :: Diagram B
+dia = fromTL False True 3 (e1*e2)
+#+end_src
+
+[[file:haskell/images/s1.svg]]
+
 *** l/3 explanation
 In order to get to the coefficient of the intersection rectangle [[l/3]], I took a polynom:
 
@@ -509,6 +559,11 @@ P'\left(\frac{l}{2}\right)=3a \cdot \left(\frac{l}{2}\right)^2 + 2b \cdot \frac{
 :PROPERTIES:
 :Attachments: 00463527fc67f80f35000000.pdf
 :ID:       606eb864-cd88-4970-9269-de1c8bf7d390
+:END:
+** Braids, Jones polynomials and the Fibonacci representation        :ATTACH:
+:PROPERTIES:
+:Attachments: brainds_jones_v3.pdf
+:ID:       1ea66689-5a3e-44de-ad3f-55d44185dedd
 :END:
 * DQC1 complexity class and the trace estimation problem
 :PROPERTIES:
@@ -866,7 +921,7 @@ The relation between the trace of the Temperley-Lieb and the trace of the Fibona
 Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 \end{align*}
 #+end_src
-*** A simple example
+*** The Unknot equivalent example
 **** A knot
 :PROPERTIES:
 :BEAMER_opt: fragile
@@ -1081,39 +1136,344 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
   <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
 \end{pmatrix}
 #+end_src
+**** COMMENT The weighted trace of the Fibonacci matrix
 **** The Markov trace and the trace of the Fibonacci matrix
 ***** The constants
 #+begin_src latex
 \begin{align*}
-&a = -A^4, b = A^8, c = A^8\tau^2 - A^4\tau, d = A^8\tau^{\frac{3}{2}} + A^4\tau^{3/2}, e = A^8\tau - A^4\tau^2\\
-&A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5))
+  \only<1-4>{
+    &a = -A^4, b = A^8, c = A^8\tau^2 - A^4\tau\\
+    &d = A^8\tau^{\frac{3}{2}} + A^4\tau^{3/2}, e = A^8\tau - A^4\tau^2\\
+  }
+  &A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5)), \phi = \frac{1+\sqrt{5}}{\sqrt{2}} = \frac{\sqrt{2}}{\tau}
 \end{align*}
 #+end_src
 ***** $Tr(\rho_F^{(n)}(s_1))$
 :PROPERTIES:
 :BEAMER_ACT: <2->
 :END:
-
 #+begin_src latex :noweb yes
-\begin{equation*}
-  \begin{overlayarea}{\linewidth}{5\baselineskip}
-    Tr
-    \only<2-3>{
-      <<pmatrix(fib-s-1)>>
-    }
-    \only<4->{
-      <<pmatrix(fib-s-1-short)>>
-    }
-    \only<3>{
-      = a+b+c+a+e
-    }
-    \only<4>{
-      = -A^4+A^8+A^8\tau^2 - A^4\tau - A^4 +  A^8\tau - A^4\tau^2
-    }
-  \end{overlayarea}
-\end{equation*}
+\begin{onlyenv}<1-4>
+  \begin{equation*}
+    \begin{overlayarea}{\linewidth}{5\baselineskip}
+      \only<2-4>{
+        Tr
+        <<pmatrix(fib-s-1)>>
+      }
+      \only<3-4>{
+        = a \cdot \phi + b
+      }
+      \only<4->{
+         = -A^4 \cdot \phi + A^8 
+      }
+    \end{overlayarea}
+  \end{equation*}
+\end{onlyenv}
 #+end_src
 
+<<current-stage>>
+#+begin_src octave
+A = exp((-3/5)*pi * i)
+#A = exp((2 * pi / 5) * i)
+tao = 2 / (1 + sqrt(5))
+a = -A^-4
+b = A^-8
+c = A^8*tao^2 - A^4*tao
+d = A^8*tao^(3/2) + A^4*tao^(3/2)
+E = A^8*tao - A^4*tao^2
+D = -A^2-A^(-2)
+phi = (1+sqrt(5))/2
+#ans = phi * a + b + phi * c + a + phi * E
+ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
+#+end_src
+
+#+RESULTS:
+: 0.9999999999999998-4.996003610813204e-16i
+***** COMMENT Fibonacci numbers
+|  n |     f_n |
+|----+--------|
+|  1 |      1 |
+|  2 |      1 |
+|  3 |      2 |
+|  4 |      3 |
+|  5 |      5 |
+|  6 |      8 |
+|  7 |     13 |
+|  8 |     21 |
+|  9 |     34 |
+| 10 |     55 |
+| 11 |     89 |
+| 12 |    144 |
+| 13 |    233 |
+| 14 |    377 |
+| 15 |    610 |
+| 16 |    987 |
+| 17 |   1597 |
+| 18 |   2584 |
+| 19 |   4181 |
+| 20 |   6765 |
+| 21 |  10946 |
+| 22 |  17711 |
+| 23 |  28657 |
+| 24 |  46368 |
+| 25 |  75025 |
+| 26 | 121393 |
+#+TBLFM: @<<<<$2..@>$2=@-1$2+@-2$2
+
+***** COMMENT Old version
+#+begin_src latex :exports no
+\begin{onlyenv}<5->
+  \begin{align*}
+    \cdots &= -A^4+A^8+A^8\tau^2 - A^4\tau - A^4 +  A^8\tau - A^4\tau^2 = \\
+    \only<6->{
+      &= -A^4(\tau^2+\tau+1) +A^8(\tau^2+\tau+1) = \\
+    }
+    \only<7->{
+      &=(\tau^2+\tau+1) \cdot (A^8-A^4) \\
+    }
+  \end{align*}
+\end{onlyenv}
+#+end_src
+# *I got the trace wrong, it needs to be weighted, see [[shell:evince -p 42 data/1e/a66689-5a3e-44de-ad3f-55d44185dedd/brainds_jones_v3.pdf][Ohad's presentation pg. 42]] and the [[shell:evince -p 14 data/2d/0360c5-52fe-4503-ae74-252686ad6cdd/0707.2831v3.pdf][original article pg. 14]].*
+*** The Trefoil example
+**** A knot
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** The trefoil knot $3_1$
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=200,height=100]
+<<trefoil>>
+\end{diagram}
+#+end_src
+**** The corresponding braid
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $b^{tr}$ such that its trace closure is $3_1$              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.3
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=100,height=150]
+<<unknot-equivalent-braid-representation>>
+\end{diagram}
+#+end_src
+***** $b^{tr}$ Represented with generators                        :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.4
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+#+begin_src latex :noweb yes
+$b = s_1 =$
+\begin{diagram}[width=20,height=40]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1*s1*s1) 2
+\end{diagram}
+#+end_src
+*** COMMENT
+**** The Jones polynomial
+***** The main theorem
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4})=(-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr}))
+\end{align*}
+#+end_src
+***** Calculating the Markov trace of $\rho_A(b^{tr})$
+#+begin_src latex
+\begin{align*}
+Tr(\rho_A(\sigma_1)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
+             &= A^{-1} \cdot Tr(E_1)+A \cdot Tr(\mathrm{I})
+\end{align*}
+#+end_src
+**** Calculating the trace
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** The trace closure of $\rho_A(b^{tr})$
+#+begin_src latex :noweb yes
+\begin{diagram}[width=200,height=100]
+<<tl-diagram>>
+dia = fromTL True True 2 (fromBraid s1)
+\end{diagram}
+#+end_src
+***** The trace of $\rho_A(b^{tr})$
+#+begin_src latex
+\begin{align*}
+Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
+\end{align*}
+#+end_src
+**** The sign of a braid
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** s_1                                                   :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+<<fibonacci-representation>>
+dia = fromBraidGens (s1) 2
+\end{diagram}
+#+end_src
+***** s_{-1}                                                :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+<<fibonacci-representation>>
+dia = fromBraidGens (s_ (-1)) 2
+\end{diagram}
+#+end_src
+**** Calculating the writhe
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** Definition
+Let $b = \prod_{i=0}^n{\sigma_i}$ be a braid where $\sigma_i$ is a $B_n$ generator. \\
+The writhe of braid $b$, $w(b)$ is:
+#+begin_src latex
+\begin{align*}
+w(b) = \sum_{i=0}^n{sign(\sigma_i)}
+\end{align*}
+#+end_src
+***** Calculation of our writhe
+#+begin_src latex
+\begin{align*}
+w(b^{tr}) = \sum_{i=0}^n{sign(\sigma_i)} = sign(s_1) = 1
+\end{align*}
+#+end_src
+**** The Jones Polynomial
+***** The jones polynomial of our unknot equivalent
+#+begin_src latex
+\begin{align*}
+V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
+                &= -A^{-3} \cdot d^1 \cdot (A^{-1} \cdot d^{-1} + A) = \\
+                &= -A^{-4} - A^{-2} \cdot d = \\
+                &= -A^{-4} - A^{-2} \cdot (-A^2 - A^{-2}) = \\
+                &= -A^{-4} + 1 + A^{-4} = 1
+\end{align*}
+#+end_src
+**** The Fibonacci representation
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $\mathrm{I} \in B_2$                                      :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+  <<fibonacci-representation>>
+  dia = fromBraidGens (s_ 0) 2
+\end{diagram} &
+#+end_src
+***** $\mathrm{I} \in B_2$              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.15
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+\end{pmatrix}
+#+end_src
+**** The Fibonacci representation
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
+***** $s_1 \in B_2$                                              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.2
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+\begin{diagram}[width=50,height=75]
+  <<fibonacci-representation>>
+  dia = fromBraidGens (s1) 2
+\end{diagram} &
+#+end_src
+***** $s_1 \in B_2$                                              :B_block:BMCOL:
+:PROPERTIES:
+:BEAMER_COL: 0.5
+:BEAMER_ACT: <2->
+:BEAMER_ENV: block
+:END:
+
+#+begin_src latex :noweb yes
+<<pmatrix(fib-s-1)>>
+\begin{pmatrix}
+  <<org-table-to-latex-matrix(table=latex-math-constant-spacing[:results table](fib-i-2))>>
+\end{pmatrix}
+#+end_src
+**** The Markov trace and the trace of the Fibonacci matrix
+***** The constants
+#+begin_src latex
+\begin{align*}
+  \only<1-4>{
+    &a = -A^4, b = A^8, c = A^8\tau^2 - A^4\tau\\
+    &d = A^8\tau^{\frac{3}{2}} + A^4\tau^{3/2}, e = A^8\tau - A^4\tau^2\\
+  }
+  &A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5)), \phi = \frac{1+\sqrt{5}}{\sqrt{2}} = \frac{\sqrt{2}}{\tau}
+\end{align*}
+#+end_src
+***** $Tr(\rho_F^{(n)}(s_1))$
+:PROPERTIES:
+:BEAMER_ACT: <2->
+:END:
+#+begin_src latex :noweb yes
+\begin{onlyenv}<1-4>
+  \begin{equation*}
+    \begin{overlayarea}{\linewidth}{5\baselineskip}
+      \only<2-4>{
+        Tr
+        <<pmatrix(fib-s-1)>>
+      }
+      \only<3-4>{
+        = a \cdot \phi + b
+      }
+      \only<4->{
+         = -A^4 \cdot \phi + A^8 
+      }
+    \end{overlayarea}
+  \end{equation*}
+\end{onlyenv}
+#+end_src
+
+<<current-stage>>
+#+begin_src octave
+A = exp((-3/5)*pi * i)
+#A = exp((2 * pi / 5) * i)
+tao = 2 / (1 + sqrt(5))
+a = -A^-4
+b = A^-8
+c = A^8*tao^2 - A^4*tao
+d = A^8*tao^(3/2) + A^4*tao^(3/2)
+E = A^8*tao - A^4*tao^2
+D = -A^2-A^(-2)
+phi = (1+sqrt(5))/2
+#ans = phi * a + b + phi * c + a + phi * E
+ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
+#+end_src
+
+#+RESULTS:
+: 0.9999999999999998-4.996003610813204e-16i
 *** Introduction
 **** What's the problem
 ***** What's the problem?
@@ -1138,20 +1498,6 @@ ans = e^(angle*i)*(sqrt(2)/tao + x) + e^(2 * angle * i)*x
 #+RESULTS:
 : -0.9370160244488204-7.236340591481184i
 
-#+begin_src octave
-A = e^((-3 * pi / 5) * i)
-tao = 2 / (1 + sqrt(5))
-a = -A^4
-b = A^8
-c = A^8*tao^2 - A^4*tao
-d = A^8*tao^(3/2) + A^4*tao^(3/2)
-E = A^8*tao - A^4*tao^2 
-phi = (1 + sqrt(5))/sqrt(2)
-ans = phi * a + b + phi * c + a + phi * E
-#+end_src
-
-#+RESULTS:
-: -4.383477137944906+3.370776039040406i
 
 #+begin_src octave
 t = e^((2 * pi / 5) * i)

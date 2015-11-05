@@ -321,10 +321,9 @@ fromTlGens True  n [] = addTraceClosure (fromTlGens False n []) n (1::Integer)
 fromTlGens False n g  = vcat [fromTlGen n e | e <- g]
 fromTlGens True  n g  = addTraceClosure (fromTlGens False n g) n (length g)
 
-text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
+text' s t = text t # fontSize (local s) # scale 0.2 <> strutX (s * 1.4)
 
-charMapping c = case c of
-            'a' -> 'A'
+superScript c = case c of
             '0' -> '\x2070'
             '1' -> '\xb9'
             '2' -> '\xb2'
@@ -344,9 +343,13 @@ charMapping c = case c of
             'n' -> '\x207F'
             otherwise -> c
 
-toArticleRepresentation exp = filter (\c -> c /= '^') (map charMapping exp)
+format ('a':chars) = ['A'] ++ format chars
+format ('^':'-':d:chars) = [superScript '-',superScript d] ++ format chars
+format ('^':d:chars) = [superScript d] ++ format chars
+format (c:chars) = [c] ++ format chars
+format [] = []
 
-tlCoefficient i c = text' 1.15 ((if i==1 then "" else "+") ++ (toArticleRepresentation (show c)))
+tlCoefficient i c = text' 1.15 ((if i==1 then "" else "+") ++ (format (show c)))
 
 --fromTL :: Bool -> Bool -> Int -> NPoly LPQ TemperleyLiebGens -> Diagram B
 fromTL ce tc n f@(NP ts) = hcat [(if ce then (tlCoefficient i c) else mempty) ||| (fromTlGens tc n g # center) | (i,(m@(M g),c)) <- (zip [1..] ts)]
@@ -492,11 +495,12 @@ fromBraidGens True bgs@(NP [(M xs,c)]) n = addTraceClosure (fromBraidGens False 
 #+end_src
 
 #+begin_src haskell :noweb yes :tangle haskell/s1.hs
-<<fibonacci-representation>>
+<<tl-diagram>>
 
 main = mainWith (dia)
 dia :: Diagram B
-dia = fromBraidGens True s1 2
+
+dia = fromTL True True 2 (fromBraid (s1*s1*s1))
 #+end_src
 
 [[file:haskell/images/s1.svg]]
@@ -1281,7 +1285,6 @@ $b = s_1^3 =$
 dia = fromBraidGens False (s1*s1*s1) 2
 \end{diagram}
 #+end_src
-*** COMMENT
 **** The Jones polynomial
 ***** The main theorem
 #+begin_src latex
@@ -1292,7 +1295,7 @@ V_{b^{tr}}(A^{-4})=(-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr}))
 ***** Calculating the Markov trace of $\rho_A(b^{tr})$
 #+begin_src latex
 \begin{align*}
-Tr(\rho_A(\sigma_1)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
+Tr(\rho_A(\sigma_1^3)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
              &= A^{-1} \cdot Tr(E_1)+A \cdot Tr(\mathrm{I})
 \end{align*}
 #+end_src
@@ -1302,9 +1305,9 @@ Tr(\rho_A(\sigma_1)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
 :END:
 ***** The trace closure of $\rho_A(b^{tr})$
 #+begin_src latex :noweb yes
-\begin{diagram}[width=200,height=100]
+\begin{diagram}[width=500,height=50]
 <<tl-diagram>>
-dia = fromTL True True 2 (fromBraid s1)
+dia = fromTL True True 2 (fromBraid (s1*s1*s1))
 \end{diagram}
 #+end_src
 ***** The trace of $\rho_A(b^{tr})$
@@ -1313,6 +1316,7 @@ dia = fromTL True True 2 (fromBraid s1)
 Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
 \end{align*}
 #+end_src
+*** COMMENT
 **** The sign of a braid
 :PROPERTIES:
 :BEAMER_opt: fragile

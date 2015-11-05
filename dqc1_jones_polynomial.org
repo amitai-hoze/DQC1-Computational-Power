@@ -432,7 +432,6 @@ dia = trefoil
 #+begin_src haskell :noweb yes :tangle haskell/fibonacci_representation.hs :exports none
 <<knots-and-braids>>
 <<beside-operators>>
-tc = True
 
 -- The number of strands
 --n = 2
@@ -484,7 +483,7 @@ lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
 fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(abs(i)-1)] ++ [(abs(i)+2)..n]])
 
 --fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
-fromBraidGens (NP [(M xs,c)]) n = ((vcat [fromBraidGen bg n | bg <- xs]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length xs) | i <- [1..n]]) else mempty)
+fromBraidGens tc (NP [(M xs,c)]) n = ((vcat [fromBraidGen bg n | bg <- xs]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length xs) | i <- [1..n]]) else mempty)
 #+end_src
 
 #+begin_src haskell :noweb yes :tangle haskell/s1.hs
@@ -802,7 +801,7 @@ Now, we can see (similarly to the proposition 1), that the trace of the new circ
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1) 2
+dia = fromBraidGens False (s1) 2
 \end{diagram}
 #+end_src
 ***** $s_1 s_2$                                                 :B_block:BMCOL:
@@ -815,7 +814,7 @@ dia = fromBraidGens (s1) 2
 #+begin_src latex :noweb yes
 \begin{diagram}[width=100,height=150]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1*s2) 3
+dia = fromBraidGens False (s1*s2) 3
 \end{diagram}
 #+end_src
 **** Temperley-Lieb objects - $TL_n(d)$
@@ -958,7 +957,7 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 $b = s_1 =$
 \begin{diagram}[width=20,height=40]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1) 2
+dia = fromBraidGens False (s1) 2
 \end{diagram}
 #+end_src
 **** The Jones polynomial
@@ -1005,7 +1004,7 @@ Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1) 2
+dia = fromBraidGens False (s1) 2
 \end{diagram}
 #+end_src
 ***** s_{-1}                                                :B_block:BMCOL:
@@ -1018,7 +1017,7 @@ dia = fromBraidGens (s1) 2
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
-dia = fromBraidGens (s_ (-1)) 2
+dia = fromBraidGens False (s_ (-1)) 2
 \end{diagram}
 #+end_src
 **** Calculating the writhe
@@ -1063,7 +1062,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
   <<fibonacci-representation>>
-  dia = fromBraidGens (s_ 0) 2
+  dia = fromBraidGens False (s_ 0) 2
 \end{diagram} &
 #+end_src
 ***** $\mathrm{I} \in B_2$              :B_block:BMCOL:
@@ -1091,7 +1090,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
   <<fibonacci-representation>>
-  dia = fromBraidGens (s1) 2
+  dia = fromBraidGens False (s1) 2
 \end{diagram} &
 #+end_src
 ***** $s_1 \in B_2$                                              :B_block:BMCOL:
@@ -1120,7 +1119,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
   <<fibonacci-representation>>
-  dia = fromBraidGens (s1*s2) 3
+  dia = fromBraidGens False (s1*s2) 3
 \end{diagram} &
 #+end_src
 ***** $s_1 s_2 \in B_2$                                           :B_block:BMCOL:
@@ -1272,7 +1271,7 @@ ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
 $b = s_1 =$
 \begin{diagram}[width=20,height=40]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1*s1*s1) 2
+dia = fromBraidGens False (s1*s1*s1) 2
 \end{diagram}
 #+end_src
 *** COMMENT
@@ -1320,7 +1319,7 @@ Tr(\rho_A(b^{tr})) = A^{-1} \cdot d^{-1} + A \cdot d^0 = A^{-1} \cdot d^{-1} + A
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
-dia = fromBraidGens (s1) 2
+dia = fromBraidGens False (s1) 2
 \end{diagram}
 #+end_src
 ***** s_{-1}                                                :B_block:BMCOL:
@@ -1333,7 +1332,7 @@ dia = fromBraidGens (s1) 2
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
 <<fibonacci-representation>>
-dia = fromBraidGens (s_ (-1)) 2
+dia = fromBraidGens False (s_ (-1)) 2
 \end{diagram}
 #+end_src
 **** Calculating the writhe
@@ -1378,7 +1377,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
   <<fibonacci-representation>>
-  dia = fromBraidGens (s_ 0) 2
+  dia = fromBraidGens False (s_ 0) 2
 \end{diagram} &
 #+end_src
 ***** $\mathrm{I} \in B_2$              :B_block:BMCOL:
@@ -1406,7 +1405,7 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+begin_src latex :noweb yes
 \begin{diagram}[width=50,height=75]
   <<fibonacci-representation>>
-  dia = fromBraidGens (s1) 2
+  dia = fromBraidGens False (s1) 2
 \end{diagram} &
 #+end_src
 ***** $s_1 \in B_2$                                              :B_block:BMCOL:
@@ -1709,7 +1708,7 @@ Why *formal* linear combinations?
   $\mathrm{I} =$ &
   \begin{diagram}[width=50,height=75]
     <<fibonacci-representation>>
-    dia = fromBraidGens (s1) 2
+    dia = fromBraidGens False (s1) 2
   \end{diagram} &
   =
   \begin{pmatrix}

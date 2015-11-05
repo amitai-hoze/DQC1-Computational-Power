@@ -59,6 +59,8 @@ trailsColored diagram colors = diagram # explodeTrail # zipWith lc colors # mcon
 traceStyle a = a # dashingN [0.01, 0.02] 0 # lc red
 
 traceClosure i h = (metafont $ p2 (i,0).- leaving unitX <> tension 7 <> arriving unit_X -.endpt (p2 (i,h*2))) # traceStyle
+
+addTraceClosure d n h = (d # alignB) <> mconcat [traceClosure % i % h | i <- [1..n]]
 #+end_src
 * Research
 ** Unknotting problem
@@ -311,11 +313,13 @@ downArc i = metafont $ p2 (i,0).--.p2 (i+1/2,1/2).--.endpt (p2 (i+1,0))
 line i = metafont $ p2 (i,0).--.endpt (p2 (i,2))
 
 --fromTlGen :: Bool -> Int -> TemperleyLiebGens -> Diagram B
-fromTlGen tc n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]])
+fromTlGen n e@(E j) = upArc % j <> downArc % j <> (mconcat [line % i | i <- [1..(j-1)] ++ [(j+2)..n]])
 
 --fromTlGens :: Bool -> Int -> [TemperleyLiebGens] -> Diagram B
-fromTlGens tc n [] = mconcat [line % i | i <- [1..n]]
-fromTlGens tc n g  = ((vcat [fromTlGen tc n e | e <- g]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length g) | i <- [1..n]]) else mempty)
+fromTlGens False n [] = mconcat [line % i | i <- [1..n]]
+fromTlGens True  n [] = addTraceClosure (fromTlGens False n []) n (1::Integer)
+fromTlGens False n g  = vcat [fromTlGen n e | e <- g]
+fromTlGens True  n g  = addTraceClosure (fromTlGens False n g) n (length g)
 
 text' s t = text t # fontSize (local s) # scale 0.5 <> strutX (s * 1.4)
 
@@ -483,15 +487,16 @@ lowerStrand i = (lowerStrandHalf1 i) <> (lowerStrandHalf2 i)
 fromBraidGen (S i) n = upperStrand % i <> lowerStrand % i <> (mconcat [straightStrand % j | j <- [1..(abs(i)-1)] ++ [(abs(i)+2)..n]])
 
 --fromBraidGens :: NPoly LPQ BraidGens -> Int -> Diagram B
-fromBraidGens tc (NP [(M xs,c)]) n = ((vcat [fromBraidGen bg n | bg <- xs]) # alignB) <> (if tc then (mconcat [traceClosure % i % (length xs) | i <- [1..n]]) else mempty)
+fromBraidGens False (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
+fromBraidGens True bgs@(NP [(M xs,c)]) n = addTraceClosure (fromBraidGens False bgs n) n (length xs)
 #+end_src
 
 #+begin_src haskell :noweb yes :tangle haskell/s1.hs
-<<tl-diagram>>
+<<fibonacci-representation>>
 
 main = mainWith (dia)
 dia :: Diagram B
-dia = fromTL False True 3 (e1*e2)
+dia = fromBraidGens True s1 2
 #+end_src
 
 [[file:haskell/images/s1.svg]]
@@ -938,13 +943,14 @@ Tr(\rho_F^{(n)}(b))=Tr(\rho_A(b))
 :END:
 ***** $b^{tr}$ such that its trace closure is $k$                    :B_block:BMCOL:
 :PROPERTIES:
-:BEAMER_COL: 0.3
+:BEAMER_COL: 0.4
 :BEAMER_ENV: block
 :END:
 
 #+begin_src latex :noweb yes
 \begin{diagram}[width=100,height=150]
-<<unknot-equivalent-braid-representation>>
+<<fibonacci-representation>>
+dia = fromBraidGens True (s1) 2
 \end{diagram}
 #+end_src
 ***** $b^{tr}$ Represented with generators                        :B_block:BMCOL:
@@ -1258,7 +1264,8 @@ ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
 
 #+begin_src latex :noweb yes
 \begin{diagram}[width=100,height=150]
-<<unknot-equivalent-braid-representation>>
+<<fibonacci-representation>>
+dia = fromBraidGens True (s1*s1*s1) 2
 \end{diagram}
 #+end_src
 ***** $b^{tr}$ Represented with generators                        :B_block:BMCOL:
@@ -1268,8 +1275,8 @@ ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
 :BEAMER_ENV: block
 :END:
 #+begin_src latex :noweb yes
-$b = s_1 =$
-\begin{diagram}[width=20,height=40]
+$b = s_1^3 =$
+\begin{diagram}[width=20,height=120]
 <<fibonacci-representation>>
 dia = fromBraidGens False (s1*s1*s1) 2
 \end{diagram}

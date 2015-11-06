@@ -494,17 +494,6 @@ fromBraidGens False (NP [(M xs,c)]) n = vcat [fromBraidGen bg n | bg <- xs]
 fromBraidGens True bgs@(NP [(M xs,c)]) n = addTraceClosure (fromBraidGens False bgs n) n (length xs)
 #+end_src
 
-#+begin_src haskell :noweb yes :tangle haskell/s1.hs
-<<tl-diagram>>
-
-main = mainWith (dia)
-dia :: Diagram B
-
-dia = fromTL True True 2 (fromBraid (s1*s1*s1))
-#+end_src
-
-[[file:haskell/images/s1.svg]]
-
 *** l/3 explanation
 In order to get to the coefficient of the intersection rectangle [[l/3]], I took a polynom:
 
@@ -530,6 +519,22 @@ And:
 \begin{align*}
 P'\left(\frac{l}{2}\right)=3a \cdot \left(\frac{l}{2}\right)^2 + 2b \cdot \frac{l}{2} = \dots = \frac{l}{3}
 \end{align*}
+
+** Testing
+:PROPERTIES:
+:ID:       3bb69432-4fb9-453e-bc47-9facea7d4adb
+:END:
+#+begin_src haskell :noweb yes :tangle haskell/s1.hs
+<<tl-diagram>>
+
+main = mainWith (dia)
+dia :: Diagram B
+
+dia = fromTL True True 2 (fromBraid (s1*s1*s1))
+#+end_src
+
+[[file:haskell/images/s1.svg]]
+
 * Matrices
 #+name: fib-s-1
 | a |   |   |   |   |
@@ -1305,7 +1310,7 @@ Tr(\rho_A(\sigma_1^3)) &= Tr(A^{-1} \cdot E_1+A \cdot \mathrm{I}) = \\
 :END:
 ***** The trace closure of $\rho_A(b^{tr})$
 #+begin_src latex :noweb yes
-\begin{diagram}[width=500,height=50]
+\begin{diagram}[width=300,height=50]
 <<tl-diagram>>
 dia = fromTL True True 2 (fromBraid (s1*s1*s1))
 \end{diagram}

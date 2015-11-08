@@ -344,8 +344,8 @@ superScript c = case c of
             otherwise -> c
 
 format ('a':chars) = ['A'] ++ format chars
-format ('^':'-':d:chars) = [superScript '-',superScript d] ++ format chars
-format ('^':d:chars) = [superScript d] ++ format chars
+format ('^':('-':(d:chars))) = [superScript '-',superScript d] ++ format chars
+format ('^':(d:chars)) = [superScript d] ++ format chars
 format (c:chars) = [c] ++ format chars
 format [] = []
 

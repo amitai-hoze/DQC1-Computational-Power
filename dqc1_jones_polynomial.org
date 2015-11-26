@@ -1152,14 +1152,20 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 #+end_src
 **** COMMENT The weighted trace of the Fibonacci matrix
 **** The Markov trace and the trace of the Fibonacci matrix
+:PROPERTIES:
+:BEAMER_opt: fragile
+:END:
 ***** The constants
+:PROPERTIES:
+:BEAMER_ACT: <1-4>
+:END:
 #+begin_src latex
 \begin{align*}
   \only<1-4>{
-    &a = -A^4, b = A^8, c = A^8\tau^2 - A^4\tau\\
+    &a = -A^{-4}, b = A^{-8}, c = A^8\tau^2 - A^4\tau\\
     &d = A^8\tau^{\frac{3}{2}} + A^4\tau^{3/2}, e = A^8\tau - A^4\tau^2\\
   }
-  &A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5)), \phi = \frac{1+\sqrt{5}}{\sqrt{2}} = \frac{\sqrt{2}}{\tau}
+  &A = e^{-i\frac{3\pi}{5}}, \tau = 2/(1+\sqrt(5)), \phi = \frac{1+\sqrt{5}}{2} = \frac{1}{\tau}
 \end{align*}
 #+end_src
 ***** $Tr(\rho_F^{(n)}(s_1))$
@@ -1167,42 +1173,24 @@ V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
 :BEAMER_ACT: <2->
 :END:
 #+begin_src latex :noweb yes
-\begin{onlyenv}<1-4>
+\begin{onlyenv}<1->
   \begin{equation*}
     \begin{overlayarea}{\linewidth}{5\baselineskip}
-      \only<2-4>{
+      \only<2->{
         Tr
         <<pmatrix(fib-s-1)>>
       }
-      \only<3-4>{
+      \only<3->{
         = a \cdot \phi + b
       }
       \only<4->{
-         = -A^4 \cdot \phi + A^8 
+        = -A^{-4} \cdot \phi + A^{-8} 
       }
     \end{overlayarea}
   \end{equation*}
 \end{onlyenv}
 #+end_src
 
-<<current-stage>>
-#+begin_src octave
-A = exp((-3/5)*pi * i)
-#A = exp((2 * pi / 5) * i)
-tao = 2 / (1 + sqrt(5))
-a = -A^-4
-b = A^-8
-c = A^8*tao^2 - A^4*tao
-d = A^8*tao^(3/2) + A^4*tao^(3/2)
-E = A^8*tao - A^4*tao^2
-D = -A^2-A^(-2)
-phi = (1+sqrt(5))/2
-#ans = phi * a + b + phi * c + a + phi * E
-ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
-#+end_src
-
-#+RESULTS:
-: 0.9999999999999998-4.996003610813204e-16i
 ***** COMMENT Fibonacci numbers
 |  n |     f_n |
 |----+--------|
@@ -1249,6 +1237,31 @@ ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
 \end{onlyenv}
 #+end_src
 # *I got the trace wrong, it needs to be weighted, see [[shell:evince -p 42 data/1e/a66689-5a3e-44de-ad3f-55d44185dedd/brainds_jones_v3.pdf][Ohad's presentation pg. 42]] and the [[shell:evince -p 14 data/2d/0360c5-52fe-4503-ae74-252686ad6cdd/0707.2831v3.pdf][original article pg. 14]].*
+**** The Jones polynomial
+#+begin_src latex :noweb yes
+\begin{align*}
+  V_{b^{tr}}(A^{-4}) &= (-A)^{-3w(b^{tr})}d^{n-1}Tr(\rho_A(b^{tr})) = \\
+  &= -A^{-3} \cdot D^1 \cdot (-A^{-4} \cdot \phi + A^{-8})
+\end{align*}
+#+end_src
+**** Calculation
+#+begin_src octave :exports both
+A = exp((-3/5)*pi * i)
+tao = 2 / (1 + sqrt(5))
+a = -A^-4
+b = A^-8
+c = A^8*tao^2 - A^4*tao
+d = A^8*tao^(3/2) + A^4*tao^(3/2)
+E = A^8*tao - A^4*tao^2
+D = -A^2-A^(-2)
+phi = (1+sqrt(5))/2
+x = 1/(phi+1)
+ans = -A^(-3)*D*(1/(phi+1))*(phi * a + b)
+#+end_src
+
+#+RESULTS:
+: 0.9999999999999998-4.996003610813204e-16i
+
 *** The Trefoil example
 **** A knot
 :PROPERTIES:
